@@ -28,12 +28,12 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label="Cala Zingaro — home">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Cala Zingaro"
-              width={120}
-              height={52}
+              width={180}
+              height={62}
               className="object-contain"
-              style={{ height: "44px", width: "auto" }}
+              style={{ height: "48px", width: "auto" }}
               priority
             />
           </Link>

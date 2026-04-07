@@ -34,7 +34,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           {/* Header del menu */}
           <div className="flex justify-between items-center px-6 py-4">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Cala Zingaro"
               width={120}
               height={52}
