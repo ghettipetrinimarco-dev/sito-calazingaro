@@ -55,8 +55,8 @@ export default function MenuPage() {
 
       {/* Cornice foglie — Desktop destra */}
       <div
-        className="fixed top-0 right-0 pointer-events-none z-10 hidden md:block overflow-hidden"
-        style={{ width: "30vw", height: "100dvh", transform: "scale(1.06)", transformOrigin: "top right" }}
+        className="fixed top-0 pointer-events-none z-10 hidden md:block overflow-hidden"
+        style={{ left: "calc(100vw - 30vw)", width: "30vw", height: "100dvh", transform: "scale(1.06)", transformOrigin: "top right" }}
       >
         <Image
           src="/images/leaves_alpha.webp"
