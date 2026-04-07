@@ -53,17 +53,17 @@ export default function MenuPage() {
         />
       </div>
 
-      {/* Cornice foglie — Desktop destra (specchiata) */}
+      {/* Cornice foglie — Desktop destra */}
       <div
         className="fixed top-0 right-0 pointer-events-none z-10 hidden md:block overflow-hidden"
-        style={{ width: "30vw", height: "100dvh", transform: "scaleX(-1) scale(1.06)", transformOrigin: "top right" }}
+        style={{ width: "30vw", height: "100dvh", transform: "scale(1.06)", transformOrigin: "top right" }}
       >
         <Image
           src="/images/leaves_alpha.webp"
           alt=""
           fill
           className="object-cover"
-          style={{ objectPosition: "left top" }}
+          style={{ objectPosition: "right top" }}
           priority
         />
       </div>
