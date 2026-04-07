@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import MobileMenu from "./MobileMenu"
 
 export default function Header() {
@@ -25,15 +26,16 @@ export default function Header() {
       >
         <div className="flex justify-between items-center px-6 md:px-10 py-4">
           {/* Logo */}
-          <Link
-            href="/"
-            className="italic text-xl tracking-wide transition-colors"
-            style={{
-              fontFamily: "var(--font-serif)",
-              color: scrolled ? "var(--color-text)" : "white",
-            }}
-          >
-            Cala Zingaro
+          <Link href="/" className="flex items-center" aria-label="Cala Zingaro — home">
+            <Image
+              src="/images/logo.jpg"
+              alt="Cala Zingaro"
+              width={120}
+              height={52}
+              className="object-contain"
+              style={{ height: "44px", width: "auto" }}
+              priority
+            />
           </Link>
 
           {/* Destra: pill Prenota + hamburger */}

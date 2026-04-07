@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import Image from "next/image"
 
 const voci = [
   { label: "Ristorante", href: "/ristorante" },
@@ -32,12 +33,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         >
           {/* Header del menu */}
           <div className="flex justify-between items-center px-6 py-4">
-            <span
-              className="italic text-xl"
-              style={{ fontFamily: "var(--font-serif)", color: "var(--color-sand)" }}
-            >
-              Cala Zingaro
-            </span>
+            <Image
+              src="/images/logo.jpg"
+              alt="Cala Zingaro"
+              width={120}
+              height={52}
+              className="object-contain"
+              style={{ height: "40px", width: "auto" }}
+            />
             <button
               onClick={onClose}
               aria-label="Chiudi menu"
