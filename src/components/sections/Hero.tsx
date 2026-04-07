@@ -1,12 +1,24 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 
 export default function Hero() {
+  const { scrollY } = useScroll()
+
+  // Sfasamento matematico dell'emersione degli elementi (Scroll-Driven Stagger)
+  const subtitleOpacity = useTransform(scrollY, [0, 100], [0, 1])
+  const subtitleY = useTransform(scrollY, [0, 100], [30, 0])
+  
+  const titleOpacity = useTransform(scrollY, [40, 180], [0, 1])
+  const titleY = useTransform(scrollY, [40, 180], [50, 0])
+  
+  const buttonsOpacity = useTransform(scrollY, [80, 220], [0, 1])
+  const buttonsY = useTransform(scrollY, [80, 220], [40, 0])
+
   return (
     <section className="relative flex flex-col overflow-hidden" style={{ minHeight: "100svh" }}>
-      {/* Background: gradiente Adriatico (rimpiazzato da video drone in produzione) */}
+      {/* Background: gradiente Adriatico */}
       <div
         className="absolute inset-0"
         style={{
@@ -26,12 +38,14 @@ export default function Hero() {
 
       {/* Contenuto — posizionato in basso */}
       <div className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14">
+        
         <motion.p
           className="text-[0.55rem] tracking-[0.22em] uppercase mb-3"
-          style={{ color: "rgba(255,255,255,0.5)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          style={{ 
+            color: "rgba(255,255,255,0.5)",
+            opacity: subtitleOpacity,
+            y: subtitleY
+          }}
         >
           Beach Club & Ristorante · Milano Marittima
         </motion.p>
@@ -41,10 +55,9 @@ export default function Hero() {
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: "clamp(2.8rem, 10vw, 6rem)",
+            opacity: titleOpacity,
+            y: titleY
           }}
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           Il mare.<br />
           La tavola.<br />
@@ -54,9 +67,10 @@ export default function Hero() {
 
         <motion.div
           className="flex items-center gap-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.8 }}
+          style={{
+            opacity: buttonsOpacity,
+            y: buttonsY
+          }}
         >
           <Link
             href="#prenota"
@@ -72,6 +86,7 @@ export default function Hero() {
             ↓ scopri
           </span>
         </motion.div>
+        
       </div>
     </section>
   )

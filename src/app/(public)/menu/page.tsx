@@ -23,10 +23,10 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice foglie — mobile e desktop: PNG alpha reale, full screen, ancorato in alto */}
+      {/* Cornice Foglie — Unica immagine adattiva con overlay (Opzione Luxury) */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-10"
-        style={{ width: "100vw", height: "100dvh", transform: "scale(1.04)", transformOrigin: "top center" }}
+        className="fixed inset-0 pointer-events-none z-10"
+        style={{ width: "100%", height: "100%" }}
       >
         <Image
           src="/images/leaves_alpha.webp"
