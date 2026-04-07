@@ -42,7 +42,7 @@ export default function MenuPage() {
       <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
 
         {/* Ramo Sinistro — si restringe sui viewport piccoli, mostra solo il bordo esterno */}
-        <div className="absolute top-0 left-0 h-[60vh] sm:h-[75vh] lg:h-full w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+        <div className="absolute top-0 bottom-0 left-0 w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
           <Image
             src="/images/foglie-menu-sx.png"
             alt=""
@@ -54,7 +54,7 @@ export default function MenuPage() {
         </div>
 
         {/* Ramo Destro */}
-        <div className="absolute top-0 right-0 h-[60vh] sm:h-[75vh] lg:h-full w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+        <div className="absolute top-0 bottom-0 right-0 w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
           <Image
             src="/images/foglie-menu-dx.png"
             alt=""
