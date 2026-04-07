@@ -1,21 +1,26 @@
 "use client"
 
 import Link from "next/link"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, type Variants } from "framer-motion"
+
+// Varianti per il fade-in al caricamento con stagger
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.18, delayChildren: 0.2 },
+  },
+}
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  },
+}
 
 export default function Hero() {
-  const { scrollY } = useScroll()
-
-  // Sfasamento matematico dell'emersione degli elementi (Scroll-Driven Stagger)
-  const subtitleOpacity = useTransform(scrollY, [0, 100], [0, 1])
-  const subtitleY = useTransform(scrollY, [0, 100], [30, 0])
-  
-  const titleOpacity = useTransform(scrollY, [40, 180], [0, 1])
-  const titleY = useTransform(scrollY, [40, 180], [50, 0])
-  
-  const buttonsOpacity = useTransform(scrollY, [80, 220], [0, 1])
-  const buttonsY = useTransform(scrollY, [80, 220], [40, 0])
-
   return (
     <section className="relative flex flex-col overflow-hidden" style={{ minHeight: "100svh" }}>
       {/* Background: gradiente Adriatico */}
@@ -36,16 +41,17 @@ export default function Hero() {
         }}
       />
 
-      {/* Contenuto — posizionato in basso */}
-      <div className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14">
-        
+      {/* Contenuto — posizionato in basso, animato al caricamento */}
+      <motion.div
+        className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <motion.p
           className="text-[0.55rem] tracking-[0.22em] uppercase mb-3"
-          style={{ 
-            color: "rgba(255,255,255,0.5)",
-            opacity: subtitleOpacity,
-            y: subtitleY
-          }}
+          style={{ color: "rgba(255,255,255,0.5)" }}
+          variants={itemVariants}
         >
           Beach Club & Ristorante · Milano Marittima
         </motion.p>
@@ -55,9 +61,8 @@ export default function Hero() {
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: "clamp(2.8rem, 10vw, 6rem)",
-            opacity: titleOpacity,
-            y: titleY
           }}
+          variants={itemVariants}
         >
           Il mare.<br />
           La tavola.<br />
@@ -65,13 +70,7 @@ export default function Hero() {
           <span className="md:hidden">Milano<br />Marittima.</span>
         </motion.h1>
 
-        <motion.div
-          className="flex items-center gap-4"
-          style={{
-            opacity: buttonsOpacity,
-            y: buttonsY
-          }}
-        >
+        <motion.div className="flex items-center gap-4" variants={itemVariants}>
           <Link
             href="#prenota"
             className="text-[0.62rem] tracking-widest uppercase bg-white px-5 py-3 rounded-sm transition-opacity hover:opacity-85"
@@ -86,8 +85,7 @@ export default function Hero() {
             ↓ scopri
           </span>
         </motion.div>
-        
-      </div>
+      </motion.div>
     </section>
   )
 }

@@ -41,8 +41,14 @@ export default function MenuPage() {
       {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
       <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
 
-        {/* Ramo Sinistro — si restringe sui viewport piccoli, mostra solo il bordo esterno */}
-        <div className="absolute top-0 bottom-0 left-0 w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+        {/* Ramo Sinistro — stretto su mobile, ricco su desktop; bordo interno sfuma nel bianco */}
+        <div
+          className="absolute top-0 bottom-0 left-0 w-[20vw] sm:w-[24vw] md:w-[28vw] lg:w-[30vw] xl:w-[32vw]"
+          style={{
+            maskImage: "linear-gradient(to right, black 55%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, black 55%, transparent 100%)",
+          }}
+        >
           <Image
             src="/images/foglie-menu-sx.png"
             alt=""
@@ -53,8 +59,14 @@ export default function MenuPage() {
           />
         </div>
 
-        {/* Ramo Destro */}
-        <div className="absolute top-0 bottom-0 right-0 w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+        {/* Ramo Destro — stretto su mobile, ricco su desktop; bordo interno sfuma nel bianco */}
+        <div
+          className="absolute top-0 bottom-0 right-0 w-[20vw] sm:w-[24vw] md:w-[28vw] lg:w-[30vw] xl:w-[32vw]"
+          style={{
+            maskImage: "linear-gradient(to left, black 55%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to left, black 55%, transparent 100%)",
+          }}
+        >
           <Image
             src="/images/foglie-menu-dx.png"
             alt=""
@@ -68,7 +80,7 @@ export default function MenuPage() {
       </div>
 
       {/* Contenuto */}
-      <div className="relative z-20 max-w-xl mx-auto px-6 pt-28 md:pt-36 pb-24">
+      <div className="relative z-20 max-w-xl mx-auto px-[24vw] sm:px-8 md:px-6 pt-28 md:pt-36 pb-24">
 
         {/* Titolo */}
         <motion.div

@@ -42,3 +42,8 @@ next-env.d.ts
 
 # brainstorming visual companion
 .superpowers/
+
+# playwright
+.playwright-mcp/
+*.png
+*.jpeg

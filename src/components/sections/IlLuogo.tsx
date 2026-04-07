@@ -44,14 +44,9 @@ export default function IlLuogo() {
 
         <RevealText delay={0.15}>
           <div
-            className="aspect-[4/3] rounded-sm flex items-center justify-center text-[0.6rem] tracking-widest uppercase"
-            style={{
-              backgroundColor: "var(--color-accent)",
-              color: "rgba(255,255,255,0.5)",
-            }}
-          >
-            Foto location
-          </div>
+            className="aspect-[4/3] rounded-sm"
+            style={{ backgroundColor: "var(--color-accent)" }}
+          />
         </RevealText>
       </div>
     </section>

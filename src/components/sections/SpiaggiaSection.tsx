@@ -57,11 +57,9 @@ export default function SpiaggiaSection() {
         {/* Foto — destra su desktop, sopra su mobile */}
         <RevealText delay={0.1} className="order-1 md:order-2">
           <div
-            className="min-h-[300px] md:min-h-[480px] flex items-center justify-center text-[0.6rem] tracking-widest uppercase"
-            style={{ backgroundColor: "#3a5f6e", color: "rgba(255,255,255,0.3)" }}
-          >
-            Foto spiaggia / ombrelloni
-          </div>
+            className="min-h-[300px] md:min-h-[480px]"
+            style={{ backgroundColor: "#3a5f6e" }}
+          />
         </RevealText>
       </div>
     </section>

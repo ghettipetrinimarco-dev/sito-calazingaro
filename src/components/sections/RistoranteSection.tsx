@@ -12,11 +12,9 @@ export default function RistoranteSection() {
         {/* Foto — sinistra su desktop, sopra su mobile */}
         <RevealText>
           <div
-            className="min-h-[300px] md:min-h-[480px] flex items-center justify-center text-[0.6rem] tracking-widest uppercase"
-            style={{ backgroundColor: "#c8b99a", color: "rgba(255,255,255,0.5)" }}
-          >
-            Foto food / piatti
-          </div>
+            className="min-h-[300px] md:min-h-[480px]"
+            style={{ backgroundColor: "#c8b99a" }}
+          />
         </RevealText>
 
         {/* Testo */}
