@@ -23,10 +23,10 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice foglie — Mobile: PNG con alpha reale, nessun mix-blend-mode */}
+      {/* Cornice foglie — mobile e desktop: PNG alpha reale, full screen, ancorato in alto */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-10 block md:hidden"
-        style={{ width: "100vw", height: "100dvh", transform: "scale(1.04)" }}
+        className="fixed top-0 left-0 pointer-events-none z-10"
+        style={{ width: "100vw", height: "100dvh", transform: "scale(1.04)", transformOrigin: "top center" }}
       >
         <Image
           src="/images/leaves_alpha.webp"
@@ -34,36 +34,6 @@ export default function MenuPage() {
           fill
           className="object-cover"
           style={{ objectPosition: "center top" }}
-          priority
-        />
-      </div>
-
-      {/* Cornice foglie — Desktop sinistra */}
-      <div
-        className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block overflow-hidden"
-        style={{ width: "30vw", height: "100dvh", transform: "scale(1.06)", transformOrigin: "top left" }}
-      >
-        <Image
-          src="/images/leaves_alpha.webp"
-          alt=""
-          fill
-          className="object-cover"
-          style={{ objectPosition: "left top" }}
-          priority
-        />
-      </div>
-
-      {/* Cornice foglie — Desktop destra */}
-      <div
-        className="fixed top-0 pointer-events-none z-10 hidden md:block overflow-hidden"
-        style={{ left: "calc(100vw - 30vw)", width: "30vw", height: "100dvh", transform: "scale(1.06)", transformOrigin: "top right" }}
-      >
-        <Image
-          src="/images/leaves_alpha.webp"
-          alt=""
-          fill
-          className="object-cover"
-          style={{ objectPosition: "right top" }}
           priority
         />
       </div>
