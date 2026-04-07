@@ -114,7 +114,7 @@ export default function MenuPage() {
 
         {/* Categorie */}
         <div className="space-y-20 md:space-y-28">
-          {menu.map((category, catIndex) => {
+          {menu.map((category) => {
             if (category.items.length === 0) return null
 
             return (

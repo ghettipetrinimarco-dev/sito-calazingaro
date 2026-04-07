@@ -43,11 +43,9 @@ export default function EventiSection() {
               style={{ backgroundColor: "var(--color-sand-light)" }}
             >
               <div
-                className="h-[140px] flex items-center justify-center text-[0.55rem] tracking-widest uppercase"
-                style={{ backgroundColor: "#d4c5b0", color: "rgba(255,255,255,0.5)" }}
-              >
-                Locandina evento
-              </div>
+                className="h-[140px]"
+                style={{ backgroundColor: "#d4c5b0" }}
+              />
               <div className="p-4">
                 <p
                   className="text-[0.58rem] tracking-widest uppercase mb-1"
