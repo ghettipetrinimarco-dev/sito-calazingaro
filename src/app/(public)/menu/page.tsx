@@ -26,7 +26,12 @@ export default function MenuPage() {
       {/* Cornice foglie — Desktop */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block"
-        style={{ width: "100vw", height: "100dvh", mixBlendMode: "multiply" }}
+        style={{
+          width: "100vw",
+          height: "100dvh",
+          mixBlendMode: "multiply",
+          transform: "scale(1.08)",
+        }}
       >
         <Image
           src="/images/leaves_desktop_v2.webp"
@@ -40,7 +45,12 @@ export default function MenuPage() {
       {/* Cornice foglie — Mobile */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 block md:hidden"
-        style={{ width: "100vw", height: "100dvh", mixBlendMode: "multiply" }}
+        style={{
+          width: "100vw",
+          height: "100dvh",
+          mixBlendMode: "multiply",
+          transform: "scale(1.08)",
+        }}
       >
         <Image
           src="/images/leaves_mobile.webp"
