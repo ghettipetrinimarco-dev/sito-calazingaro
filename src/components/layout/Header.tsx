@@ -25,16 +25,38 @@ export default function Header() {
         }}
       >
         <div className="flex justify-between items-center px-6 md:px-10 py-4">
-          {/* Logo */}
-          <Link href="/" className="flex items-center" aria-label="Cala Zingaro — home">
+          {/* Logo — cross-fade bianco→colori allo scroll */}
+          <Link href="/" className="relative flex items-center" aria-label="Cala Zingaro — home" style={{ height: "48px" }}>
+            {/* Logo colorato — appare quando scrolled */}
             <Image
               src="/images/logo.svg"
               alt="Cala Zingaro"
               width={180}
-              height={62}
+              height={48}
               className="object-contain"
-              style={{ height: "48px", width: "auto" }}
+              style={{
+                height: "48px",
+                width: "auto",
+                opacity: scrolled ? 1 : 0,
+                transition: "opacity 0.5s ease",
+              }}
               priority
+            />
+            {/* Logo bianco — visibile sulla hero */}
+            <Image
+              src="/images/logo.svg"
+              alt=""
+              aria-hidden
+              width={180}
+              height={48}
+              className="object-contain absolute inset-0"
+              style={{
+                height: "48px",
+                width: "auto",
+                filter: "brightness(0) invert(1)",
+                opacity: scrolled ? 0 : 1,
+                transition: "opacity 0.5s ease",
+              }}
             />
           </Link>
 
