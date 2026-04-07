@@ -43,7 +43,11 @@ next-env.d.ts
 # brainstorming visual companion
 .superpowers/
 
-# playwright
+# playwright e screenshot di test
 .playwright-mcp/
 *.png
 *.jpeg
+
+# file locali
+tasks.md
+**/.DS_Store
