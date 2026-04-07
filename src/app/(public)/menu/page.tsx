@@ -23,16 +23,16 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice foglie — Desktop */}
+      {/* Cornice foglie — incornicia solo la parte alta (titolo), non scende sul menu */}
+      {/* Desktop */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block"
         style={{
           width: "100vw",
-          height: "100dvh",
+          height: "60vh",
           mixBlendMode: "multiply",
-          transform: "scale(1.06)", // nasconde i bordi tagliati spingendoli fuori viewport
-          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 88%)",
-          maskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 88%)",
+          transform: "scale(1.14)",
+          transformOrigin: "top center",
         }}
       >
         <Image
@@ -40,20 +40,20 @@ export default function MenuPage() {
           alt=""
           fill
           className="object-cover"
+          style={{ objectPosition: "top center" }}
           priority
         />
       </div>
 
-      {/* Cornice foglie — Mobile */}
+      {/* Mobile */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 block md:hidden"
         style={{
           width: "100vw",
-          height: "100dvh",
+          height: "55vh",
           mixBlendMode: "multiply",
-          transform: "scale(1.06)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 50%, transparent 85%)",
-          maskImage: "linear-gradient(to bottom, black 0%, black 50%, transparent 85%)",
+          transform: "scale(1.14)",
+          transformOrigin: "top center",
         }}
       >
         <Image
@@ -61,6 +61,7 @@ export default function MenuPage() {
           alt=""
           fill
           className="object-cover"
+          style={{ objectPosition: "top center" }}
           priority
         />
       </div>

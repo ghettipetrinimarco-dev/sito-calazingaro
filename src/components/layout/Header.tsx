@@ -29,16 +29,18 @@ export default function Header() {
           boxShadow: scrolled ? "0 1px 0 rgba(0,0,0,0.06)" : "none",
         }}
       >
-        {/* Logo — si sposta da centro a sinistra allo scroll */}
+        {/* Logo — si sposta da centro a sinistra allo scroll, solo transform per GPU smoothness */}
         <Link
           href="/"
           aria-label="Cala Zingaro — home"
           className="absolute"
           style={{
             top: "50%",
-            left: scrolled ? "24px" : "50%",
-            transform: scrolled ? "translateY(-50%)" : "translate(-50%, -50%)",
-            transition: "left 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1)",
+            left: "50%",
+            transform: scrolled
+              ? "translateX(calc(24px - 50vw)) translateY(-50%)"
+              : "translate(-50%, -50%)",
+            transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
           }}
         >
           {/* Logo colorato — appare quando scrolled */}
