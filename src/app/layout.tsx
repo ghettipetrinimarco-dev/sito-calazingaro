@@ -1,6 +1,17 @@
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
+import { Cormorant_Garamond } from "next/font/google"
+import LenisProvider from "@/components/layout/LenisProvider"
+import Header from "@/components/layout/Header"
+import Footer from "@/components/layout/Footer"
 import "./globals.css"
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant-var",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: {
@@ -8,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Cala Zingaro",
   },
   description:
-    "Beach club e ristorante a Milano Marittima. Ombrelloni, lettini e cucina di qualità a due passi dal mare. Prenota il tuo posto.",
+    "Beach club e ristorante sulla spiaggia di Milano Marittima. Pranzo, aperitivo, cena e dopocena ogni weekend. Prenota il tuo posto.",
   metadataBase: new URL("https://calazingaro.it"),
   openGraph: {
     siteName: "Cala Zingaro",
@@ -19,12 +30,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="it" className={`${GeistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="it" className={cormorant.variable}>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-full flex flex-col">
+        <LenisProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </LenisProvider>
+      </body>
     </html>
   )
 }

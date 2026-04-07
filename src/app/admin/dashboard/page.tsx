@@ -1,10 +1,12 @@
-// Server Component — fetch dati Supabase lato server
-
-export default async function DashboardPage() {
-  // TODO: fetch prenotazioni + tavoli + verificaAdminToken da cookie
+export default function DashboardPage() {
   return (
-    <main>
-      <p>Dashboard Admin — TODO</p>
-    </main>
+    <div className="min-h-screen flex items-center justify-center">
+      <p
+        className="italic text-2xl"
+        style={{ fontFamily: "var(--font-serif)", color: "var(--color-muted)" }}
+      >
+        Admin Dashboard — coming soon
+      </p>
+    </div>
   )
 }

@@ -1,7 +1,12 @@
 export default function ContattiPage() {
   return (
-    <main>
-      <p>Contatti — TODO</p>
-    </main>
+    <div className="min-h-screen flex items-center justify-center pt-20">
+      <p
+        className="italic text-3xl"
+        style={{ fontFamily: "var(--font-serif)", color: "var(--color-muted)" }}
+      >
+        Contatti — coming soon
+      </p>
+    </div>
   )
 }
