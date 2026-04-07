@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 export default function Hero() {
   return (
-    <section className="relative flex flex-col overflow-hidden" style={{ height: "100svh", minHeight: "600px" }}>
+    <section className="relative flex flex-col overflow-hidden" style={{ minHeight: "100svh" }}>
       {/* Background: gradiente Adriatico (rimpiazzato da video drone in produzione) */}
       <div
         className="absolute inset-0"
@@ -25,7 +25,7 @@ export default function Hero() {
       />
 
       {/* Contenuto — posizionato in basso */}
-      <div className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pb-10 md:pb-14">
+      <div className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14">
         <motion.p
           className="text-[0.55rem] tracking-[0.22em] uppercase mb-3"
           style={{ color: "rgba(255,255,255,0.5)" }}
