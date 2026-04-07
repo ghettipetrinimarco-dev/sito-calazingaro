@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { usePathname } from "next/navigation"
 import Lenis from "lenis"
 
 export default function LenisProvider({
@@ -8,7 +9,11 @@ export default function LenisProvider({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
   useEffect(() => {
+    if (pathname === "/menu") return // Disabilita Lenis sul menu per permettere zoom e pan nativo
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
