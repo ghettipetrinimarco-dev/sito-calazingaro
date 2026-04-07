@@ -1,6 +1,11 @@
+"use client"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Footer() {
+  const pathname = usePathname()
+  if (pathname === "/menu") return null
   return (
     <footer style={{ backgroundColor: "var(--color-ink)" }}>
       <div className="px-6 md:px-10 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">

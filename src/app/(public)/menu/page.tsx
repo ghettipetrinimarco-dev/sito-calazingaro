@@ -23,45 +23,30 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice foglie — incornicia solo la parte alta (titolo), non scende sul menu */}
-      {/* Desktop */}
+      {/* Cornice foglie — Desktop */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block"
-        style={{
-          width: "100vw",
-          height: "60vh",
-          mixBlendMode: "multiply",
-          transform: "scale(1.14)",
-          transformOrigin: "top center",
-        }}
+        style={{ width: "100vw", height: "100dvh", mixBlendMode: "multiply" }}
       >
         <Image
           src="/images/leaves_desktop_v2.webp"
           alt=""
           fill
           className="object-cover"
-          style={{ objectPosition: "top center" }}
           priority
         />
       </div>
 
-      {/* Mobile */}
+      {/* Cornice foglie — Mobile */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 block md:hidden"
-        style={{
-          width: "100vw",
-          height: "55vh",
-          mixBlendMode: "multiply",
-          transform: "scale(1.14)",
-          transformOrigin: "top center",
-        }}
+        style={{ width: "100vw", height: "100dvh", mixBlendMode: "multiply" }}
       >
         <Image
           src="/images/leaves_mobile.webp"
           alt=""
           fill
           className="object-cover"
-          style={{ objectPosition: "top center" }}
           priority
         />
       </div>
