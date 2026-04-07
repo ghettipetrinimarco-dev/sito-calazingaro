@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Cormorant_Garamond, Antonio } from "next/font/google"
+import { Cormorant_Garamond, Antonio, Yanone_Kaffeesatz, Quicksand } from "next/font/google"
 import LenisProvider from "@/components/layout/LenisProvider"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
@@ -17,6 +17,20 @@ const antonio = Antonio({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400"],
   variable: "--font-antonio",
+  display: "swap",
+})
+
+const yanone = Yanone_Kaffeesatz({
+  subsets: ["latin"],
+  weight: ["200", "300", "400"],
+  variable: "--font-yanone",
+  display: "swap",
+})
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-quicksand",
   display: "swap",
 })
 
@@ -39,7 +53,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="it" className={`${cormorant.variable} ${antonio.variable}`}>
+    <html lang="it" className={`${cormorant.variable} ${antonio.variable} ${yanone.variable} ${quicksand.variable}`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link

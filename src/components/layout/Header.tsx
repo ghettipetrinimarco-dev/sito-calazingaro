@@ -53,6 +53,10 @@ export default function Header() {
   const rightElementsOpacity = useTransform(scrollY, [60, 120], [0, 1])
   const rightElementsPointerEvents = useTransform(scrollY, (v) => (v > 60 ? "auto" : "none"))
 
+  // HOOKS RIFATTORIZZATI: Da mettere SEMPRE prima di qualsiasi return condizionale!
+  const headerBgColor = useTransform(headerBgOpacity, (o) => `rgba(223, 210, 196, ${o})`)
+  const headerBoxShadow = useTransform(shadowOpacity, (o) => `0 1px 0 rgba(0,0,0,${o})`)
+
   if (pathname === "/menu") return null
 
   return (
@@ -62,8 +66,8 @@ export default function Header() {
         className="fixed top-0 left-0 right-0 z-40"
         style={{
           height: headerHeight,
-          backgroundColor: useTransform(headerBgOpacity, (o) => `rgba(223, 210, 196, ${o})`), // Colore sabbia
-          boxShadow: useTransform(shadowOpacity, (o) => `0 1px 0 rgba(0,0,0,${o})`),
+          backgroundColor: headerBgColor, // Variabile sicura
+          boxShadow: headerBoxShadow,     // Variabile sicura
         }}
       >
         {/* Livello 1: Inseguitore X (dal centro a 24px limite sinistro) */}

@@ -8,11 +8,26 @@ import Link from "next/link"
 import { X } from "lucide-react"
 import { motion } from "framer-motion"
 import { menu } from "@/data/menu"
+import { useEffect } from "react"
 
 export default function MenuPage() {
-  return (
-    <div className="relative min-h-screen bg-white text-[#111] pb-32 overflow-x-hidden">
+  
+  useEffect(() => {
+    // Gestione safely del body per eliminare il mismatch di colore e il rubber band
+    document.documentElement.style.backgroundColor = "#ffffff"
+    document.body.style.backgroundColor = "#ffffff"
+    document.body.style.overscrollBehaviorY = "none"
+    
+    return () => {
+      // Pulizia quando esci dal menu per ripristinare il logo/landing in altre pagine
+      document.documentElement.style.backgroundColor = ""
+      document.body.style.backgroundColor = ""
+      document.body.style.overscrollBehaviorY = ""
+    }
+  }, [])
 
+  return (
+    <div className="relative min-h-screen bg-white text-[#111] pb-0 overflow-x-hidden">
       {/* Tasto chiudi — stile IG */}
       <Link
         href="/"
@@ -23,19 +38,33 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice Foglie — Unica immagine adattiva con overlay (Opzione Luxury) */}
-      <div
-        className="fixed inset-0 pointer-events-none z-10"
-        style={{ width: "100%", height: "100%" }}
-      >
-        <Image
-          src="/images/leaves_alpha.webp"
-          alt=""
-          fill
-          className="object-cover"
-          style={{ objectPosition: "center top" }}
-          priority
-        />
+      {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
+      <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+
+        {/* Ramo Sinistro — si restringe sui viewport piccoli, mostra solo il bordo esterno */}
+        <div className="absolute top-0 left-0 h-[60vh] sm:h-[75vh] lg:h-full w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+          <Image
+            src="/images/foglie-menu-sx.png"
+            alt=""
+            fill
+            className="object-cover"
+            style={{ objectPosition: "left top" }}
+            priority
+          />
+        </div>
+
+        {/* Ramo Destro */}
+        <div className="absolute top-0 right-0 h-[60vh] sm:h-[75vh] lg:h-full w-[28vw] sm:w-[32vw] md:w-[38vw] lg:w-[43vw] xl:w-[45vw] max-w-[560px]">
+          <Image
+            src="/images/foglie-menu-dx.png"
+            alt=""
+            fill
+            className="object-cover"
+            style={{ objectPosition: "right top" }}
+            priority
+          />
+        </div>
+
       </div>
 
       {/* Contenuto */}
@@ -43,24 +72,28 @@ export default function MenuPage() {
 
         {/* Titolo */}
         <motion.div
-          className="text-center mb-20 md:mb-28"
+          className="text-center mb-20 md:mb-28 flex flex-col items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p
-            className="text-[0.5rem] tracking-[0.3em] uppercase mb-4"
-            style={{ color: "#999" }}
-          >
-            Ristorante · Cala Zingaro
-          </p>
+          {/* Logo nero al posto del testo "Ristorante Cala Zingaro" come da richiesta */}
+          <div className="mb-8">
+            <Image
+              src="/images/logo.svg"
+              alt="Cala Zingaro"
+              width={180}
+              height={60}
+              className="h-10 md:h-14 w-auto object-contain"
+              priority
+            />
+          </div>
           <h1
-            className="uppercase leading-none"
+            className="uppercase leading-none tracking-normal"
             style={{
-              fontFamily: "var(--font-antonio)",
-              fontWeight: 200,
-              fontSize: "clamp(5rem, 22vw, 9rem)",
-              letterSpacing: "-0.01em",
+              fontFamily: "var(--font-yanone)",
+              fontWeight: 300,
+              fontSize: "clamp(4.5rem, 18vw, 11rem)",
             }}
           >
             Menù
@@ -85,18 +118,18 @@ export default function MenuPage() {
                   <h2
                     className="uppercase"
                     style={{
-                      fontFamily: "var(--font-antonio)",
+                      fontFamily: "var(--font-yanone)",
                       fontWeight: 300,
-                      fontSize: "clamp(1.6rem, 6vw, 2.8rem)",
-                      letterSpacing: "0.12em",
+                      fontSize: "clamp(2.5rem, 8vw, 4rem)",
+                      letterSpacing: "0.05em",
                     }}
                   >
                     {category.nome}
                   </h2>
                   {category.descrizione && (
                     <p
-                      className="mt-2 text-[0.65rem] tracking-widest uppercase"
-                      style={{ color: "#999", fontFamily: "var(--font-sans)" }}
+                      className="mt-2 text-[0.7rem] md:text-sm tracking-wide uppercase font-medium"
+                      style={{ color: "#999", fontFamily: "var(--font-quicksand)" }}
                     >
                       {category.descrizione}
                     </p>
@@ -133,18 +166,18 @@ export default function MenuPage() {
                       }}
                     >
                       <h3
-                        className="text-[0.9rem] md:text-base font-medium tracking-wide"
-                        style={{ fontFamily: "var(--font-sans)" }}
+                        className="text-[1.1rem] md:text-xl font-semibold tracking-wide"
+                        style={{ fontFamily: "var(--font-quicksand)", color: "#000" }}
                       >
                         {item.nome}
                       </h3>
                       {item.descrizione && (
                         <p
-                          className="mt-1 text-[0.75rem] md:text-sm font-light max-w-xs mx-auto"
+                          className="mt-1.5 text-[0.8rem] md:text-base font-medium max-w-xs mx-auto"
                           style={{
-                            color: "#777",
-                            fontFamily: "var(--font-sans)",
-                            lineHeight: 1.5,
+                            color: "#555",
+                            fontFamily: "var(--font-quicksand)",
+                            lineHeight: 1.4,
                           }}
                         >
                           {item.descrizione}
@@ -152,8 +185,8 @@ export default function MenuPage() {
                       )}
                       {item.prezzo !== null && (
                         <p
-                          className="mt-1.5 text-[0.7rem] tracking-wider"
-                          style={{ color: "#aaa", fontFamily: "var(--font-sans)" }}
+                          className="mt-1.5 text-[0.8rem] font-medium tracking-wide"
+                          style={{ color: "#888", fontFamily: "var(--font-quicksand)" }}
                         >
                           € {item.prezzo}
                         </p>
@@ -165,28 +198,6 @@ export default function MenuPage() {
             )
           })}
         </div>
-
-        {/* Footer pagina */}
-        <motion.div
-          className="text-center mt-24 md:mt-32"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <p
-            className="text-[0.55rem] tracking-[0.25em] uppercase"
-            style={{ color: "#bbb", fontFamily: "var(--font-sans)" }}
-          >
-            Traversa XIX Pineta · Milano Marittima
-          </p>
-          <p
-            className="mt-1 text-[0.55rem] tracking-[0.25em] uppercase"
-            style={{ color: "#ccc", fontFamily: "var(--font-sans)" }}
-          >
-            I prezzi variano secondo disponibilità del pescato
-          </p>
-        </motion.div>
 
       </div>
     </div>
