@@ -23,40 +23,63 @@ export default function MenuPage() {
         <X strokeWidth={1.5} size={26} />
       </Link>
 
-      {/* Cornice foglie — Desktop */}
-      <div
-        className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block"
-        style={{
-          width: "100vw",
-          height: "100dvh",
-          mixBlendMode: "multiply",
-          transform: "scale(1.08)",
-        }}
-      >
-        <Image
-          src="/images/leaves_desktop_v2.webp"
-          alt=""
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
-      {/* Cornice foglie — Mobile */}
+      {/* Cornice foglie — Mobile (immagine dalla copertina del menu fisico, centro biancato) */}
       <div
         className="fixed top-0 left-0 pointer-events-none z-10 block md:hidden"
         style={{
           width: "100vw",
           height: "100dvh",
           mixBlendMode: "multiply",
-          transform: "scale(1.08)",
+          transform: "scale(1.04)",
         }}
       >
         <Image
-          src="/images/leaves_mobile.webp"
+          src="/images/leaves_final_mobile.webp"
           alt=""
           fill
           className="object-cover"
+          style={{ objectPosition: "center top" }}
+          priority
+        />
+      </div>
+
+      {/* Cornice foglie — Desktop lato sinistro */}
+      <div
+        className="fixed top-0 left-0 pointer-events-none z-10 hidden md:block"
+        style={{
+          width: "35vw",
+          height: "100dvh",
+          mixBlendMode: "multiply",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src="/images/leaves_final_mobile.webp"
+          alt=""
+          fill
+          className="object-cover"
+          style={{ objectPosition: "left top" }}
+          priority
+        />
+      </div>
+
+      {/* Cornice foglie — Desktop lato destro (specchiato) */}
+      <div
+        className="fixed top-0 right-0 pointer-events-none z-10 hidden md:block"
+        style={{
+          width: "35vw",
+          height: "100dvh",
+          mixBlendMode: "multiply",
+          overflow: "hidden",
+          transform: "scaleX(-1)",
+        }}
+      >
+        <Image
+          src="/images/leaves_final_mobile.webp"
+          alt=""
+          fill
+          className="object-cover"
+          style={{ objectPosition: "left top" }}
           priority
         />
       </div>
