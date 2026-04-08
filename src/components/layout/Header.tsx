@@ -33,6 +33,14 @@ export default function Header() {
 
   const { scrollY } = useScroll()
 
+  // Resetta scrollY ad ogni cambio di pagina — evita il flash del logo a sinistra
+  // quando si torna dalla pagina /menu (il componente non si rimonta, il MotionValue persiste)
+  useEffect(() => {
+    scrollY.set(0)
+    window.scrollTo(0, 0)
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
+
   // Sincronia fisica continua: Height e Background passano dai valori Hero a quelli Sticky in 120px di scroll
   const headerHeight = useTransform(scrollY, [0, 120], [88, 64])
   const headerBgOpacity = useTransform(scrollY, [40, 120], [0, 1])
