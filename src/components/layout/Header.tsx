@@ -93,9 +93,9 @@ export default function Header() {
           />
         </Link>
 
-        {/* Pulsanti destra */}
+        {/* Prenota — compare solo dopo lo scroll */}
         <div
-          className="absolute right-6 md:right-10 flex items-center gap-3"
+          className="absolute right-16 md:right-20"
           style={{
             top: "50%",
             transform: "translateY(-50%)",
@@ -106,20 +106,27 @@ export default function Header() {
         >
           <Link
             href="#prenota"
-            className="text-[0.6rem] tracking-widest uppercase px-4 py-2 rounded-full border transition-colors duration-300"
+            className="text-[0.6rem] tracking-widest uppercase px-4 py-2 rounded-full border"
             style={{ borderColor: "var(--color-text)", color: "var(--color-text)" }}
           >
             Prenota
           </Link>
-
-          <button
-            onClick={() => setMenuOpen(true)}
-            aria-label="Apri menu"
-            style={{ color: "var(--color-text)" }}
-          >
-            <Menu size={20} strokeWidth={1.5} />
-          </button>
         </div>
+
+        {/* Hamburger — sempre visibile, bianco in cima e scuro quando scrolled */}
+        <button
+          onClick={() => setMenuOpen(true)}
+          aria-label="Apri menu"
+          className="absolute right-6 md:right-10"
+          style={{
+            top: "50%",
+            transform: "translateY(-50%)",
+            color: scrolled ? "var(--color-text)" : "#fff",
+            transition,
+          }}
+        >
+          <Menu size={20} strokeWidth={1.5} />
+        </button>
       </header>
 
       <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
