@@ -18,9 +18,10 @@ const voci = [
 interface MobileMenuProps {
   isOpen: boolean
   onClose: () => void
+  scrolled: boolean
 }
 
-export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProps) {
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : ""
     return () => { document.body.style.overflow = "" }
@@ -37,8 +38,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Header del menu */}
-          <div className="flex justify-between items-center px-6 py-4">
+          {/* Logo */}
+          <div className="flex items-center px-6 py-4">
             <Image
               src="/images/logo.svg"
               alt="Cala Zingaro"
@@ -47,15 +48,17 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               className="object-contain"
               style={{ height: "40px", width: "auto" }}
             />
-            <button
-              onClick={onClose}
-              aria-label="Chiudi menu"
-              className="text-3xl leading-none"
-              style={{ color: "var(--color-ink)" }}
-            >
-              ×
-            </button>
           </div>
+
+          {/* X — posizionata esattamente dove stava l'hamburger */}
+          <button
+            onClick={onClose}
+            aria-label="Chiudi menu"
+            className="fixed right-6 md:right-10 text-3xl leading-none -translate-y-1/2"
+            style={{ top: scrolled ? 32 : 54, color: "var(--color-ink)" }}
+          >
+            ×
+          </button>
 
           {/* Voci — centrate */}
           <nav className="flex-1 flex flex-col justify-center items-center gap-1 text-center">

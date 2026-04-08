@@ -128,7 +128,7 @@ export default function Header() {
         </button>
       </header>
 
-      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} scrolled={scrolled} />
     </>
   )
 }

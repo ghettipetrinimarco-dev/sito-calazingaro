@@ -13,8 +13,8 @@ export default function Hero() {
 
   useEffect(() => {
     return scrollY.on("change", (v) => {
-      if (v > 120) setVisible(true)
-      else if (v < 60) setVisible(false)
+      if (v > 10) setVisible(true)
+      else if (v < 5) setVisible(false)
     })
   }, [scrollY])
 
