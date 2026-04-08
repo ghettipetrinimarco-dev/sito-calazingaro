@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 export default function Footer() {
   const pathname = usePathname()
 
-  if (pathname === "/menu") return null
+  if (pathname === "/menu" || pathname === "/vini") return null
 
   return (
     <footer className="relative z-50" style={{ backgroundColor: "var(--color-ink)" }}>

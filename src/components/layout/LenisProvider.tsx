@@ -15,7 +15,7 @@ export default function LenisProvider({
     // Scroll in cima ad ogni cambio di pagina
     window.scrollTo(0, 0)
 
-    if (pathname === "/menu") return // Disabilita Lenis sul menu per permettere zoom e pan nativo
+    if (pathname === "/menu" || pathname === "/vini") return // Disabilita Lenis su menu e vini
 
     const lenis = new Lenis({
       duration: 1.2,

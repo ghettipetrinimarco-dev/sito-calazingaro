@@ -29,7 +29,7 @@ export default function Header() {
     })
   }, [scrollY])
 
-  if (pathname === "/menu") return null
+  if (pathname === "/menu" || pathname === "/vini") return null
 
   const transition = "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
 
