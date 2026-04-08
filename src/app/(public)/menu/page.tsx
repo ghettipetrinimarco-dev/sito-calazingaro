@@ -32,10 +32,17 @@ export default function MenuPage() {
       <Link
         href="/"
         aria-label="Chiudi menu"
-        className="fixed top-5 right-5 z-50 p-2"
-        style={{ color: "#fff", filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.4))" }}
+        className="fixed top-5 right-5 z-50 flex items-center justify-center rounded-full"
+        style={{
+          width: 40,
+          height: 40,
+          color: "#fff",
+          backgroundColor: "rgba(0,0,0,0.2)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+        }}
       >
-        <X strokeWidth={1.5} size={28} />
+        <X strokeWidth={1.5} size={20} />
       </Link>
 
       {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
