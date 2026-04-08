@@ -265,13 +265,26 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ## GIT WORKFLOW
 
-```bash
-git checkout -b session/YYYY-MM-DD_HH-mm
-git add -A && git commit -m "feat: descrizione in italiano"
-# MAI push su main senza ok esplicito di Marco
+### Struttura branch
+```
+main        ← produzione — solo merge da `modifiche` con ok di Marco
+modifiche   ← branch di integrazione — merge dei branch personali quando pronti
+marco       ← branch personale di Marco
+ale         ← branch personale di Alessandro
 ```
 
-Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:`
+### Flusso operativo
+1. Ogni sviluppatore lavora sul proprio branch (`marco`, `ale`, ecc.)
+2. Quando una feature è pronta e verificata → merge su `modifiche`
+3. Quando `modifiche` è stabile → merge su `main` (solo con ok esplicito di Marco)
+4. **Mai committare o pushare direttamente su `main`**
+
+### Convenzioni commit
+```bash
+git add <file> && git commit -m "feat: descrizione in italiano"
+```
+
+Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:` `docs:`
 
 ---
 
