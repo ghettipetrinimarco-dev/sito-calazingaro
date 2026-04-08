@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "sync-assets": "git add public/ && git diff --cached --quiet && echo 'Nessun asset nuovo.' || git commit -m 'assets: aggiornamento contenuti' && git push origin HEAD"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

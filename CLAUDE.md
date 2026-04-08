@@ -263,6 +263,30 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ---
 
+## SYNC ASSET (FOTO / VIDEO)
+
+Quando aggiungi nuove foto o video nella cartella `public/`, esegui:
+
+```bash
+pnpm sync-assets
+```
+
+Questo comando fa automaticamente:
+1. `git add public/` — staged tutti i nuovi asset
+2. `git commit -m "assets: aggiornamento contenuti"` — commit automatico
+3. `git push origin HEAD` — push sul branch attivo → visibile su GitHub per tutti i collaboratori
+
+**Cartelle asset:**
+- `public/Ambiente/` — foto location e spiaggia
+- `public/Cucina/` — foto cibo e ristorante
+- `public/videos/` — video (attenzione: file grandi, push può essere lento)
+- `public/images/` — loghi, icone, elementi grafici
+
+> ⚠️ I video pesanti (>50MB) potrebbero essere rifiutati da GitHub (limite 100MB per file).
+> In quel caso usare un CDN esterno (Cloudflare R2, Vercel Blob, ecc.) e referenziare l'URL.
+
+---
+
 ## GIT WORKFLOW
 
 ```bash
