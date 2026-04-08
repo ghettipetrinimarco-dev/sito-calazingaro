@@ -32,12 +32,21 @@ export default function Hero() {
         <source src="/Video/Cala-Zingaro-Landing-Page-Video2.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay */}
+      {/* Overlay base — basso per il testo */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
+            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
+        }}
+      />
+
+      {/* Vignettatura in alto — per il logo */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 18%, rgba(0,0,0,0) 35%)",
         }}
       />
 
