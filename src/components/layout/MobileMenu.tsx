@@ -32,11 +32,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {isOpen && (
         <motion.div
           className="fixed inset-0 z-50 flex flex-col"
-          style={{ backgroundColor: "var(--color-night)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35 }}
+          style={{ backgroundColor: "var(--color-sand)" }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Header del menu */}
           <div className="flex justify-between items-center px-6 py-4">
@@ -52,20 +52,26 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               onClick={onClose}
               aria-label="Chiudi menu"
               className="text-3xl leading-none"
-              style={{ color: "var(--color-sand)" }}
+              style={{ color: "var(--color-ink)" }}
             >
               ×
             </button>
           </div>
 
-          {/* Voci */}
-          <nav className="flex-1 flex flex-col justify-center px-8 gap-1">
+          {/* Voci — centrate */}
+          <nav className="flex-1 flex flex-col justify-center items-center gap-1 text-center">
             {voci.map((voce, i) => (
               <motion.div
                 key={voce.href}
-                initial={{ opacity: 0, x: -24 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05 + i * 0.06, duration: 0.4 }}
+                initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  delay: 0.06 + i * 0.07,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                whileHover="hover"
+                whileTap="hover"
               >
                 <TransitionLink
                   href={voce.href}
@@ -75,12 +81,30 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     fontFamily: "var(--font-serif)",
                     fontWeight: 200,
                     fontSize: "clamp(2rem, 8vw, 3rem)",
-                    color: "var(--color-sand)",
+                    color: "var(--color-ink)",
                     lineHeight: 1.15,
                     letterSpacing: "0.02em",
+                    display: "inline-block",
+                    position: "relative",
                   }}
                 >
                   {voce.label}
+                  {/* Underline che cresce al hover/tap */}
+                  <motion.span
+                    variants={{ hover: { scaleX: 1 }, rest: { scaleX: 0 } }}
+                    initial="rest"
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      position: "absolute",
+                      bottom: 2,
+                      left: 0,
+                      right: 0,
+                      height: 1.5,
+                      backgroundColor: "var(--color-ink)",
+                      transformOrigin: "left",
+                      display: "block",
+                    }}
+                  />
                 </TransitionLink>
               </motion.div>
             ))}
@@ -89,7 +113,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
+              transition={{ delay: 0.56, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="mt-8"
             >
               <Link
@@ -97,8 +121,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 onClick={onClose}
                 className="inline-block text-[0.62rem] tracking-widest uppercase px-6 py-3 rounded-full transition-opacity hover:opacity-80"
                 style={{
-                  backgroundColor: "var(--color-sand)",
-                  color: "var(--color-night)",
+                  backgroundColor: "var(--color-ink)",
+                  color: "var(--color-sand)",
                 }}
               >
                 Prenota ora

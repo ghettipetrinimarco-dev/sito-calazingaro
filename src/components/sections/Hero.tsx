@@ -1,13 +1,13 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { motion, type Variants } from "framer-motion"
+import { motion, useScroll, type Variants } from "framer-motion"
 
-// Varianti per il fade-in al caricamento con stagger
 const containerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.18, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.18, delayChildren: 0.1 },
   },
 }
 
@@ -21,6 +21,16 @@ const itemVariants: Variants = {
 }
 
 export default function Hero() {
+  const [visible, setVisible] = useState(false)
+  const { scrollY } = useScroll()
+
+  useEffect(() => {
+    return scrollY.on("change", (v) => {
+      if (v > 120) setVisible(true)
+      else if (v < 60) setVisible(false)
+    })
+  }, [scrollY])
+
   return (
     <section className="relative flex flex-col overflow-hidden" style={{ minHeight: "100svh" }}>
       {/* Background: gradiente Adriatico */}
@@ -41,12 +51,12 @@ export default function Hero() {
         }}
       />
 
-      {/* Contenuto — posizionato in basso, animato al caricamento */}
+      {/* Contenuto — posizionato in basso, compare al primo scroll */}
       <motion.div
         className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14"
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
+        animate={visible ? "visible" : "hidden"}
       >
         <motion.p
           className="text-[0.55rem] tracking-[0.22em] uppercase mb-3"
