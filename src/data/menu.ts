@@ -111,12 +111,12 @@ export const menu: MenuCategory[] = [
     nome: "DOLCI",
     descrizione: null,
     items: [
-      { id: "d1", nome: "Gelato di nostra produzione", descrizione: "", prezzo: null, foto: null, disponibile: true },
-      { id: "d2", nome: "Panna cotta", descrizione: "pop-corn caramellato", prezzo: null, foto: null, disponibile: true },
-      { id: "d3", nome: "Mascarpone", descrizione: "tiramisù, coulis di fragole", prezzo: null, foto: null, disponibile: true },
-      { id: "d4", nome: "Sasso", descrizione: "cioccolato bianco e pistacchio con salsa Kahlùa", prezzo: null, foto: null, disponibile: true },
-      { id: "d5", nome: "Cannolo", descrizione: "lampone", prezzo: null, foto: null, disponibile: true },
-      { id: "d6", nome: "Pesca romagnola", descrizione: "crema ai cachi e crema al cacao", prezzo: null, foto: null, disponibile: true },
+      { id: "d1", nome: "Gelato di nostra produzione", descrizione: "", prezzo: 8, foto: null, disponibile: true },
+      { id: "d2", nome: "Panna cotta", descrizione: "pop-corn caramellato", prezzo: 10, foto: null, disponibile: true },
+      { id: "d3", nome: "Mascarpone", descrizione: "tiramisù, coulis di fragole", prezzo: 10, foto: null, disponibile: true },
+      { id: "d4", nome: "Sasso", descrizione: "cioccolato bianco e pistacchio con salsa Kahlùa", prezzo: 10, foto: null, disponibile: true },
+      { id: "d5", nome: "Cannolo", descrizione: "lampone", prezzo: 10, foto: null, disponibile: true },
+      { id: "d6", nome: "Pesca romagnola", descrizione: "crema ai cachi e crema al cacao", prezzo: 10, foto: null, disponibile: true },
     ],
   },
 ]
