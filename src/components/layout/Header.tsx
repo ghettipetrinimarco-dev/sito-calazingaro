@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useLayoutEffect } from "react"
-import Link from "next/link"
 import Image from "next/image"
+import TransitionLink from "@/components/transitions/TransitionLink"
 import { usePathname } from "next/navigation"
 import { useScroll } from "framer-motion"
 import { Menu } from "lucide-react"
@@ -45,9 +45,8 @@ export default function Header() {
         }}
       >
         {/* Logo */}
-        <Link
+        <TransitionLink
           href="/"
-          aria-label="Cala Zingaro — home"
           className="absolute"
           style={{
             top: "50%",
@@ -91,7 +90,7 @@ export default function Header() {
               transition,
             }}
           />
-        </Link>
+        </TransitionLink>
 
         {/* Prenota — compare solo dopo lo scroll */}
         <div
@@ -104,13 +103,13 @@ export default function Header() {
             transition,
           }}
         >
-          <Link
+          <a
             href="#prenota"
             className="text-[0.6rem] tracking-widest uppercase px-4 py-2 rounded-full border"
             style={{ borderColor: "var(--color-text)", color: "var(--color-text)" }}
           >
             Prenota
-          </Link>
+          </a>
         </div>
 
         {/* Hamburger — sempre visibile, bianco in cima e scuro quando scrolled */}
