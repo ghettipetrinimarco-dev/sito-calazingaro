@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 
 export default function Footer() {
@@ -13,12 +14,14 @@ export default function Footer() {
       <div className="px-6 md:px-10 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Logo + tagline */}
         <div>
-          <p
-            className="italic text-xl mb-3"
-            style={{ fontFamily: "var(--font-serif)", color: "rgba(244,242,237,0.7)" }}
-          >
-            Cala Zingaro
-          </p>
+          <Image
+            src="/images/logo.svg"
+            alt="Cala Zingaro"
+            width={140}
+            height={48}
+            className="mb-3"
+            style={{ height: 36, width: "auto", filter: "brightness(0) invert(1)", opacity: 0.7 }}
+          />
           <p className="text-xs leading-relaxed" style={{ color: "rgba(244,242,237,0.35)" }}>
             Beach Club & Ristorante<br />
             Milano Marittima (RA)<br />
