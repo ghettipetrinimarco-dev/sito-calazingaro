@@ -18,7 +18,7 @@ export default function EventiSection() {
         <RevealText>
           <SectionLabel>Serate & eventi</SectionLabel>
           <h2
-            className="italic font-light leading-none"
+            className="font-light uppercase tracking-wide leading-none"
             style={{
               fontFamily: "var(--font-serif)",
               fontSize: "clamp(2rem, 5vw, 3rem)",

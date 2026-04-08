@@ -25,7 +25,7 @@ export default function RistoranteSection() {
           <RevealText delay={0.1}>
             <SectionLabel>Ristorante</SectionLabel>
             <h2
-              className="italic font-light leading-none mb-5"
+              className="font-light uppercase tracking-wide leading-none mb-5"
               style={{
                 fontFamily: "var(--font-serif)",
                 fontSize: "clamp(2rem, 5vw, 3rem)",

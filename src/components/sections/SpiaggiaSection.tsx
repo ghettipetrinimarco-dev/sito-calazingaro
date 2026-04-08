@@ -14,7 +14,7 @@ export default function SpiaggiaSection() {
           <RevealText>
             <SectionLabel light>Beach Club</SectionLabel>
             <h2
-              className="italic font-light leading-none mb-5 text-white"
+              className="font-light uppercase tracking-wide leading-none mb-5 text-white"
               style={{
                 fontFamily: "var(--font-serif)",
                 fontSize: "clamp(2rem, 5vw, 3rem)",

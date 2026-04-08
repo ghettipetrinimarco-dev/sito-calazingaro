@@ -57,7 +57,7 @@ export default function Hero() {
         </motion.p>
 
         <motion.h1
-          className="italic font-light text-white leading-none mb-6"
+          className="font-light uppercase tracking-wide text-white leading-none mb-6"
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: "clamp(2.8rem, 10vw, 6rem)",

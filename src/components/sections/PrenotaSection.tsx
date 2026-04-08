@@ -23,7 +23,7 @@ export default function PrenotaSection() {
           Scegli la tua esperienza
         </p>
         <h2
-          className="italic font-light text-white leading-none mb-4"
+          className="font-light uppercase tracking-wide text-white leading-none mb-4"
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: "clamp(2.5rem, 8vw, 5rem)",

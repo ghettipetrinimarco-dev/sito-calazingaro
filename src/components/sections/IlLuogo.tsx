@@ -12,7 +12,7 @@ export default function IlLuogo() {
           <RevealText>
             <SectionLabel>Il luogo</SectionLabel>
             <h2
-              className="italic font-light leading-none mb-5"
+              className="font-light uppercase tracking-wide leading-none mb-5"
               style={{
                 fontFamily: "var(--font-serif)",
                 fontSize: "clamp(2.2rem, 6vw, 3.5rem)",

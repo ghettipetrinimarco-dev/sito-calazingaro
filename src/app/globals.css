@@ -2,8 +2,8 @@
 
 @theme inline {
   /* Font */
-  --font-sans: 'Satoshi', system-ui, sans-serif;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: var(--font-quicksand), system-ui, sans-serif;
+  --font-serif: var(--font-yanone), Georgia, sans-serif;
 
   /* Palette — mai bianco/nero puri */
   --color-sand: #F4F2ED;
