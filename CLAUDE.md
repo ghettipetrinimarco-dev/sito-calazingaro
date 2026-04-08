@@ -55,6 +55,7 @@ GitHub — version control
 9. **I dati menu stanno in `src/data/menu.ts`** — non hardcodare nelle pagine.
 10. **Notifiche sempre con `Promise.allSettled`** — mai `Promise.all` (vedi PATTERNS_GLOBALI.md).
 11. **Supabase client sempre lazy** — funzione `supabaseAdmin()`, mai costante globale.
+12. **Font nel CSS manuale: sempre variabili `next/font` dirette** — mai alias `@theme inline`. Vedi sezione FONT.
 
 ---
 
@@ -168,6 +169,28 @@ const nextConfig: NextConfig = {
 }
 ```
 Senza questo, Sharp non funziona in produzione su Vercel.
+
+---
+
+## FONT — REGOLA CRITICA (Tailwind v4 + next/font)
+
+`@theme inline` in Tailwind v4 **non emette variabili CSS nel browser** — le usa solo internamente per generare utility classes. Quindi `var(--font-sans)` o `var(--font-serif)` nel CSS manuale non funzionano.
+
+**Nel CSS manuale usa sempre le variabili `next/font` direttamente:**
+
+```css
+/* ✅ corretto */
+body { font-family: var(--font-quicksand), system-ui, sans-serif; }
+.title-display { font-family: var(--font-yanone), Georgia, sans-serif; }
+
+/* ❌ sbagliato — var(--font-sans) non esiste nel browser con @theme inline */
+body { font-family: var(--font-sans); }
+```
+
+Le utility Tailwind (`font-sans` come classe) funzionano perché Tailwind risolve il valore a compile time.
+Il CSS manuale con `var()` punta a variabili che non esistono a runtime → fallback al font di sistema.
+
+Font attivi: `--font-yanone` (Yanone Kaffeesatz, titoli) · `--font-quicksand` (Quicksand, corpo testo)
 
 ---
 

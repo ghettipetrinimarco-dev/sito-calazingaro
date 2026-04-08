@@ -25,7 +25,7 @@ export default function PrenotaSection() {
         <h2
           className="font-light uppercase tracking-wide text-white leading-none mb-4"
           style={{
-            fontFamily: "var(--font-serif)",
+            fontFamily: "var(--font-yanone)",
             fontSize: "clamp(2.5rem, 8vw, 5rem)",
           }}
         >

@@ -15,7 +15,7 @@ export default function PrenotazioneSection() {
           <h2
             className="font-light uppercase tracking-wide leading-none mb-12 md:mb-16"
             style={{
-              fontFamily: "var(--font-serif)",
+              fontFamily: "var(--font-yanone)",
               fontSize: "clamp(2.2rem, 6vw, 3.5rem)",
               color: "var(--color-text)",
             }}
@@ -40,7 +40,7 @@ export default function PrenotazioneSection() {
                 <h3
                   className="font-light uppercase tracking-wide leading-tight"
                   style={{
-                    fontFamily: "var(--font-serif)",
+                    fontFamily: "var(--font-yanone)",
                     fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
                   }}
                 >
@@ -76,7 +76,7 @@ export default function PrenotazioneSection() {
                 <h3
                   className="font-light uppercase tracking-wide leading-tight"
                   style={{
-                    fontFamily: "var(--font-serif)",
+                    fontFamily: "var(--font-yanone)",
                     fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
                     color: "var(--color-text)",
                   }}

@@ -23,14 +23,14 @@ html { scroll-behavior: auto; }
 body {
   background-color: var(--color-sand);
   color: var(--color-text);
-  font-family: var(--font-sans);
+  font-family: var(--font-quicksand), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Titoli display — usare sempre questo per h1/h2 grandi */
 .title-display {
-  font-family: var(--font-serif);
+  font-family: var(--font-yanone), Georgia, sans-serif;
   font-weight: 300;
   line-height: 0.95;
   letter-spacing: -0.02em;
@@ -42,5 +42,5 @@ body {
   font-size: 0.6rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-family: var(--font-sans);
+  font-family: var(--font-quicksand), system-ui, sans-serif;
 }
