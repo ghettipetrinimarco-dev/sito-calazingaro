@@ -39,13 +39,13 @@ export default function Header() {
       <header
         className="fixed top-0 left-0 right-0 z-40"
         style={{
-          height: scrolled ? 64 : 88,
+          height: scrolled ? 64 : 108,
           backgroundColor: scrolled ? "rgba(223, 210, 196, 1)" : "rgba(223, 210, 196, 0)",
           boxShadow: scrolled ? "0 1px 0 rgba(0,0,0,0.06)" : "none",
           transition,
         }}
       >
-        {/* Logo */}
+        {/* Logo — grande e centrato in cima, piccolo a sinistra dopo lo scroll */}
         <TransitionLink
           href="/"
           aria-label="Cala Zingaro — home"
@@ -54,18 +54,18 @@ export default function Header() {
             top: "50%",
             left: scrolled ? 24 : "50%",
             transform: scrolled ? "translateY(-50%)" : "translate(-50%, -50%)",
-            height: scrolled ? 44 : 72,
+            height: scrolled ? 44 : 96,
             transition,
             display: "flex",
             alignItems: "center",
           }}
         >
-          {/* Logo colorato (visibile quando scrolled) */}
+          {/* Logo colorato — visibile sulla navbar sabbia */}
           <Image
             src="/images/logo.svg"
             alt="Cala Zingaro"
             width={200}
-            height={72}
+            height={96}
             style={{
               height: "100%",
               width: "auto",
@@ -74,12 +74,12 @@ export default function Header() {
               transition,
             }}
           />
-          {/* Logo bianco (visibile in cima) */}
+          {/* Logo bianco — visibile sull'hero */}
           <Image
             src="/images/logo.svg"
             alt=""
             width={200}
-            height={72}
+            height={96}
             style={{
               height: "100%",
               width: "auto",
@@ -114,7 +114,7 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Hamburger — sempre visibile, bianco in cima e scuro quando scrolled */}
+        {/* Hamburger — sempre visibile, bianco sull'hero e scuro sulla navbar */}
         <button
           onClick={() => setMenuOpen(true)}
           aria-label="Apri menu"
