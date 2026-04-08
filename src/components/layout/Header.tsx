@@ -4,7 +4,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useMotionValue } from "framer-motion"
 import { Menu } from "lucide-react"
 
 const MotionImage = motion(Image)
@@ -31,15 +31,22 @@ export default function Header() {
     return () => ro.disconnect()
   }, [])
 
-  const { scrollY } = useScroll()
+  const { scrollY: rawScrollY } = useScroll()
 
-  // Resetta scrollY PRIMA del paint ad ogni cambio di pagina — evita il flash del logo a sinistra
-  // useLayoutEffect è sincrono: gira prima che il browser dipinga, eliminando il frame errato
+  // MotionValue che controlliamo noi — non dipende dal listener interno di Framer Motion
+  // Possiamo resettarlo a 0 prima del paint senza race condition
+  const scrollY = useMotionValue(0)
+
+  // Sincronizza con lo scroll reale
+  useEffect(() => {
+    return rawScrollY.on("change", (v) => scrollY.set(v))
+  }, [rawScrollY, scrollY])
+
+  // Reset garantito prima del paint ad ogni cambio pagina
   useLayoutEffect(() => {
     scrollY.set(0)
     window.scrollTo(0, 0)
-  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [pathname, scrollY])
 
   // Sincronia fisica continua: Height e Background passano dai valori Hero a quelli Sticky in 120px di scroll
   const headerHeight = useTransform(scrollY, [0, 120], [88, 64])
