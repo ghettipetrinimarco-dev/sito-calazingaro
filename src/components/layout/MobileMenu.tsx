@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
+import TransitionLink from "@/components/TransitionLink"
 
 const voci = [
   { label: "Ristorante", href: "/ristorante" },
@@ -66,7 +67,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 + i * 0.06, duration: 0.4 }}
               >
-                <Link
+                <TransitionLink
                   href={voce.href}
                   onClick={onClose}
                   className="block py-1.5"
@@ -80,7 +81,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   }}
                 >
                   {voce.label}
-                </Link>
+                </TransitionLink>
               </motion.div>
             ))}
 

@@ -3,6 +3,8 @@ import { Cormorant_Garamond, Antonio, Yanone_Kaffeesatz, Quicksand } from "next/
 import LenisProvider from "@/components/layout/LenisProvider"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
+import { TransitionProvider } from "@/contexts/TransitionContext"
+import LeafOverlay from "@/components/LeafOverlay"
 import "./globals.css"
 
 const cormorant = Cormorant_Garamond({
@@ -62,11 +64,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <LenisProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </LenisProvider>
+        <TransitionProvider>
+          <LeafOverlay />
+          <LenisProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </LenisProvider>
+        </TransitionProvider>
       </body>
     </html>
   )
