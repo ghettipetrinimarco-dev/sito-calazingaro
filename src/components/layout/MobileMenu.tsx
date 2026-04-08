@@ -69,12 +69,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <Link
                   href={voce.href}
                   onClick={onClose}
-                  className="block italic py-1.5"
+                  className="block py-1.5"
                   style={{
                     fontFamily: "var(--font-serif)",
+                    fontWeight: 200,
                     fontSize: "clamp(2rem, 8vw, 3rem)",
                     color: "var(--color-sand)",
                     lineHeight: 1.15,
+                    letterSpacing: "0.02em",
                   }}
                 >
                   {voce.label}
