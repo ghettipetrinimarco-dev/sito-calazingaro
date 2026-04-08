@@ -1,39 +1,27 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { motion, useScroll } from "framer-motion"
+import { motion } from "framer-motion"
 import TransitionLink from "@/components/TransitionLink"
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function Hero() {
-  const [visible, setVisible] = useState(false)
-  const { scrollY } = useScroll()
-
-  useEffect(() => {
-    return scrollY.on("change", (v) => {
-      if (v > 120) setVisible(true)
-      else if (v < 60) setVisible(false)
-    })
-  }, [scrollY])
-
   return (
     <section className="relative overflow-hidden" style={{ height: "100svh" }}>
 
-      {/* Foto fullscreen */}
-      <Image
-        src="/Ambiente/Cala-Zingaro-Ambiente-3.webp"
-        alt="Cala Zingaro — spiaggia"
-        fill
-        priority
-        loading="eager"
-        sizes="100vw"
-        className="object-cover"
-        style={{ objectPosition: "center 60%" }}
-      />
+      {/* Video fullscreen */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: "center center" }}
+      >
+        <source src="/Video/Cala-Zingaro-Landing-Page-Video2.mp4" type="video/mp4" />
+      </video>
 
-      {/* Overlay scuro sfumato verso il basso */}
+      {/* Overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -42,14 +30,13 @@ export default function Hero() {
         }}
       />
 
-      {/* Contenuto — appare al primo scroll */}
+      {/* Contenuto */}
       <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-12 pb-10 md:pb-16">
 
-        {/* Tagline principale */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
-          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 1.1, ease: EASE }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}
           className="text-white leading-none mb-6 md:mb-8"
           style={{
             fontFamily: "var(--font-yanone)",
@@ -61,11 +48,10 @@ export default function Hero() {
           The place<br />not to be sad.
         </motion.h1>
 
-        {/* Riga sotto — label + CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.9, ease: EASE, delay: visible ? 0.15 : 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.45 }}
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"
         >
           <p
