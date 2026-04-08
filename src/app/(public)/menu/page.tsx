@@ -33,7 +33,7 @@ export default function MenuPage() {
         href="/"
         aria-label="Chiudi menu"
         className="fixed top-5 right-5 z-50 p-2"
-        style={{ color: "#111" }}
+        style={{ color: "#fff", filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.4))" }}
       >
         <X strokeWidth={1.5} size={28} />
       </Link>
