@@ -52,7 +52,7 @@ export default function Hero() {
           transition={{ duration: 1.1, ease: EASE }}
           className="text-white leading-none mb-6 md:mb-8"
           style={{
-            fontFamily: "var(--font-serif)",
+            fontFamily: "var(--font-yanone)",
             fontWeight: 300,
             fontSize: "clamp(3rem, 11vw, 8rem)",
             letterSpacing: "-0.01em",

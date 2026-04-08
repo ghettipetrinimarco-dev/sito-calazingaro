@@ -20,7 +20,7 @@ export default function EventiSection() {
           <h2
             className="font-light uppercase tracking-wide leading-none"
             style={{
-              fontFamily: "var(--font-serif)",
+              fontFamily: "var(--font-yanone)",
               fontSize: "clamp(2rem, 5vw, 3rem)",
               color: "var(--color-text)",
             }}
