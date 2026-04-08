@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { motion, useScroll, useTransform } from "framer-motion"
+import { Menu } from "lucide-react"
 
 const MotionImage = motion(Image)
 import MobileMenu from "./MobileMenu"
@@ -139,10 +140,9 @@ export default function Header() {
           <button
             onClick={() => setMenuOpen(true)}
             aria-label="Apri menu"
-            className="text-[0.6rem] tracking-widest uppercase"
             style={{ color: "var(--color-text)" }}
           >
-            Menu
+            <Menu size={20} strokeWidth={1.5} />
           </button>
         </motion.div>
       </motion.header>
