@@ -5,7 +5,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { X } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import { menu } from "@/data/menu"
 import { useEffect } from "react"
@@ -28,14 +28,22 @@ export default function MenuPage() {
 
   return (
     <div className="relative min-h-screen bg-white text-[#111] pb-0 overflow-x-hidden">
-      {/* Tasto chiudi — stile IG */}
+      {/* Pill fisso in basso — sempre raggiungibile dal pollice */}
       <Link
         href="/"
-        aria-label="Chiudi menu"
-        className="fixed top-5 right-5 z-50 p-2"
-        style={{ mixBlendMode: "difference", color: "white" }}
+        aria-label="Torna al sito"
+        className="fixed bottom-8 left-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-full"
+        style={{
+          transform: "translateX(-50%)",
+          backgroundColor: "#111",
+          color: "#fff",
+          fontSize: "0.65rem",
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+        }}
       >
-        <X strokeWidth={1.5} size={26} />
+        <ArrowLeft size={13} strokeWidth={2} />
+        Torna al sito
       </Link>
 
       {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
