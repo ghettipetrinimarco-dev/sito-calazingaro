@@ -12,6 +12,9 @@ export default function LenisProvider({
   const pathname = usePathname()
 
   useEffect(() => {
+    // Scroll in cima ad ogni cambio di pagina
+    window.scrollTo(0, 0)
+
     if (pathname === "/menu") return // Disabilita Lenis sul menu per permettere zoom e pan nativo
 
     const lenis = new Lenis({
@@ -32,7 +35,7 @@ export default function LenisProvider({
       cancelAnimationFrame(animationFrameId)
       lenis.destroy()
     }
-  }, [])
+  }, [pathname])
 
   return <>{children}</>
 }

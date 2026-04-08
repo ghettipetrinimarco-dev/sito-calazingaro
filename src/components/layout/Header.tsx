@@ -15,7 +15,9 @@ export default function Header() {
   
   // Riferimento per conoscere la larghezza vera della navbar (senza contare la scrollbar del browser)
   const headerRef = useRef<HTMLElement>(null)
-  const [containerWidth, setContainerWidth] = useState(1200)
+  const [containerWidth, setContainerWidth] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  )
 
   useEffect(() => {
     if (!headerRef.current) return
