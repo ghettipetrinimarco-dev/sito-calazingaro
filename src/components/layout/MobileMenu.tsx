@@ -78,7 +78,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   onClick={onClose}
                   className="block py-1.5"
                   style={{
-                    fontFamily: "var(--font-serif)",
+                    fontFamily: "var(--font-yanone)",
                     fontWeight: 200,
                     fontSize: "clamp(2rem, 8vw, 3rem)",
                     color: "var(--color-ink)",

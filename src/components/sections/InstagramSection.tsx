@@ -47,7 +47,7 @@ export default async function InstagramSection() {
               <h2
                 className="font-light uppercase tracking-wide leading-none"
                 style={{
-                  fontFamily: "var(--font-serif)",
+                  fontFamily: "var(--font-yanone)",
                   fontSize: "clamp(2rem, 5.5vw, 3.2rem)",
                   color: "var(--color-text)",
                 }}
