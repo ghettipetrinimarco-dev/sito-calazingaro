@@ -296,17 +296,16 @@ pnpm sync-assets
 
 ### Struttura branch
 ```
-main        ← produzione — solo merge da `modifiche` con ok di Marco
-modifiche   ← branch di integrazione — merge dei branch personali quando pronti
-marco       ← branch personale di Marco
-ale         ← branch personale di Alessandro
+main    ← branch principale — merge dai branch personali con ok di Marco
+marco   ← branch personale di Marco
+ale     ← branch personale di Alessandro
 ```
 
 ### Flusso operativo
 1. Ogni sviluppatore lavora sul proprio branch (`marco`, `ale`, ecc.)
-2. Quando una feature è pronta e verificata → merge su `modifiche`
-3. Quando `modifiche` è stabile → merge su `main` (solo con ok esplicito di Marco)
-4. **Mai committare o pushare direttamente su `main`**
+2. Quando una feature è pronta e verificata → merge diretto su `main` con ok di Marco
+3. Per aggiornarsi col lavoro dell'altro → `git pull origin main`, poi `git merge main` sul proprio branch
+4. **Mai committare direttamente su `main`**
 
 ### Convenzioni commit
 ```bash
