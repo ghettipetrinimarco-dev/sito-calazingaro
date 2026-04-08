@@ -1,5 +1,5 @@
-import Link from "next/link"
-import SectionLabel from "@/components/ui/SectionLabel"
+import Image from "next/image"
+import TransitionLink from "@/components/TransitionLink"
 import RevealText from "@/components/ui/RevealText"
 
 export default function SpiaggiaSection() {
@@ -8,59 +8,57 @@ export default function SpiaggiaSection() {
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-night)" }}
     >
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 items-stretch">
-        {/* Testo — sinistra su desktop, sotto su mobile */}
-        <div className="flex flex-col justify-center px-8 py-16 md:px-12 md:py-20 order-2 md:order-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+
+        {/* Testo */}
+        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-20 md:py-32 order-2 md:order-1">
           <RevealText>
-            <SectionLabel light>Beach Club</SectionLabel>
+            <p className="section-label mb-5" style={{ color: "rgba(244,242,237,0.35)" }}>
+              Beach Club
+            </p>
             <h2
-              className="font-light uppercase tracking-wide leading-none mb-5 text-white"
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 5vw, 3rem)",
-              }}
+              className="title-display mb-8"
+              style={{ fontSize: "clamp(3.5rem, 8vw, 6.5rem)", color: "var(--color-sand)" }}
             >
               La spiaggia<br />è tua.
             </h2>
             <p
-              className="text-sm leading-relaxed mb-6"
-              style={{ color: "rgba(244,242,237,0.55)" }}
+              className="leading-relaxed mb-10"
+              style={{ color: "rgba(244,242,237,0.5)", maxWidth: "32ch", fontSize: "0.95rem" }}
             >
-              Ombrelloni, lettini e servizio direttamente in spiaggia.
-              Prenota il tuo posto e goditi il mare senza pensieri.
+              Ombrelloni macramé, lettini, servizio diretto in spiaggia.
+              Il mare come non lo hai mai vissuto — a due passi dalla tavola.
             </p>
-            <div className="flex flex-col gap-3">
-              <Link
+            <div className="flex flex-col gap-4">
+              <TransitionLink
                 href="/spiaggia"
-                className="text-[0.62rem] tracking-widest uppercase border-b pb-0.5 self-start transition-opacity hover:opacity-60"
-                style={{
-                  borderColor: "rgba(244,242,237,0.5)",
-                  color: "rgba(244,242,237,0.8)",
-                }}
+                className="text-[0.6rem] tracking-[0.2em] uppercase border-b pb-1 self-start transition-opacity hover:opacity-50"
+                style={{ borderColor: "rgba(244,242,237,0.35)", color: "rgba(244,242,237,0.7)" }}
               >
                 Vedi prezzi e servizi →
-              </Link>
-              <Link
+              </TransitionLink>
+              <TransitionLink
                 href="#prenota"
-                className="text-[0.62rem] tracking-widest uppercase border-b pb-0.5 self-start transition-opacity hover:opacity-60"
-                style={{
-                  borderColor: "rgba(244,242,237,0.5)",
-                  color: "rgba(244,242,237,0.8)",
-                }}
+                className="text-[0.6rem] tracking-[0.2em] uppercase border-b pb-1 self-start transition-opacity hover:opacity-50"
+                style={{ borderColor: "rgba(244,242,237,0.35)", color: "rgba(244,242,237,0.7)" }}
               >
                 Prenota l&apos;ombrellone →
-              </Link>
+              </TransitionLink>
             </div>
           </RevealText>
         </div>
 
-        {/* Foto — destra su desktop, sopra su mobile */}
-        <RevealText delay={0.1} className="order-1 md:order-2">
-          <div
-            className="min-h-[300px] md:min-h-[480px]"
-            style={{ backgroundColor: "#3a5f6e" }}
+        {/* Foto */}
+        <div className="relative order-1 md:order-2" style={{ minHeight: "560px" }}>
+          <Image
+            src="/Ambiente/Cala-Zingaro-Ambiente-2.webp"
+            alt="Beach club Cala Zingaro"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
           />
-        </RevealText>
+        </div>
+
       </div>
     </section>
   )

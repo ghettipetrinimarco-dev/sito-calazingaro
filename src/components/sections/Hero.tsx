@@ -1,101 +1,88 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { motion, useScroll, type Variants } from "framer-motion"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import TransitionLink from "@/components/TransitionLink"
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.18, delayChildren: 0.1 },
-  },
-}
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  },
-}
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function Hero() {
-  const [visible, setVisible] = useState(false)
-  const { scrollY } = useScroll()
-
-  useEffect(() => {
-    return scrollY.on("change", (v) => {
-      if (v > 120) setVisible(true)
-      else if (v < 60) setVisible(false)
-    })
-  }, [scrollY])
-
   return (
-    <section className="relative flex flex-col overflow-hidden" style={{ minHeight: "100svh" }}>
-      {/* Background: gradiente Adriatico */}
+    <section className="relative overflow-hidden" style={{ height: "100svh" }}>
+
+      {/* Foto fullscreen */}
+      <Image
+        src="/Ambiente/Cala-Zingaro-Ambiente-3.webp"
+        alt="Cala Zingaro — spiaggia"
+        fill
+        priority
+        loading="eager"
+        sizes="100vw"
+        className="object-cover"
+        style={{ objectPosition: "center 60%" }}
+      />
+
+      {/* Overlay scuro sfumato verso il basso */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(175deg, #2d5a7a 0%, #3a8fa8 18%, #4ba3bc 30%, #5bbcd4 45%, #7acfdf 58%, #b8d9c8 68%, #d4c5a0 78%, #c8b892 88%, #a89060 100%)",
+            "linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.75) 100%)",
         }}
       />
 
-      {/* Overlay per leggibilità testo */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.04) 40%, rgba(0,0,0,0.12) 60%, rgba(0,0,0,0.68) 100%)",
-        }}
-      />
+      {/* Contenuto */}
+      <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-12 pb-10 md:pb-16">
 
-      {/* Contenuto — posizionato in basso, compare al primo scroll */}
-      <motion.div
-        className="relative flex-1 flex flex-col justify-end px-6 md:px-10 pt-28 pb-8 md:pb-14"
-        variants={containerVariants}
-        initial="hidden"
-        animate={visible ? "visible" : "hidden"}
-      >
-        <motion.p
-          className="text-[0.55rem] tracking-[0.22em] uppercase mb-3"
-          style={{ color: "rgba(255,255,255,0.5)" }}
-          variants={itemVariants}
-        >
-          Beach Club & Ristorante · Milano Marittima
-        </motion.p>
-
+        {/* Tagline principale */}
         <motion.h1
-          className="font-light uppercase tracking-wide text-white leading-none mb-6"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: EASE, delay: 0.1 }}
+          className="text-white leading-none mb-6 md:mb-8"
           style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.8rem, 10vw, 6rem)",
+            fontWeight: 300,
+            fontSize: "clamp(3rem, 11vw, 8rem)",
+            letterSpacing: "-0.01em",
           }}
-          variants={itemVariants}
         >
-          Il mare.<br />
-          La tavola.<br />
-          <span className="hidden md:inline">Milano Marittima.</span>
-          <span className="md:hidden">Milano<br />Marittima.</span>
+          The place<br />not to be sad.
         </motion.h1>
 
-        <motion.div className="flex items-center gap-4" variants={itemVariants}>
-          <Link
-            href="#prenota"
-            className="text-[0.62rem] tracking-widest uppercase bg-white px-5 py-3 rounded-sm transition-opacity hover:opacity-85"
-            style={{ color: "var(--color-ink)" }}
+        {/* Riga sotto — label + CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.45 }}
+          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"
+        >
+          <p
+            className="text-[0.6rem] tracking-[0.22em] uppercase"
+            style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            Prenota ora
-          </Link>
-          <span
-            className="text-[0.55rem] tracking-widest uppercase"
-            style={{ color: "rgba(255,255,255,0.35)" }}
-          >
-            ↓ scopri
-          </span>
+            Beach Club & Ristorante · Milano Marittima
+          </p>
+
+          <div className="flex items-center gap-5">
+            <TransitionLink
+              href="#prenota"
+              className="text-[0.62rem] tracking-widest uppercase bg-white px-5 py-3 transition-opacity hover:opacity-85"
+              style={{ color: "var(--color-ink)" }}
+            >
+              Prenota ora
+            </TransitionLink>
+            <a
+              href="#scopri"
+              className="text-[0.6rem] tracking-widest uppercase"
+              style={{ color: "rgba(255,255,255,0.45)" }}
+            >
+              ↓ scopri
+            </a>
+          </div>
         </motion.div>
-      </motion.div>
+
+      </div>
     </section>
   )
 }

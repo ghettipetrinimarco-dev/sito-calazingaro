@@ -5,21 +5,20 @@
   --font-sans: var(--font-quicksand), system-ui, sans-serif;
   --font-serif: var(--font-yanone), Georgia, sans-serif;
 
-  /* Palette — mai bianco/nero puri */
+  /* Palette */
   --color-sand: #F4F2ED;
   --color-sand-light: #FAFAF7;
-  --color-night: #1A1A1A;
+  --color-night: #111111;
   --color-ink: #0D0D0D;
   --color-text: #111111;
-  --color-muted: #666666;
-  --color-subtle: #999999;
+  --color-muted: #777777;
+  --color-subtle: #AAAAAA;
   --color-accent: #C8A87A;
 }
 
-/* Reset base */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: auto; } /* Lenis gestisce lo scroll */
+html { scroll-behavior: auto; }
 
 body {
   background-color: var(--color-sand);
@@ -27,4 +26,21 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Titoli display — usare sempre questo per h1/h2 grandi */
+.title-display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* Label sezione */
+.section-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
 }

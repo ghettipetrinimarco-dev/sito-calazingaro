@@ -1,35 +1,46 @@
-import SectionLabel from "@/components/ui/SectionLabel"
+import Image from "next/image"
 import RevealText from "@/components/ui/RevealText"
 
 export default function StoriaSection() {
   return (
     <section
-      className="px-6 md:px-10 py-20 md:py-32"
-      style={{ backgroundColor: "var(--color-night)", color: "var(--color-sand)" }}
+      className="overflow-hidden"
+      style={{ backgroundColor: "var(--color-night)" }}
     >
-      <div className="max-w-5xl mx-auto">
-
-        {/* Header */}
-        <RevealText>
-          <SectionLabel light>La nostra storia</SectionLabel>
-          <h2
-            className="font-light uppercase tracking-wide leading-none mb-16 md:mb-24"
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(2.4rem, 7vw, 4.5rem)",
-            }}
-          >
-            Da Milano<br />al mare.
-          </h2>
-        </RevealText>
-
-        {/* Storia testo */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start mb-20 md:mb-28">
+      {/* Foto insegna — fullwidth con overlay e testo sovrapposto */}
+      <div className="relative" style={{ minHeight: "70vh" }}>
+        <Image
+          src="/Ambiente/Cala-Zingaro-Ambiente-6.webp"
+          alt="The place not to be sad — Cala Zingaro"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: "center 50%" }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, rgba(17,17,17,0.3) 0%, rgba(17,17,17,0.85) 100%)" }}
+        />
+        <div className="absolute inset-0 flex flex-col justify-end px-8 md:px-16 lg:px-20 pb-16 md:pb-24">
           <RevealText>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "rgba(244,242,237,0.65)" }}
+            <p className="section-label mb-5" style={{ color: "rgba(244,242,237,0.35)" }}>
+              La nostra storia
+            </p>
+            <h2
+              className="title-display"
+              style={{ fontSize: "clamp(3.5rem, 9vw, 7.5rem)", color: "var(--color-sand)" }}
             >
+              Da Milano<br />al mare.
+            </h2>
+          </RevealText>
+        </div>
+      </div>
+
+      {/* Corpo testo */}
+      <div className="px-8 md:px-16 lg:px-20 py-20 md:py-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 mb-20 md:mb-28">
+          <RevealText>
+            <p style={{ color: "rgba(244,242,237,0.6)", lineHeight: 1.8, fontSize: "0.95rem" }}>
               Andrea Ravaglia lascia il mondo della moda per scommettere su
               qualcosa di più autentico: un angolo di Romagna sul mare. Con due
               soci, prende in mano Cala Zingaro e lo trasforma in un posto dove
@@ -37,12 +48,8 @@ export default function StoriaSection() {
               qualità della materia prima.
             </p>
           </RevealText>
-
           <RevealText delay={0.12}>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: "rgba(244,242,237,0.65)" }}
-            >
+            <p style={{ color: "rgba(244,242,237,0.6)", lineHeight: 1.8, fontSize: "0.95rem" }}>
               La cucina parte dal pesce fresco della Riviera romagnola, incontra
               influenze asiatiche e tecniche contemporanee, e arriva a tavola
               senza fronzoli. Il mare come ingrediente principale, la semplicità
@@ -51,57 +58,45 @@ export default function StoriaSection() {
           </RevealText>
         </div>
 
-        {/* Premio 4 Ristoranti */}
+        {/* Premio */}
         <RevealText delay={0.1}>
           <div
-            className="border-t pt-12"
-            style={{ borderColor: "rgba(244,242,237,0.12)" }}
+            className="border-t pt-12 md:pt-16"
+            style={{ borderColor: "rgba(244,242,237,0.08)" }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center">
-
-              {/* Numero grande */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-end">
               <div className="md:col-span-1">
                 <p
-                  className="font-light leading-none"
+                  className="title-display"
                   style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "clamp(5rem, 18vw, 10rem)",
+                    fontSize: "clamp(6rem, 20vw, 14rem)",
                     color: "var(--color-accent)",
-                    opacity: 0.8,
+                    opacity: 0.7,
+                    lineHeight: 0.85,
                   }}
                 >
                   #1
                 </p>
               </div>
-
-              {/* Testo premio */}
               <div className="md:col-span-2">
-                <SectionLabel light>Alessandro Borghese · 4 Ristoranti · 2020</SectionLabel>
+                <p className="section-label mb-4" style={{ color: "rgba(244,242,237,0.3)" }}>
+                  Alessandro Borghese · 4 Ristoranti · 2020
+                </p>
                 <h3
-                  className="font-light uppercase tracking-wide leading-tight mb-4"
-                  style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "clamp(1.4rem, 3.5vw, 2rem)",
-                  }}
+                  className="title-display mb-5"
+                  style={{ fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--color-sand)" }}
                 >
                   Vincitori della<br />Riviera Romagnola.
                 </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "rgba(244,242,237,0.55)" }}
-                >
+                <p style={{ color: "rgba(244,242,237,0.45)", lineHeight: 1.8, fontSize: "0.9rem", maxWidth: "44ch" }}>
                   Nel 2020 Cala Zingaro ha vinto l&apos;episodio dedicato alla
-                  Riviera Romagnola nel programma &quot;4 Ristoranti&quot; condotto
-                  da Alessandro Borghese su Sky Uno — battendo tre dei migliori
-                  ristoranti della zona tra Milano Marittima, Miramare di Rimini
-                  e Cesenatico.
+                  Riviera Romagnola nel programma &ldquo;4 Ristoranti&rdquo; condotto
+                  da Alessandro Borghese su Sky Uno.
                 </p>
               </div>
-
             </div>
           </div>
         </RevealText>
-
       </div>
     </section>
   )
