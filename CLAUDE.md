@@ -265,16 +265,21 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ## SYNC ASSET (FOTO / VIDEO)
 
-Quando aggiungi nuove foto o video nella cartella `public/`, esegui:
+### Watch automatico (consigliato)
+
+Avvia una volta in un terminale separato:
+
+```bash
+pnpm watch-assets
+```
+
+Da quel momento, ogni volta che aggiungi file in `public/`, lo script li committa e pusha su GitHub **automaticamente** dopo 3 secondi. Gira in locale sul Mac, zero costi.
+
+### Sync manuale (alternativa)
 
 ```bash
 pnpm sync-assets
 ```
-
-Questo comando fa automaticamente:
-1. `git add public/` — staged tutti i nuovi asset
-2. `git commit -m "assets: aggiornamento contenuti"` — commit automatico
-3. `git push origin HEAD` — push sul branch attivo → visibile su GitHub per tutti i collaboratori
 
 **Cartelle asset:**
 - `public/Ambiente/` — foto location e spiaggia
