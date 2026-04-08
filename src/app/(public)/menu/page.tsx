@@ -5,7 +5,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { X } from "lucide-react"
 import { motion } from "framer-motion"
 import { menu } from "@/data/menu"
 import { useEffect } from "react"
@@ -28,22 +28,14 @@ export default function MenuPage() {
 
   return (
     <div className="relative min-h-screen bg-white text-[#111] pb-0 overflow-x-hidden">
-      {/* Pill fisso in basso — sempre raggiungibile dal pollice */}
+      {/* X chiudi — leggibile, top-right */}
       <Link
         href="/"
-        aria-label="Torna al sito"
-        className="fixed bottom-8 left-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-full"
-        style={{
-          transform: "translateX(-50%)",
-          backgroundColor: "#111",
-          color: "#fff",
-          fontSize: "0.65rem",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-        }}
+        aria-label="Chiudi menu"
+        className="fixed top-5 right-5 z-50 p-2"
+        style={{ color: "#111" }}
       >
-        <ArrowLeft size={13} strokeWidth={2} />
-        Torna al sito
+        <X strokeWidth={1.5} size={28} />
       </Link>
 
       {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
