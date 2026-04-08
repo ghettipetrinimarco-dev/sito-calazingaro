@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useLayoutEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -33,9 +33,9 @@ export default function Header() {
 
   const { scrollY } = useScroll()
 
-  // Resetta scrollY ad ogni cambio di pagina — evita il flash del logo a sinistra
-  // quando si torna dalla pagina /menu (il componente non si rimonta, il MotionValue persiste)
-  useEffect(() => {
+  // Resetta scrollY PRIMA del paint ad ogni cambio di pagina — evita il flash del logo a sinistra
+  // useLayoutEffect è sincrono: gira prima che il browser dipinga, eliminando il frame errato
+  useLayoutEffect(() => {
     scrollY.set(0)
     window.scrollTo(0, 0)
   }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
