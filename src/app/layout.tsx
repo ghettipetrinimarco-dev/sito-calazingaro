@@ -1,26 +1,11 @@
 import type { Metadata } from "next"
-import { Cormorant_Garamond, Antonio, Yanone_Kaffeesatz, Quicksand } from "next/font/google"
+import { Yanone_Kaffeesatz, Quicksand } from "next/font/google"
 import LenisProvider from "@/components/layout/LenisProvider"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import { TransitionProvider } from "@/contexts/TransitionContext"
 import LeafOverlay from "@/components/LeafOverlay"
 import "./globals.css"
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant-var",
-  display: "swap",
-})
-
-const antonio = Antonio({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400"],
-  variable: "--font-antonio",
-  display: "swap",
-})
 
 const yanone = Yanone_Kaffeesatz({
   subsets: ["latin"],
@@ -55,14 +40,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="it" className={`${cormorant.variable} ${antonio.variable} ${yanone.variable} ${quicksand.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="it" className={`${yanone.variable} ${quicksand.variable}`}>
       <body className="min-h-full flex flex-col">
         <TransitionProvider>
           <LeafOverlay />
