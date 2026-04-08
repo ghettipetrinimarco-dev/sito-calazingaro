@@ -185,6 +185,11 @@ export default function MenuPage() {
                         style={{ fontFamily: "var(--font-quicksand)", color: "#000" }}
                       >
                         {item.nome}
+                        {item.nota && (
+                          <span className="font-normal text-[0.75rem] ml-1.5" style={{ color: "#999" }}>
+                            {item.nota}
+                          </span>
+                        )}
                       </h3>
                       {item.descrizione && (
                         <p
@@ -212,6 +217,29 @@ export default function MenuPage() {
               </section>
             )
           })}
+        </div>
+
+        {/* Coperto e note */}
+        <div className="mt-20 space-y-4 text-center">
+          <p
+            className="text-sm tracking-widest uppercase"
+            style={{ color: "#888", fontFamily: "var(--font-quicksand)" }}
+          >
+            Coperto € 3
+          </p>
+          <p
+            className="text-[0.65rem] leading-relaxed max-w-sm mx-auto"
+            style={{ color: "#bbb", fontFamily: "var(--font-quicksand)" }}
+          >
+            Tutto il pesce utilizzato è fresco e conforme al regolamento CE853/24, fornitore Gio Mare SPA.
+            Solo in caso di irreperibilità di pesce fresco possono essere utilizzati pesci congelati a bordo.
+          </p>
+          <p
+            className="text-[0.65rem]"
+            style={{ color: "#bbb", fontFamily: "var(--font-quicksand)" }}
+          >
+            Per informazioni su sostanze e allergeni rivolgersi al personale di servizio.
+          </p>
         </div>
 
       </div>

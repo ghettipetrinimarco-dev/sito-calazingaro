@@ -157,17 +157,6 @@ export default function ViniPage() {
           ))}
         </div>
 
-        {/* Nota coperto */}
-        <motion.p
-          className="text-center mt-20 text-xs tracking-wide uppercase"
-          style={{ color: "#bbb", fontFamily: "var(--font-quicksand)" }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          Coperto € 3
-        </motion.p>
 
       </div>
     </div>
