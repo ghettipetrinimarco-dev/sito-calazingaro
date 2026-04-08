@@ -1,5 +1,5 @@
 import Image from "next/image"
-import TransitionLink from "@/components/TransitionLink"
+import TransitionLink from "@/components/transitions/TransitionLink"
 import RevealText from "@/components/ui/RevealText"
 
 export default function RistoranteSection() {

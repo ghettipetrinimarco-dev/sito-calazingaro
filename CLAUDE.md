@@ -263,15 +263,57 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ---
 
-## GIT WORKFLOW
+## SYNC ASSET (FOTO / VIDEO)
+
+### Watch automatico (consigliato)
+
+Avvia una volta in un terminale separato:
 
 ```bash
-git checkout -b session/YYYY-MM-DD_HH-mm
-git add -A && git commit -m "feat: descrizione in italiano"
-# MAI push su main senza ok esplicito di Marco
+pnpm watch-assets
 ```
 
-Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:`
+Da quel momento, ogni volta che aggiungi file in `public/`, lo script li committa e pusha su GitHub **automaticamente** dopo 3 secondi. Gira in locale sul Mac, zero costi.
+
+### Sync manuale (alternativa)
+
+```bash
+pnpm sync-assets
+```
+
+**Cartelle asset:**
+- `public/Ambiente/` — foto location e spiaggia
+- `public/Cucina/` — foto cibo e ristorante
+- `public/videos/` — video (attenzione: file grandi, push può essere lento)
+- `public/images/` — loghi, icone, elementi grafici
+
+> ⚠️ I video pesanti (>50MB) potrebbero essere rifiutati da GitHub (limite 100MB per file).
+> In quel caso usare un CDN esterno (Cloudflare R2, Vercel Blob, ecc.) e referenziare l'URL.
+
+---
+
+## GIT WORKFLOW
+
+### Struttura branch
+```
+main        ← produzione — solo merge da `modifiche` con ok di Marco
+modifiche   ← branch di integrazione — merge dei branch personali quando pronti
+marco       ← branch personale di Marco
+ale         ← branch personale di Alessandro
+```
+
+### Flusso operativo
+1. Ogni sviluppatore lavora sul proprio branch (`marco`, `ale`, ecc.)
+2. Quando una feature è pronta e verificata → merge su `modifiche`
+3. Quando `modifiche` è stabile → merge su `main` (solo con ok esplicito di Marco)
+4. **Mai committare o pushare direttamente su `main`**
+
+### Convenzioni commit
+```bash
+git add <file> && git commit -m "feat: descrizione in italiano"
+```
+
+Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:` `docs:`
 
 ---
 

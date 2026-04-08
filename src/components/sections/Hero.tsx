@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import { motion, useScroll } from "framer-motion"
-import TransitionLink from "@/components/TransitionLink"
+import TransitionLink from "@/components/transitions/TransitionLink"
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -13,27 +12,27 @@ export default function Hero() {
 
   useEffect(() => {
     return scrollY.on("change", (v) => {
-      if (v > 120) setVisible(true)
-      else if (v < 60) setVisible(false)
+      if (v > 10) setVisible(true)
+      else if (v < 5) setVisible(false)
     })
   }, [scrollY])
 
   return (
     <section className="relative overflow-hidden" style={{ height: "100svh" }}>
 
-      {/* Foto fullscreen */}
-      <Image
-        src="/Ambiente/Cala-Zingaro-Ambiente-3.webp"
-        alt="Cala Zingaro — spiaggia"
-        fill
-        priority
-        loading="eager"
-        sizes="100vw"
-        className="object-cover"
-        style={{ objectPosition: "center 60%" }}
-      />
+      {/* Video fullscreen */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: "center center" }}
+      >
+        <source src="/Video/Cala-Zingaro-Landing-Page-Video2.mp4" type="video/mp4" />
+      </video>
 
-      {/* Overlay scuro sfumato verso il basso */}
+      {/* Overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -45,7 +44,6 @@ export default function Hero() {
       {/* Contenuto — appare al primo scroll */}
       <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-12 pb-10 md:pb-16">
 
-        {/* Tagline principale */}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
@@ -61,7 +59,6 @@ export default function Hero() {
           The place<br />not to be sad.
         </motion.h1>
 
-        {/* Riga sotto — label + CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
