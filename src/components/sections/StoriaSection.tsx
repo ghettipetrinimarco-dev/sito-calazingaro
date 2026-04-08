@@ -38,17 +38,34 @@ export default function StoriaSection() {
 
       {/* Corpo testo */}
       <div className="px-8 md:px-16 lg:px-20 py-20 md:py-28">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 mb-20 md:mb-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 mb-20 md:mb-28 items-center">
+
+          {/* Foto Ravaglia */}
           <RevealText>
-            <p style={{ color: "rgba(244,242,237,0.6)", lineHeight: 1.8, fontSize: "0.95rem" }}>
-              Andrea Ravaglia lascia il mondo della moda per scommettere su
-              qualcosa di più autentico: un angolo di Romagna sul mare. Con due
-              soci, prende in mano Cala Zingaro e lo trasforma in un posto dove
-              stare bene — dalla colazione al dopocena — senza mai tradire la
-              qualità della materia prima.
-            </p>
+            <div className="relative overflow-hidden" style={{ aspectRatio: "3/4", maxWidth: "420px" }}>
+              <Image
+                src="/Eventi/Cala Zingaro_Rava.webp"
+                alt="Andrea Ravaglia — Cala Zingaro"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-cover"
+                style={{ objectPosition: "center 20%", filter: "sepia(0.15) contrast(1.05)" }}
+              />
+            </div>
           </RevealText>
+
+          {/* Testo */}
           <RevealText delay={0.12}>
+            <p className="section-label mb-5" style={{ color: "rgba(244,242,237,0.3)" }}>
+              Andrea Ravaglia · Fondatore
+            </p>
+            <p style={{ color: "rgba(244,242,237,0.6)", lineHeight: 1.8, fontSize: "0.95rem", marginBottom: "1.5rem" }}>
+              Andrea lascia il mondo della moda per scommettere su qualcosa di
+              più autentico: un angolo di Romagna sul mare. Con due soci, prende
+              in mano Cala Zingaro e lo trasforma in un posto dove stare bene —
+              dalla colazione al dopocena — senza mai tradire la qualità della
+              materia prima.
+            </p>
             <p style={{ color: "rgba(244,242,237,0.6)", lineHeight: 1.8, fontSize: "0.95rem" }}>
               La cucina parte dal pesce fresco della Riviera romagnola, incontra
               influenze asiatiche e tecniche contemporanee, e arriva a tavola
@@ -56,6 +73,7 @@ export default function StoriaSection() {
               come filosofia.
             </p>
           </RevealText>
+
         </div>
 
         {/* Premio */}

@@ -263,6 +263,35 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ---
 
+## SYNC ASSET (FOTO / VIDEO)
+
+### Watch automatico (consigliato)
+
+Avvia una volta in un terminale separato:
+
+```bash
+pnpm watch-assets
+```
+
+Da quel momento, ogni volta che aggiungi file in `public/`, lo script li committa e pusha su GitHub **automaticamente** dopo 3 secondi. Gira in locale sul Mac, zero costi.
+
+### Sync manuale (alternativa)
+
+```bash
+pnpm sync-assets
+```
+
+**Cartelle asset:**
+- `public/Ambiente/` — foto location e spiaggia
+- `public/Cucina/` — foto cibo e ristorante
+- `public/videos/` — video (attenzione: file grandi, push può essere lento)
+- `public/images/` — loghi, icone, elementi grafici
+
+> ⚠️ I video pesanti (>50MB) potrebbero essere rifiutati da GitHub (limite 100MB per file).
+> In quel caso usare un CDN esterno (Cloudflare R2, Vercel Blob, ecc.) e referenziare l'URL.
+
+---
+
 ## GIT WORKFLOW
 
 ### Struttura branch
