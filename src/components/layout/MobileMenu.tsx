@@ -65,20 +65,21 @@ export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProp
             {voci.map((voce, i) => (
               <motion.div
                 key={voce.href}
+                className="group"
                 initial={{ opacity: 0, y: 20, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 1.05 }}
                 transition={{
                   delay: 0.06 + i * 0.07,
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                whileHover="hover"
-                whileTap="hover"
               >
                 <TransitionLink
                   href={voce.href}
                   onClick={onClose}
-                  className="block py-1.5"
+                  className="block py-1.5 relative"
                   style={{
                     fontFamily: "var(--font-yanone)",
                     fontWeight: 200,
@@ -87,25 +88,13 @@ export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProp
                     lineHeight: 1.15,
                     letterSpacing: "0.02em",
                     display: "inline-block",
-                    position: "relative",
                   }}
                 >
                   {voce.label}
-                  {/* Underline che cresce al hover/tap */}
-                  <motion.span
-                    variants={{ hover: { scaleX: 1 }, rest: { scaleX: 0 } }}
-                    initial="rest"
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    style={{
-                      position: "absolute",
-                      bottom: 2,
-                      left: 0,
-                      right: 0,
-                      height: 1.5,
-                      backgroundColor: "var(--color-ink)",
-                      transformOrigin: "left",
-                      display: "block",
-                    }}
+                  {/* Underline — desktop: hover, mobile: active/tap */}
+                  <span
+                    className="absolute left-0 right-0 bottom-0.5 block origin-left scale-x-0 group-hover:scale-x-100 group-active:scale-x-100 transition-transform duration-[250ms]"
+                    style={{ height: 1.5, backgroundColor: "var(--color-ink)" }}
                   />
                 </TransitionLink>
               </motion.div>
