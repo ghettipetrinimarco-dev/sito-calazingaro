@@ -6,6 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useScroll } from "framer-motion"
 import { Menu } from "lucide-react"
+import TransitionLink from "@/components/TransitionLink"
 
 import MobileMenu from "./MobileMenu"
 
@@ -45,7 +46,7 @@ export default function Header() {
         }}
       >
         {/* Logo */}
-        <Link
+        <TransitionLink
           href="/"
           aria-label="Cala Zingaro — home"
           className="absolute"
@@ -91,7 +92,7 @@ export default function Header() {
               transition,
             }}
           />
-        </Link>
+        </TransitionLink>
 
         {/* Prenota — compare solo dopo lo scroll */}
         <div
