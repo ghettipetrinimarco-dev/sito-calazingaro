@@ -1,39 +1,57 @@
 "use client"
 
-import { createContext, useContext, useState, ReactNode } from "react"
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react"
 
-interface TransitionContextType {
-  isTransitioning: boolean
-  pendingRoute: string | null
-  startTransition: (href: string) => void
-  endTransition: () => void
+type Phase = "idle" | "covering" | "waiting" | "revealing"
+
+interface TransitionState {
+  phase: Phase
+  targetHref: string
 }
 
-const TransitionContext = createContext<TransitionContextType | null>(null)
+interface TransitionContextValue {
+  state: TransitionState
+  startTransition: (href: string) => void
+  onCoveringComplete: () => void
+  onRevealComplete: () => void
+  setPhase: (phase: Phase) => void
+}
+
+const TransitionContext = createContext<TransitionContextValue | null>(null)
 
 export function TransitionProvider({ children }: { children: ReactNode }) {
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [pendingRoute, setPendingRoute] = useState<string | null>(null)
+  const [state, setState] = useState<TransitionState>({
+    phase: "idle",
+    targetHref: "",
+  })
 
-  function startTransition(href: string) {
-    setPendingRoute(href)
-    setIsTransitioning(true)
-  }
+  const startTransition = useCallback((href: string) => {
+    setState({ phase: "covering", targetHref: href })
+  }, [])
 
-  function endTransition() {
-    setIsTransitioning(false)
-    setPendingRoute(null)
-  }
+  const onCoveringComplete = useCallback(() => {
+    setState((prev) => ({ ...prev, phase: "waiting" }))
+  }, [])
+
+  const setPhase = useCallback((phase: Phase) => {
+    setState((prev) => ({ ...prev, phase }))
+  }, [])
+
+  const onRevealComplete = useCallback(() => {
+    setState({ phase: "idle", targetHref: "" })
+  }, [])
 
   return (
-    <TransitionContext.Provider value={{ isTransitioning, pendingRoute, startTransition, endTransition }}>
+    <TransitionContext.Provider
+      value={{ state, startTransition, onCoveringComplete, onRevealComplete, setPhase }}
+    >
       {children}
     </TransitionContext.Provider>
   )
 }
 
-export function useTransition() {
+export function usePageTransition() {
   const ctx = useContext(TransitionContext)
-  if (!ctx) throw new Error("useTransition must be used inside TransitionProvider")
+  if (!ctx) throw new Error("usePageTransition deve essere usato dentro TransitionProvider")
   return ctx
 }

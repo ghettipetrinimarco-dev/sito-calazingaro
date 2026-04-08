@@ -2,9 +2,8 @@
 
 import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
 import Image from "next/image"
-import TransitionLink from "@/components/TransitionLink"
+import TransitionLink from "@/components/transitions/TransitionLink"
 
 const voci = [
   { label: "Ristorante", href: "/ristorante" },
@@ -116,7 +115,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               transition={{ delay: 0.56, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="mt-8"
             >
-              <Link
+              <a
                 href="#prenota"
                 onClick={onClose}
                 className="inline-block text-[0.62rem] tracking-widest uppercase px-6 py-3 rounded-full transition-opacity hover:opacity-80"
@@ -126,7 +125,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 }}
               >
                 Prenota ora
-              </Link>
+              </a>
             </motion.div>
           </nav>
         </motion.div>

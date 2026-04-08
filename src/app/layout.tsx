@@ -4,7 +4,7 @@ import LenisProvider from "@/components/layout/LenisProvider"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import { TransitionProvider } from "@/contexts/TransitionContext"
-import LeafOverlay from "@/components/LeafOverlay"
+import LeafOverlay from "@/components/transitions/LeafOverlay"
 import "./globals.css"
 
 const yanone = Yanone_Kaffeesatz({

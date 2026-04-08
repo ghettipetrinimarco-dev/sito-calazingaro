@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, useScroll } from "framer-motion"
-import TransitionLink from "@/components/TransitionLink"
+import TransitionLink from "@/components/transitions/TransitionLink"
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
