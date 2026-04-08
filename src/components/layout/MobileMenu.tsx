@@ -68,8 +68,8 @@ export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProp
                 className="group"
                 initial={{ opacity: 0, y: 20, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 1.05 }}
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 1.12 }}
                 transition={{
                   delay: 0.06 + i * 0.07,
                   duration: 0.5,
@@ -93,7 +93,7 @@ export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProp
                   {voce.label}
                   {/* Underline — desktop: hover, mobile: active/tap */}
                   <span
-                    className="absolute left-0 right-0 bottom-0.5 block origin-left scale-x-0 group-hover:scale-x-100 group-active:scale-x-100 transition-transform duration-[250ms]"
+                    className="absolute left-0 right-0 bottom-0.5 block origin-center scale-x-0 group-hover:scale-x-100 group-active:scale-x-100 transition-transform duration-[150ms]"
                     style={{ height: 1.5, backgroundColor: "var(--color-ink)" }}
                   />
                 </TransitionLink>
