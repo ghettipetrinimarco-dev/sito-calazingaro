@@ -4,16 +4,28 @@ import InstagramGrid from "@/components/sections/InstagramGrid"
 import OrganicLink from "@/components/ui/OrganicLink"
 import { fetchRecentPosts } from "@/lib/instagram"
 
+// Foto reali del sito usate come placeholder finché Instagram non è collegato
+const PLACEHOLDER_POSTS = [
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-1.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-1.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-2.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-2.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-3.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-3.webp" },
+]
+
 export default async function InstagramSection() {
   const rawPosts = await fetchRecentPosts()
 
   // I VIDEO usano thumbnail_url come anteprima, le IMAGE usano media_url
-  const posts = rawPosts
+  const apiPosts = rawPosts
     .filter((p) => p.media_url || p.thumbnail_url)
     .map((p) => ({
       url: p.permalink,
       thumb: p.media_type === "VIDEO" ? (p.thumbnail_url ?? p.media_url) : p.media_url,
     }))
+
+  const posts = apiPosts.length > 0 ? apiPosts : PLACEHOLDER_POSTS
 
   return (
     <section
@@ -48,17 +60,7 @@ export default async function InstagramSection() {
           </div>
         </RevealText>
 
-        {posts.length > 0 ? (
-          <InstagramGrid posts={posts} />
-        ) : (
-          // Fallback silenzioso se API non disponibile — nessun errore visibile all'utente
-          <div
-            className="h-40 flex items-center justify-center opacity-30 text-sm tracking-widest uppercase"
-            style={{ fontFamily: "var(--font-quicksand)" }}
-          >
-            Segui @calazingaro su Instagram
-          </div>
-        )}
+        <InstagramGrid posts={posts} />
 
       </div>
     </section>
