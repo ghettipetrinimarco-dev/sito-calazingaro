@@ -127,7 +127,7 @@ export default function EventiSection() {
       >
         {/* Separatore superiore — divide dalla sezione precedente */}
         <div className="relative px-6 md:px-16 mb-10 md:mb-12">
-          <OrganicLine color="white" opacity={0.12} />
+          <OrganicLine color="white" opacity={0.35} />
         </div>
 
         {/* Header sezione */}
@@ -145,7 +145,7 @@ export default function EventiSection() {
 
         {/* Separatore organico */}
         <div className="relative px-6 md:px-16 mb-10 md:mb-12">
-          <OrganicLine color="white" opacity={0.12} />
+          <OrganicLine color="white" opacity={0.35} />
         </div>
 
         {/* Bento Grid */}
