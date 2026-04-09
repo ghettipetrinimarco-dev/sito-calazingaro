@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 
 export default function PrenotaSection() {
   return (
@@ -10,7 +10,7 @@ export default function PrenotaSection() {
       className="py-24 md:py-32 px-6 md:px-10 text-center"
       style={{ backgroundColor: "var(--color-ink)" }}
     >
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 32 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -67,7 +67,7 @@ export default function PrenotaSection() {
             WhatsApp
           </a>
         </p>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

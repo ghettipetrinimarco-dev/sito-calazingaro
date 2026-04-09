@@ -56,7 +56,7 @@ export default function MenuPage() {
         >
           <motion.div className="absolute left-0 w-full top-0" style={{ y: plantsY }}>
             <Image
-              src="/Logo & Illustrazioni/foglie-menu-sx-lunga.jpg"
+              src="/Logo & Illustrazioni/foglie-menu-sx-lunga.webp"
               alt="" width={600} height={2400}
               className="w-full h-auto"
               priority
@@ -74,7 +74,7 @@ export default function MenuPage() {
         >
           <motion.div className="absolute right-0 w-full top-0" style={{ y: plantsY }}>
             <Image
-              src="/Logo & Illustrazioni/foglie-menu-dx-lunga.jpg"
+              src="/Logo & Illustrazioni/foglie-menu-dx-lunga.webp"
               alt="" width={600} height={2400}
               className="w-full h-auto"
               priority
