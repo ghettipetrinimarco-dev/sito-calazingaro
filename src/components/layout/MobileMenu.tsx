@@ -22,10 +22,37 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose, scrolled }: MobileMenuProps) {
+  // Fix scroll lock iOS Safari: overflow hidden da solo non basta, serve position fixed
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
+    if (isOpen) {
+      const scrollY = window.scrollY
+      document.body.style.overflow = "hidden"
+      document.body.style.position = "fixed"
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = "100%"
+    } else {
+      const savedTop = document.body.style.top
+      document.body.style.overflow = ""
+      document.body.style.position = ""
+      document.body.style.top = ""
+      document.body.style.width = ""
+      if (savedTop) window.scrollTo(0, -parseInt(savedTop, 10))
+    }
+    return () => {
+      document.body.style.overflow = ""
+      document.body.style.position = ""
+      document.body.style.top = ""
+      document.body.style.width = ""
+    }
   }, [isOpen])
+
+  // Chiusura con tasto Escape
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [isOpen, onClose])
 
   return (
     <AnimatePresence>
