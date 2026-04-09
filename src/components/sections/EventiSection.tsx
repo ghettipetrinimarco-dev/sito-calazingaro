@@ -156,7 +156,7 @@ export default function EventiSection() {
     <LazyMotion features={domAnimation}>
       <section
         className="relative overflow-hidden py-20 md:py-28"
-        style={{ backgroundColor: "#1c1c1f" }}
+        style={{ backgroundColor: "var(--color-night)" }}
       >
         {/* Cielo notturno — velature e stelle realistiche */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
