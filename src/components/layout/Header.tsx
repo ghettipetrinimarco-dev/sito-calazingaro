@@ -65,9 +65,8 @@ export default function Header() {
         <TransitionLink
           href="/"
           className="absolute"
-          onClick={(e) => {
+          onClick={() => {
             if (pathname === "/") {
-              e.preventDefault()
               window.scrollTo({ top: 0, behavior: "smooth" })
             }
           }}
