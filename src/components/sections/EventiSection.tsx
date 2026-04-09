@@ -9,39 +9,6 @@ import OrganicLine from "@/components/ui/OrganicLine"
 const SPRING_HOVER = { type: "spring" as const, stiffness: 260, damping: 20 }
 const SPRING_APPEAR = { type: "spring" as const, stiffness: 100, damping: 15 }
 
-// Stelle dim — punti di luce appena percettibili [cx%, cy%, r, opacity]
-const STELLE_DIM: ReadonlyArray<readonly [number, number, number, number]> = [
-  [4.2, 8.1, 0.28, 0.30], [11.7, 3.4, 0.22, 0.25], [18.3, 14.6, 0.30, 0.35],
-  [26.5, 7.2, 0.25, 0.28], [33.1, 19.8, 0.28, 0.32], [41.6, 4.7, 0.22, 0.26],
-  [49.8, 11.3, 0.30, 0.35], [57.4, 6.8, 0.25, 0.28], [64.9, 17.2, 0.28, 0.30],
-  [72.3, 2.9, 0.22, 0.25], [80.6, 12.7, 0.30, 0.35], [88.1, 8.4, 0.25, 0.28],
-  [95.7, 16.3, 0.28, 0.32], [7.8, 31.5, 0.22, 0.26], [15.4, 26.8, 0.30, 0.30],
-  [23.9, 38.4, 0.25, 0.28], [30.2, 24.1, 0.28, 0.32], [38.7, 33.6, 0.22, 0.25],
-  [46.3, 21.9, 0.30, 0.35], [53.8, 42.3, 0.25, 0.28], [61.2, 29.7, 0.28, 0.30],
-  [69.5, 37.1, 0.22, 0.26], [77.1, 23.8, 0.30, 0.32], [85.4, 41.6, 0.25, 0.28],
-  [92.8, 28.4, 0.28, 0.35], [2.6, 52.3, 0.22, 0.25], [9.3, 47.8, 0.30, 0.30],
-  [17.6, 61.4, 0.25, 0.28], [25.1, 54.9, 0.28, 0.32], [34.8, 67.3, 0.22, 0.25],
-  [43.2, 58.7, 0.30, 0.30], [51.7, 72.1, 0.25, 0.28], [60.4, 63.5, 0.28, 0.32],
-  [68.9, 76.8, 0.22, 0.25], [78.3, 69.2, 0.30, 0.30], [87.6, 81.4, 0.25, 0.28],
-  [96.2, 74.7, 0.28, 0.32],
-] as const
-
-// Stelle medie — visibili, punto di luce netto
-const STELLE_MEDIE: ReadonlyArray<readonly [number, number, number, number]> = [
-  [8.4, 22.7, 0.48, 0.60], [21.3, 10.5, 0.52, 0.65], [35.6, 28.3, 0.45, 0.58],
-  [48.2, 16.9, 0.50, 0.62], [63.7, 35.4, 0.48, 0.60], [76.4, 19.8, 0.52, 0.65],
-  [89.1, 44.2, 0.45, 0.58], [14.7, 57.6, 0.50, 0.62], [39.8, 83.1, 0.48, 0.60],
-  [58.3, 48.7, 0.52, 0.65], [82.6, 61.3, 0.45, 0.58], [3.9, 86.4, 0.50, 0.62],
-] as const
-
-// Stelle brillanti — alone e spike di diffrazione
-const STELLE_BRILLANTI: ReadonlyArray<readonly [number, number, number]> = [
-  [55.2, 8.3, 0.85],
-  [27.8, 43.1, 0.75],
-  [71.5, 31.7, 0.80],
-  [14.3, 18.6, 0.70],
-] as const
-
 const eventi = [
   {
     id: "night-groove",
@@ -158,71 +125,6 @@ export default function EventiSection() {
         className="relative overflow-hidden py-20 md:py-28"
         style={{ backgroundColor: "var(--color-night)" }}
       >
-        {/* Cielo notturno — velature e stelle realistiche */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          {/* Velature nuvolose */}
-          <div className="absolute" style={{
-            top: "0%", left: "5%", width: "50%", height: "40%",
-            background: "radial-gradient(ellipse, rgba(255,255,255,0.018) 0%, transparent 65%)",
-            filter: "blur(52px)",
-          }} />
-          <div className="absolute" style={{
-            top: "30%", left: "50%", width: "42%", height: "35%",
-            background: "radial-gradient(ellipse, rgba(210,220,255,0.014) 0%, transparent 65%)",
-            filter: "blur(60px)",
-          }} />
-          <div className="absolute" style={{
-            top: "62%", left: "18%", width: "34%", height: "28%",
-            background: "radial-gradient(ellipse, rgba(255,255,255,0.012) 0%, transparent 65%)",
-            filter: "blur(48px)",
-          }} />
-
-          {/* SVG stelle */}
-          <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <defs>
-              {/* Alone per stelle brillanti */}
-              <filter id="glow-bright" x="-300%" y="-300%" width="700%" height="700%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="0.9" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            {/* Stelle dim */}
-            {STELLE_DIM.map(([cx, cy, r, opacity], i) => (
-              <circle key={`dim-${i}`} cx={cx} cy={cy} r={r} fill="white" opacity={opacity} />
-            ))}
-
-            {/* Stelle medie */}
-            {STELLE_MEDIE.map(([cx, cy, r, opacity], i) => (
-              <circle key={`med-${i}`} cx={cx} cy={cy} r={r} fill="white" opacity={opacity} />
-            ))}
-
-            {/* Stelle brillanti — alone + spike di diffrazione */}
-            {STELLE_BRILLANTI.map(([cx, cy, r], i) => (
-              <g key={`bright-${i}`} filter="url(#glow-bright)">
-                <circle cx={cx} cy={cy} r={r} fill="white" opacity={0.95} />
-                {/* Spike orizzontale */}
-                <line
-                  x1={cx - 2.2} y1={cy} x2={cx + 2.2} y2={cy}
-                  stroke="white" strokeWidth={0.12} opacity={0.35}
-                />
-                {/* Spike verticale */}
-                <line
-                  x1={cx} y1={cy - 2.2} x2={cx} y2={cy + 2.2}
-                  stroke="white" strokeWidth={0.12} opacity={0.35}
-                />
-              </g>
-            ))}
-          </svg>
-        </div>
-
         {/* Header sezione */}
         <div className="relative px-6 md:px-16 mb-8 md:mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <RevealText>
@@ -243,14 +145,9 @@ export default function EventiSection() {
 
         {/* Bento Grid */}
         <div className="relative px-6 md:px-16">
-          {/* Mobile — stack verticale, angoli netti */}
+          {/* Mobile — stack verticale */}
           <div className="flex flex-col gap-3 md:hidden">
-            <EventCard
-              evento={hero}
-              hero
-              className="aspect-[4/5]"
-              sizes="94vw"
-            />
+            <EventCard evento={hero} hero className="aspect-[4/5]" sizes="94vw" />
             {rest.map((ev, i) => (
               <EventCard
                 key={ev.id}
@@ -262,7 +159,7 @@ export default function EventiSection() {
             ))}
           </div>
 
-          {/* Desktop — bento asimmetrico 3×3, angoli netti */}
+          {/* Desktop — bento asimmetrico 3×3 */}
           {/* [ Hero 2×2        ] [ Card2 ] */}
           {/* [ Hero 2×2        ] [ Card3 ] */}
           {/* [ Card4 full-width 3×1      ] */}
