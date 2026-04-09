@@ -76,6 +76,9 @@ async function getActiveToken(redis: Redis): Promise<string> {
  * Restituisce array vuoto in caso di errore — la sezione rimane visibile ma vuota.
  */
 export async function fetchRecentPosts(): Promise<InstagramPost[]> {
+  // Se il token non è configurato, ritorna silenziosamente — nessun errore in console
+  if (!process.env.INSTAGRAM_ACCESS_TOKEN && !process.env.REDIS_URL) return []
+
   let redis: Redis | null = null
   try {
     redis = getRedis()
