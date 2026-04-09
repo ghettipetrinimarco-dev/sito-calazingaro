@@ -1,9 +1,9 @@
-import EventsBento from "@/components/sections/EventsBento"
+import EventiSection from "@/components/sections/EventiSection"
 
 export default function EventiPage() {
   return (
     <main className="pt-20">
-      <EventsBento />
+      <EventiSection />
     </main>
   )
 }
