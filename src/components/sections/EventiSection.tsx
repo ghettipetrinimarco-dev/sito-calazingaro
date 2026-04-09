@@ -125,6 +125,11 @@ export default function EventiSection() {
         className="relative overflow-hidden py-20 md:py-28"
         style={{ backgroundColor: "var(--color-night)" }}
       >
+        {/* Separatore superiore — divide dalla sezione precedente */}
+        <div className="relative px-6 md:px-16 mb-10 md:mb-12">
+          <OrganicLine color="white" opacity={0.12} />
+        </div>
+
         {/* Header sezione */}
         <div className="relative px-6 md:px-16 mb-8 md:mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <RevealText>
