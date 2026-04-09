@@ -44,8 +44,10 @@ export default function Header() {
         className="fixed top-0 left-0 right-0 z-40"
         style={{
           height: scrolled ? 64 : 108,
-          backgroundColor: scrolled ? "rgba(223, 210, 196, 1)" : "rgba(223, 210, 196, 0)",
-          boxShadow: scrolled ? "0 1px 0 rgba(0,0,0,0.06)" : "none",
+          backgroundColor: scrolled ? "rgba(250, 250, 247, 0.88)" : "rgba(250, 250, 247, 0)",
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
+          boxShadow: scrolled ? "0 1px 0 rgba(0,0,0,0.05)" : "none",
           transition,
         }}
       >

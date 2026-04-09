@@ -11,7 +11,7 @@ export default function SectionLabel({
 }: SectionLabelProps) {
   return (
     <p
-      className={`text-[0.6rem] tracking-[0.2em] uppercase mb-3 ${className}`}
+      className={`text-[1rem] tracking-[0.18em] uppercase mb-3 ${className}`}
       style={{ color: light ? "rgba(244,242,237,0.4)" : "var(--color-subtle)" }}
     >
       {children}
