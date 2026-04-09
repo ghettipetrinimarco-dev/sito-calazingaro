@@ -18,6 +18,15 @@ export default function Header() {
     window.scrollTo(0, 0)
   }, [pathname])
 
+  // Apre il menu hamburger se la X di /menu o /vini ha segnalato il ritorno
+  useEffect(() => {
+    const flag = sessionStorage.getItem("openMobileMenu")
+    if (flag) {
+      sessionStorage.removeItem("openMobileMenu")
+      setMenuOpen(true)
+    }
+  }, [pathname])
+
   // Listener scroll nativo — passivo, senza dipendenza da Framer Motion.
   // Quando il menu è aperto, position:fixed sul body azzera window.scrollY →
   // congelare scrolled per evitare che logo e hamburger cambino posizione.

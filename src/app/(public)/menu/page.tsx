@@ -4,15 +4,23 @@
 // Il bot aggiorna menu.ts su GitHub → Vercel re-deploya automaticamente.
 
 import Image from "next/image"
-import Link from "next/link"
 import { X } from "lucide-react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { menu } from "@/data/menu"
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 
 export default function MenuPage() {
+  const router = useRouter()
   const { scrollY } = useScroll()
   const plantsY = useTransform(scrollY, (v) => v * -0.05)
+
+  const handleClose = useCallback(() => {
+    const returnPath = sessionStorage.getItem("menuReturnPath") || "/"
+    sessionStorage.removeItem("menuReturnPath")
+    sessionStorage.setItem("openMobileMenu", "1")
+    router.replace(returnPath)
+  }, [router])
 
   useEffect(() => {
     // Gestione safely del body per eliminare il mismatch di colore e il rubber band
@@ -30,9 +38,9 @@ export default function MenuPage() {
 
   return (
     <div className="relative min-h-screen bg-white text-[#111] pb-0 overflow-x-hidden">
-      {/* X chiudi — leggibile, top-right */}
-      <Link
-        href="/"
+      {/* X chiudi — torna alla pagina precedente con hamburger aperto */}
+      <button
+        onClick={handleClose}
         aria-label="Chiudi menu"
         className="fixed top-5 right-5 z-50 p-2"
         style={{
@@ -41,7 +49,7 @@ export default function MenuPage() {
         }}
       >
         <X strokeWidth={2} size={34} />
-      </Link>
+      </button>
 
       {/* Cornice Foglie con parallax */}
       <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
