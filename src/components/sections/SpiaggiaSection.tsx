@@ -1,6 +1,7 @@
 import Image from "next/image"
 import RevealText from "@/components/ui/RevealText"
 import OrganicLink from "@/components/ui/OrganicLink"
+import OrganicCorner from "@/components/ui/OrganicCorner"
 
 export default function SpiaggiaSection() {
   return (
@@ -12,7 +13,7 @@ export default function SpiaggiaSection() {
 
         {/* Foto — sinistra */}
         <RevealText className="min-h-[480px] md:min-h-0">
-          <div className="relative w-full h-full" style={{ minHeight: "520px" }}>
+          <div className="relative w-full h-full overflow-hidden" style={{ minHeight: "520px" }}>
             <Image
               src="/Ambiente/Cala-Zingaro-Ambiente-10.webp"
               alt="Beach club Cala Zingaro"
@@ -24,7 +25,7 @@ export default function SpiaggiaSection() {
         </RevealText>
 
         {/* Testo — destra */}
-        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-20 md:py-32">
+        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 md:py-24 pb-10 md:pb-16">
           <RevealText delay={0.1}>
             <p className="section-label mb-5" style={{ color: "var(--color-subtle)" }}>
               Beach Club

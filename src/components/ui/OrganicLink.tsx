@@ -12,6 +12,7 @@ interface OrganicLinkProps {
   color?: string
   className?: string
   external?: boolean
+  style?: React.CSSProperties
 }
 
 export default function OrganicLink({
@@ -20,13 +21,14 @@ export default function OrganicLink({
   color = "currentColor",
   className = "",
   external = false,
+  style,
 }: OrganicLinkProps) {
   const uid = useId()
   const filterId = `ul-${uid}`
 
   const inner = (
     <span className="relative inline-block">
-      <span className={`relative ${className}`} style={{ color }}>
+      <span className={`relative ${className}`} style={{ color, ...style }}>
         {children}
       </span>
       {/* Underline organica */}
@@ -71,7 +73,7 @@ export default function OrganicLink({
   )
 
   if (external) {
-    return <a href={href}>{inner}</a>
+    return <a href={href} target="_blank" rel="noopener noreferrer">{inner}</a>
   }
 
   return <TransitionLink href={href}>{inner}</TransitionLink>
