@@ -1,24 +1,39 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { m } from "framer-motion"
-
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+import { useEffect } from "react"
+import { m, useMotionValue, useTransform } from "framer-motion"
 
 export default function Hero() {
-  const [visible, setVisible] = useState(false)
+  const scrollY = useMotionValue(0)
 
-  // Listener scroll nativo — passivo, senza dipendenza da useScroll di FM
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY
-      if (y > 10) setVisible(true)
-      else if (y < 5) setVisible(false)
-    }
-
+    const onScroll = () => scrollY.set(window.scrollY)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+  }, [scrollY])
+
+  // Appare: 0→60px
+  // Resta visibile fino al 70% dell'altezza hero
+  // Esce (sinistra + fade) nell'ultimo 30% prima che la sezione esca dal frame
+  const opacity = useTransform(scrollY, (y) => {
+    if (typeof window === "undefined") return 0
+    if (y < 60) return y / 60
+    const vh = window.innerHeight
+    const exitStart = vh * 0.5
+    const exitEnd = vh * 0.8
+    if (y < exitStart) return 1
+    return Math.max(1 - (y - exitStart) / (exitEnd - exitStart), 0)
+  })
+
+  const x = useTransform(scrollY, (y) => {
+    if (typeof window === "undefined") return 0
+    const vh = window.innerHeight
+    const exitStart = vh * 0.5
+    const exitEnd = vh * 0.8
+    if (y < exitStart) return 0
+    const progress = Math.min((y - exitStart) / (exitEnd - exitStart), 1)
+    return progress * -200
+  })
 
   return (
     <section className="relative overflow-hidden" style={{ height: "100svh" }}>
@@ -44,43 +59,23 @@ export default function Hero() {
         }}
       />
 
-      {/* Contenuto — appare al primo scroll */}
-      <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-12 pb-10 md:pb-16">
-
+      {/* Tagline */}
+      <div className="absolute inset-0 flex flex-col justify-end items-center px-6 md:px-12 pb-16 md:pb-24">
         <m.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 1.1, ease: EASE }}
-          className="text-white leading-none mb-6 md:mb-8"
           style={{
+            opacity,
+            x,
             fontFamily: "var(--font-yanone)",
             fontWeight: 300,
-            fontSize: "clamp(3rem, 11vw, 8rem)",
+            fontSize: "clamp(2.2rem, 7vw, 5.5rem)",
             letterSpacing: "-0.01em",
           }}
+          className="text-white leading-none text-center"
         >
-          The place<br />not to be sad.
+          THE PLACE NOT TO BE SAD.
         </m.h1>
-
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.9, ease: EASE, delay: visible ? 0.15 : 0 }}
-        >
-          <p
-            className="tracking-[0.18em] uppercase"
-            style={{
-              fontFamily: "var(--font-quicksand)",
-              fontWeight: 500,
-              fontSize: "clamp(0.65rem, 1.4vw, 0.9rem)",
-              color: "rgba(255,255,255,0.65)",
-            }}
-          >
-            Beach Club & Ristorante · Milano Marittima
-          </p>
-        </m.div>
-
       </div>
+
     </section>
   )
 }

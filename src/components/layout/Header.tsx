@@ -35,8 +35,9 @@ export default function Header() {
 
     const onScroll = () => {
       const y = window.scrollY
-      if (y > 120) setScrolled(true)
-      else if (y < 60) setScrolled(false)
+      const threshold = window.innerHeight * 0.5
+      if (y > threshold) setScrolled(true)
+      else if (y < threshold - 40) setScrolled(false)
     }
 
     window.addEventListener("scroll", onScroll, { passive: true })
