@@ -4,7 +4,29 @@ import { LazyMotion, domAnimation, m } from "framer-motion"
 import Image from "next/image"
 import SectionLabel from "@/components/ui/SectionLabel"
 import RevealText from "@/components/ui/RevealText"
-import OrganicLine from "@/components/ui/OrganicLine"
+// Separatore chalk personalizzato — più visibile su sfondo scuro rispetto a OrganicLine (SVG 2px)
+// Linea chalk con ondulazione via path — senza SVG filter (che la rendeva invisibile su sfondo scuro)
+function ChalkLine({ opacity = 0.4 }: { opacity?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className="w-full"
+      height="8"
+      viewBox="0 0 1000 8"
+      preserveAspectRatio="none"
+      fill="none"
+    >
+      <path
+        d="M 0,4 C 60,3.2 120,4.8 180,4.1 C 240,3.4 300,4.6 360,4.0 C 420,3.5 480,4.7 540,4.2 C 600,3.6 660,4.5 720,4.0 C 780,3.4 840,4.6 900,4.1 C 940,3.7 970,4.4 1000,4"
+        stroke="white"
+        strokeWidth={1.2}
+        strokeLinecap="round"
+        opacity={opacity}
+        fill="none"
+      />
+    </svg>
+  )
+}
 
 const SPRING_HOVER = { type: "spring" as const, stiffness: 260, damping: 20 }
 const SPRING_APPEAR = { type: "spring" as const, stiffness: 100, damping: 15 }
@@ -127,7 +149,7 @@ export default function EventiSection() {
       >
         {/* Separatore superiore — divide dalla sezione precedente */}
         <div className="relative px-6 md:px-16 mb-10 md:mb-12">
-          <OrganicLine color="white" opacity={0.35} />
+          <ChalkLine opacity={0.45} />
         </div>
 
         {/* Header sezione */}
@@ -145,7 +167,7 @@ export default function EventiSection() {
 
         {/* Separatore organico */}
         <div className="relative px-6 md:px-16 mb-10 md:mb-12">
-          <OrganicLine color="white" opacity={0.35} />
+          <ChalkLine opacity={0.45} />
         </div>
 
         {/* Bento Grid */}
