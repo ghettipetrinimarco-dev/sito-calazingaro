@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "sync-assets": "git add public/ && git diff --cached --quiet && echo 'Nessun asset nuovo.' || git commit -m 'assets: aggiornamento contenuti' && git push origin HEAD",
+    "watch-assets": "node scripts/watch-assets.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -16,7 +18,6 @@
     "@octokit/rest": "^22.0.1",
     "@supabase/supabase-js": "^2.102.0",
     "framer-motion": "^12.38.0",
-    "geist": "^1.7.0",
     "ioredis": "^5.10.1",
     "lenis": "^1.3.21",
     "lucide-react": "^1.7.0",
@@ -32,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chokidar": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",

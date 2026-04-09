@@ -6,12 +6,14 @@
 import Image from "next/image"
 import Link from "next/link"
 import { X } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 import { menu } from "@/data/menu"
 import { useEffect } from "react"
 
 export default function MenuPage() {
-  
+  const { scrollY } = useScroll()
+  const plantsY = useTransform(scrollY, (v) => v * -0.05)
+
   useEffect(() => {
     // Gestione safely del body per eliminare il mismatch di colore e il rubber band
     document.documentElement.style.backgroundColor = "#ffffff"
@@ -41,43 +43,43 @@ export default function MenuPage() {
         <X strokeWidth={2} size={34} />
       </Link>
 
-      {/* Cornice Foglie: panel ancorati agli angoli, larghezza proporzionale al viewport */}
+      {/* Cornice Foglie con parallax */}
       <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
 
-        {/* Ramo Sinistro — stretto su mobile, ricco su desktop; bordo interno sfuma nel bianco */}
+        {/* Ramo Sinistro */}
         <div
-          className="absolute top-0 bottom-0 left-0 w-[20vw] sm:w-[24vw] md:w-[28vw] lg:w-[30vw] xl:w-[32vw]"
+          className="absolute top-0 bottom-0 left-0 w-[22vw] sm:w-[26vw] md:w-[30vw] lg:w-[32vw]"
           style={{
-            maskImage: "linear-gradient(to right, black 55%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to right, black 55%, transparent 100%)",
+            maskImage: "linear-gradient(to right, black 60%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to right, black 60%, transparent 100%)",
           }}
         >
-          <Image
-            src="/images/foglie-menu-sx.png"
-            alt=""
-            fill
-            className="object-cover"
-            style={{ objectPosition: "left top" }}
-            priority
-          />
+          <motion.div className="absolute left-0 w-full top-0" style={{ y: plantsY }}>
+            <Image
+              src="/Logo & Illustrazioni/foglie-menu-sx-lunga.webp"
+              alt="" width={600} height={2400}
+              className="w-full h-auto"
+              priority
+            />
+          </motion.div>
         </div>
 
-        {/* Ramo Destro — stretto su mobile, ricco su desktop; bordo interno sfuma nel bianco */}
+        {/* Ramo Destro */}
         <div
-          className="absolute top-0 bottom-0 right-0 w-[20vw] sm:w-[24vw] md:w-[28vw] lg:w-[30vw] xl:w-[32vw]"
+          className="absolute top-0 bottom-0 right-0 w-[22vw] sm:w-[26vw] md:w-[30vw] lg:w-[32vw]"
           style={{
-            maskImage: "linear-gradient(to left, black 55%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to left, black 55%, transparent 100%)",
+            maskImage: "linear-gradient(to left, black 60%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)",
           }}
         >
-          <Image
-            src="/images/foglie-menu-dx.png"
-            alt=""
-            fill
-            className="object-cover"
-            style={{ objectPosition: "right top" }}
-            priority
-          />
+          <motion.div className="absolute right-0 w-full top-0" style={{ y: plantsY }}>
+            <Image
+              src="/Logo & Illustrazioni/foglie-menu-dx-lunga.webp"
+              alt="" width={600} height={2400}
+              className="w-full h-auto"
+              priority
+            />
+          </motion.div>
         </div>
 
       </div>

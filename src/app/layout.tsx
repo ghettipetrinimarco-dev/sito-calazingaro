@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import { Yanone_Kaffeesatz, Quicksand } from "next/font/google"
 import LenisProvider from "@/components/layout/LenisProvider"
+import MotionProvider from "@/components/layout/MotionProvider"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import { TransitionProvider } from "@/contexts/TransitionContext"
-import LeafOverlay from "@/components/LeafOverlay"
+import LeafOverlay from "@/components/transitions/LeafOverlay"
 import "./globals.css"
 
 const yanone = Yanone_Kaffeesatz({
@@ -43,14 +44,17 @@ export default function RootLayout({
     <html lang="it" className={`${yanone.variable} ${quicksand.variable}`}>
       <body className="min-h-full flex flex-col">
         <TransitionProvider>
-          <LeafOverlay />
-          <LenisProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </LenisProvider>
+          <MotionProvider>
+            <LeafOverlay />
+            <LenisProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </LenisProvider>
+          </MotionProvider>
         </TransitionProvider>
       </body>
     </html>
   )
 }
+

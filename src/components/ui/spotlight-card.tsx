@@ -52,6 +52,34 @@ const GLOW_STYLES = `
 `
 
 let stylesInjected = false
+// Ref counter per il listener globale: un solo listener per N card
+let listenerCount = 0
+let globalCleanup: (() => void) | null = null
+
+function ensureGlobalListener() {
+  listenerCount++
+  if (listenerCount === 1) {
+    const syncPointer = (e: PointerEvent) => {
+      const cards = document.querySelectorAll<HTMLElement>("[data-spotlight]")
+      const x = e.clientX.toFixed(1)
+      const y = e.clientY.toFixed(1)
+      cards.forEach((card) => {
+        card.style.setProperty("--x", x)
+        card.style.setProperty("--y", y)
+      })
+    }
+    document.addEventListener("pointermove", syncPointer)
+    globalCleanup = () => document.removeEventListener("pointermove", syncPointer)
+  }
+}
+
+function releaseGlobalListener() {
+  listenerCount--
+  if (listenerCount === 0 && globalCleanup) {
+    globalCleanup()
+    globalCleanup = null
+  }
+}
 
 interface SpotlightCardProps {
   children: ReactNode
@@ -70,16 +98,9 @@ export function SpotlightCard({ children, className = "" }: SpotlightCardProps) 
       stylesInjected = true
     }
 
-    // Traccia posizione puntatore (mouse + touch tramite pointer events API)
-    const syncPointer = (e: PointerEvent) => {
-      if (cardRef.current) {
-        cardRef.current.style.setProperty("--x", e.clientX.toFixed(1))
-        cardRef.current.style.setProperty("--y", e.clientY.toFixed(1))
-      }
-    }
-
-    document.addEventListener("pointermove", syncPointer)
-    return () => document.removeEventListener("pointermove", syncPointer)
+    // Singolo listener globale condiviso da tutte le card
+    ensureGlobalListener()
+    return () => releaseGlobalListener()
   }, [])
 
   return (

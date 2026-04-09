@@ -56,12 +56,64 @@ GitHub — version control
 10. **Notifiche sempre con `Promise.allSettled`** — mai `Promise.all` (vedi PATTERNS_GLOBALI.md).
 11. **Supabase client sempre lazy** — funzione `supabaseAdmin()`, mai costante globale.
 12. **Font nel CSS manuale: sempre variabili `next/font` dirette** — mai alias `@theme inline`. Vedi sezione FONT.
+13. **VERSIONE NEXT.JS CRITICA:** Prima di scrivere qualsiasi codice relativo a data fetching, routing, caching o server components, **DEVI** leggere `node_modules/next/dist/docs/` e invocare la skill `vercel/nextjs`. Questa versione ha breaking changes rispetto al training data.
 
 ---
 
-## AUTO-IMPROVEMENT
+## MASTER ORCHESTRATION PROTOCOL
 
-Quando trovi un pattern che funziona bene o commetti un errore, aggiorna autonomamente questo file con la nuova regola o lezione appresa.
+> Questa è la Costituzione operativa. Governa ogni task. Le sezioni precedenti forniscono il contesto tecnico; questa sezione governa il comportamento.
+
+### MODALITÀ OPERATIVE (BINARIO)
+- **FAST:** nel prompt → BINARIO 2: agisci direttamente, niente PLAN, task a basso rischio.
+- Prompt normale → BINARIO 1: protocollo STRICT completo (vedi sotto).
+
+---
+
+### 1. ARCHITETTURA — Superpowers `writing-plans`
+Ogni task BINARIO 1 inizia invocando la skill `superpowers:writing-plans`.
+Il piano deve:
+- Elencare i percorsi esatti dei file coinvolti.
+- Citare esplicitamente quale sezione di questo CLAUDE.md o di MEMORY.md giustifica ogni scelta tecnica.
+- Terminare con 2-3 domande di allineamento. Aspetta “OK procedi” prima di eseguire.
+
+---
+
+### 2. DESIGN AUTHORITY — Skill `design-taste-frontend`
+Per ogni componente UI nuovo o modificato, **invocare la skill `design-taste-frontend` prima di scrivere codice**.
+Parametri estetici definiti in `TASTE_RULES.md` (file di progetto, standard obbligatorio).
+Standard estetico obbligatorio “High-End Taste”:
+- Animazioni con fisica spring (Framer Motion), mai ease lineare.
+- Micro-interazioni su hover, focus e tap.
+- Tipografia dinamica: scale fluida, spaziatura consapevole.
+- **VIETATO:** stili industrial, brutalist, minimal-standard generico.
+- Non sostituire la skill con giudizio personale o convenzioni generiche.
+
+---
+
+### 3. NEXT.JS RIGOR — Skill `vercel/nextjs`
+Prima di scrivere codice relativo a data fetching, routing, caching, searchParams o Server Components:
+- Invocare la skill `vercel/nextjs`.
+- Leggere `node_modules/next/dist/docs/` se il comportamento è incerto.
+- `searchParams` è asincrono in Next.js 15 — validare sempre con `await`.
+
+---
+
+### 4. MEMORIA ATTIVA
+- Dopo ogni EXECUTE: aggiornare `~/.claude/projects/.../memory/MEMORY.md` con la decisione tecnica presa (non il log delle azioni, ma il *perché*).
+- **Compattazione:** se le voci sotto “Task Completati” superano 30 righe, consolida i task vecchi in “Contesto Storico” mantenendo estesi solo gli ultimi 3.
+- Basarsi SOLO su codice, MEMORY.md e questo CLAUDE.md — non dedurre best practice da fonti esterne.
+
+---
+
+### 5. KILL-SWITCH & VERIFICA FINALE
+- **Errori di build/lint/runtime:** massimo 2 tentativi di auto-fix. Al terzo, fermati, documenta l'errore e aspetta istruzioni.
+- **Prima di dichiarare completato:** invocare la skill `superpowers:verification-before-completion`.
+- Non dichiarare mai “✓ Fatto” senza aver eseguito `pnpm build` e verificato l'output.
+
+---
+
+**FLEXIBILITY**: Puoi proporre deviazioni architetturali, ma devi motivarle con dati reali estratti dal codice e chiedere conferma.
 
 ---
 
@@ -263,15 +315,56 @@ pnpm add @octokit/rest @supabase/supabase-js @dnd-kit/core @dnd-kit/utilities io
 
 ---
 
-## GIT WORKFLOW
+## SYNC ASSET (FOTO / VIDEO)
+
+### Watch automatico (consigliato)
+
+Avvia una volta in un terminale separato:
 
 ```bash
-git checkout -b session/YYYY-MM-DD_HH-mm
-git add -A && git commit -m "feat: descrizione in italiano"
-# MAI push su main senza ok esplicito di Marco
+pnpm watch-assets
 ```
 
-Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:`
+Da quel momento, ogni volta che aggiungi file in `public/`, lo script li committa e pusha su GitHub **automaticamente** dopo 3 secondi. Gira in locale sul Mac, zero costi.
+
+### Sync manuale (alternativa)
+
+```bash
+pnpm sync-assets
+```
+
+**Cartelle asset:**
+- `public/Ambiente/` — foto location e spiaggia
+- `public/Cucina/` — foto cibo e ristorante
+- `public/videos/` — video (attenzione: file grandi, push può essere lento)
+- `public/images/` — loghi, icone, elementi grafici
+
+> ⚠️ I video pesanti (>50MB) potrebbero essere rifiutati da GitHub (limite 100MB per file).
+> In quel caso usare un CDN esterno (Cloudflare R2, Vercel Blob, ecc.) e referenziare l'URL.
+
+---
+
+## GIT WORKFLOW
+
+### Struttura branch
+```
+main    ← branch principale — merge dai branch personali con ok di Marco
+marco   ← branch personale di Marco
+ale     ← branch personale di Alessandro
+```
+
+### Flusso operativo
+1. Ogni sviluppatore lavora sul proprio branch (`marco`, `ale`, ecc.)
+2. Quando una feature è pronta e verificata → merge diretto su `main` con ok di Marco
+3. Per aggiornarsi col lavoro dell'altro → `git pull origin main`, poi `git merge main` sul proprio branch
+4. **Mai committare direttamente su `main`**
+
+### Convenzioni commit
+```bash
+git add <file> && git commit -m "feat: descrizione in italiano"
+```
+
+Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:` `docs:`
 
 ---
 
