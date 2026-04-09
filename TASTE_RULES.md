@@ -14,6 +14,12 @@
 - Non bloccarti su asset mancanti — crea il placeholder, segnala cosa sostituire.
 - Per sfondi blur: qualsiasi foto `public/Ambiente/` va bene come default.
 
+## 5. ORGANICITÀ (chalk style)
+- **Nessuna linea dritta decorativa** — usare `<OrganicLine />` per separatori e divisori.
+- **Nessun `border-b` su link testuali** — usare `<OrganicLink />` per CTA con underline.
+- **Intensità:** displacement `scale` max 2 per linee, max 1.5 per underline — appena percettibile, non cartoonesco.
+- I componenti vivono in `src/components/ui/OrganicLine.tsx` e `OrganicLink.tsx`.
+
 ## 4. TIPOGRAFIA
 - **Headings:** Quicksand (o font di progetto), semi-bold, tracking-tighter.
 - **Body:** Leggibilità massima, contrasto morbido (mai #FFF su #000, usa zinc-300).

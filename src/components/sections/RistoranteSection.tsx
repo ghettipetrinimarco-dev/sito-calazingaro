@@ -1,6 +1,6 @@
 import Image from "next/image"
-import TransitionLink from "@/components/transitions/TransitionLink"
 import RevealText from "@/components/ui/RevealText"
+import OrganicLink from "@/components/ui/OrganicLink"
 
 export default function RistoranteSection() {
   return (
@@ -8,66 +8,88 @@ export default function RistoranteSection() {
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-sand-light)" }}
     >
-      {/* Titolo fullwidth sopra */}
-      <div className="px-8 md:px-16 lg:px-20 pt-20 md:pt-28 pb-10 md:pb-14">
+      {/* Titolo + descrizione centrati */}
+      <div className="px-6 md:px-16 pt-20 md:pt-28 pb-12 md:pb-16 text-center max-w-3xl mx-auto">
         <RevealText>
-          <p className="section-label mb-4" style={{ color: "var(--color-subtle)" }}>
+          <p className="section-label mb-5" style={{ color: "var(--color-subtle)" }}>
             Ristorante
           </p>
           <h2
-            className="title-display"
-            style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)", color: "var(--color-text)" }}
+            className="title-display mb-8"
+            style={{ fontSize: "clamp(4rem, 12vw, 9rem)", color: "var(--color-text)" }}
           >
             Cucina<br />di mare.
           </h2>
+          <p
+            style={{ color: "var(--color-muted)", fontSize: "0.95rem", lineHeight: 1.8, maxWidth: "42ch", margin: "0 auto" }}
+          >
+            Pesce fresco della Riviera, influenze asiatiche, ingredienti di stagione.
+            Dalla colazione al dopocena — la sala guarda il mare.
+          </p>
         </RevealText>
       </div>
 
-      {/* Foto + testo affiancati */}
-      <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
-
-        {/* Foto */}
-        <div className="relative" style={{ minHeight: "480px" }}>
+      {/* Foto fullwidth */}
+      <RevealText>
+        <div className="relative w-full" style={{ height: "65vh", minHeight: 400 }}>
           <Image
-            src="/Cucina/Cala-Zingaro-Cucina-5.webp"
+            src="/Cucina/Cala-Zingaro-Cucina-2.webp"
             alt="Cucina Cala Zingaro"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="100vw"
             className="object-cover"
-            style={{ objectPosition: "center 40%" }}
+            style={{ objectPosition: "center 65%" }}
           />
         </div>
+      </RevealText>
 
-        {/* Testo */}
-        <div className="flex flex-col justify-center px-8 md:px-14 lg:px-16 py-14 md:py-20">
-          <RevealText delay={0.15}>
-            <p
-              className="leading-relaxed mb-10"
-              style={{ color: "var(--color-muted)", maxWidth: "32ch", fontSize: "0.95rem" }}
-            >
-              Pranzo, aperitivo, cena e dopocena. Pesce fresco della Riviera,
-              influenze asiatiche, ingredienti di stagione. La sala guarda il mare.
-            </p>
-            <div className="flex flex-col gap-4">
-              <TransitionLink
-                href="/menu"
-                className="text-[0.6rem] tracking-[0.2em] uppercase border-b pb-1 self-start transition-opacity hover:opacity-50"
-                style={{ borderColor: "var(--color-text)", color: "var(--color-text)" }}
-              >
-                Vedi il menu →
-              </TransitionLink>
-              <TransitionLink
-                href="#prenota"
-                className="text-[0.6rem] tracking-[0.2em] uppercase border-b pb-1 self-start transition-opacity hover:opacity-50"
-                style={{ borderColor: "var(--color-text)", color: "var(--color-text)" }}
-              >
-                Prenota un tavolo →
-              </TransitionLink>
-            </div>
-          </RevealText>
+      {/* Tre foto in riga */}
+      <RevealText delay={0.1}>
+        <div className="grid grid-cols-3 gap-1.5 mt-1.5">
+          <div className="relative" style={{ aspectRatio: "3/4" }}>
+            <Image
+              src="/Cucina/Cala-Zingaro-Cucina-4.webp"
+              alt="Piatto Cala Zingaro"
+              fill
+              sizes="33vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="relative" style={{ aspectRatio: "3/4" }}>
+            <Image
+              src="/Cucina/Cala-Zingaro-Cucina-5.webp"
+              alt="Piatto Cala Zingaro"
+              fill
+              sizes="33vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="relative" style={{ aspectRatio: "3/4" }}>
+            <Image
+              src="/Cucina/Cala-Zingaro-Cucina-8.webp"
+              alt="Piatto Cala Zingaro"
+              fill
+              sizes="33vw"
+              className="object-cover"
+            />
+          </div>
         </div>
+      </RevealText>
 
+      {/* Link in fondo */}
+      <div className="px-6 md:px-16 py-10 md:py-12 flex flex-col sm:flex-row gap-6 sm:gap-12">
+        <RevealText>
+          <OrganicLink href="/menu" color="var(--color-text)" className="text-[0.7rem] tracking-[0.2em] uppercase hover:opacity-50 transition-opacity">
+            Vedi il menu →
+          </OrganicLink>
+        </RevealText>
+        <RevealText delay={0.08}>
+          <OrganicLink href="#prenota" color="var(--color-text)" className="text-[0.7rem] tracking-[0.2em] uppercase hover:opacity-50 transition-opacity">
+            Prenota un tavolo →
+          </OrganicLink>
+        </RevealText>
       </div>
+
     </section>
   )
 }

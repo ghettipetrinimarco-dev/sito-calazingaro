@@ -39,8 +39,8 @@ body {
 
 /* Label sezione */
 .section-label {
-  font-size: 0.6rem;
-  letter-spacing: 0.22em;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   font-family: var(--font-quicksand), system-ui, sans-serif;
 }

@@ -1,6 +1,7 @@
 import SectionLabel from "@/components/ui/SectionLabel"
 import RevealText from "@/components/ui/RevealText"
 import InstagramGrid from "@/components/sections/InstagramGrid"
+import OrganicLink from "@/components/ui/OrganicLink"
 
 const POSTS = [
   "https://www.instagram.com/p/DW3g0PKDUUT/",
@@ -55,15 +56,9 @@ export default async function InstagramSection() {
                 Seguici<br />su Instagram.
               </h2>
             </div>
-            <a
-              href="https://www.instagram.com/calazingaro/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[0.6rem] tracking-[0.18em] uppercase border-b pb-0.5 w-fit transition-opacity hover:opacity-60"
-              style={{ borderColor: "var(--color-text)", color: "var(--color-text)" }}
-            >
+            <OrganicLink href="https://www.instagram.com/calazingaro/" color="var(--color-text)" className="text-[0.7rem] tracking-[0.18em] uppercase transition-opacity hover:opacity-60" external>
               @calazingaro →
-            </a>
+            </OrganicLink>
           </div>
         </RevealText>
 

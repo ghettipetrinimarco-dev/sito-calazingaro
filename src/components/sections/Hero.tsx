@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { m } from "framer-motion"
-import TransitionLink from "@/components/transitions/TransitionLink"
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -67,35 +66,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.9, ease: EASE, delay: visible ? 0.15 : 0 }}
-          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"
         >
           <p
-            className="text-[0.72rem] tracking-[0.06em]"
+            className="tracking-[0.18em] uppercase"
             style={{
               fontFamily: "var(--font-quicksand)",
-              fontWeight: 400,
-              color: "rgba(255,255,255,0.6)",
+              fontWeight: 500,
+              fontSize: "clamp(0.65rem, 1.4vw, 0.9rem)",
+              color: "rgba(255,255,255,0.65)",
             }}
           >
             Beach Club & Ristorante · Milano Marittima
           </p>
-
-          <div className="flex items-center gap-5">
-            <TransitionLink
-              href="#prenota"
-              className="text-[0.62rem] tracking-widest uppercase bg-white px-5 py-3 transition-opacity hover:opacity-85"
-              style={{ color: "var(--color-ink)" }}
-            >
-              Prenota ora
-            </TransitionLink>
-            <a
-              href="#scopri"
-              className="text-[0.6rem] tracking-widest uppercase"
-              style={{ color: "rgba(255,255,255,0.45)" }}
-            >
-              ↓ scopri
-            </a>
-          </div>
         </m.div>
 
       </div>
