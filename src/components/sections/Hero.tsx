@@ -1,21 +1,25 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, useScroll } from "framer-motion"
+import { m } from "framer-motion"
 import TransitionLink from "@/components/transitions/TransitionLink"
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function Hero() {
   const [visible, setVisible] = useState(false)
-  const { scrollY } = useScroll()
 
+  // Listener scroll nativo — passivo, senza dipendenza da useScroll di FM
   useEffect(() => {
-    return scrollY.on("change", (v) => {
-      if (v > 10) setVisible(true)
-      else if (v < 5) setVisible(false)
-    })
-  }, [scrollY])
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y > 10) setVisible(true)
+      else if (y < 5) setVisible(false)
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <section className="relative overflow-hidden" style={{ height: "100svh" }}>
@@ -44,7 +48,7 @@ export default function Hero() {
       {/* Contenuto — appare al primo scroll */}
       <div className="absolute inset-0 flex flex-col justify-end px-6 md:px-12 pb-10 md:pb-16">
 
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 40 }}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 1.1, ease: EASE }}
@@ -57,17 +61,21 @@ export default function Hero() {
           }}
         >
           The place<br />not to be sad.
-        </motion.h1>
+        </m.h1>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.9, ease: EASE, delay: visible ? 0.15 : 0 }}
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"
         >
           <p
-            className="text-[0.6rem] tracking-[0.22em] uppercase"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            className="text-[0.72rem] tracking-[0.06em]"
+            style={{
+              fontFamily: "var(--font-quicksand)",
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.6)",
+            }}
           >
             Beach Club & Ristorante · Milano Marittima
           </p>
@@ -88,7 +96,7 @@ export default function Hero() {
               ↓ scopri
             </a>
           </div>
-        </motion.div>
+        </m.div>
 
       </div>
     </section>

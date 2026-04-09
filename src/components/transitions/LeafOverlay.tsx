@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { useRouter, usePathname } from "next/navigation"
 import { usePageTransition } from "@/contexts/TransitionContext"
 
@@ -58,7 +58,7 @@ export default function LeafOverlay() {
       className="fixed inset-0 z-[9999] flex items-center justify-center"
       style={{ pointerEvents: "auto" }}
     >
-      <motion.div
+      <m.div
         style={{ willChange: "transform" }}
         // Parte piccola dal bordo sinistro, inclinata
         initial={{ x: X_START, scale: SCALE_SMALL, rotate: -40 }}
@@ -88,7 +88,7 @@ export default function LeafOverlay() {
         >
           <path d={LEAF_PATH} fill="#1A1A1A" />
         </svg>
-      </motion.div>
+      </m.div>
     </div>
   )
 }

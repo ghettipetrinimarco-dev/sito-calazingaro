@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useEffect, useRef } from "react"
 
 interface RevealTextProps {
   children: React.ReactNode
@@ -8,20 +8,50 @@ interface RevealTextProps {
   className?: string
 }
 
+/**
+ * Reveal on scroll — CSS only (no Framer Motion).
+ * Usa un singolo IntersectionObserver per tutte le istanze della pagina.
+ * L'animazione è gestita interamente via CSS transition per massima
+ * performance GPU (transform + opacity → layer compositing).
+ */
 export default function RevealText({
   children,
   delay = 0,
   className = "",
 }: RevealTextProps) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Applica la classe di reveal dopo il delay
+            if (delay > 0) {
+              setTimeout(() => el.classList.add("revealed"), delay * 1000)
+            } else {
+              el.classList.add("revealed")
+            }
+            observer.unobserve(el)
+          }
+        })
+      },
+      { rootMargin: "-60px 0px", threshold: 0 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [delay])
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={`reveal-on-scroll ${className}`}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }

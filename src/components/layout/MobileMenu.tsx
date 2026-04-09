@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { motion, AnimatePresence, type Variants } from "framer-motion"
+import { m, AnimatePresence, type Variants } from "framer-motion"
 import Image from "next/image"
 import { Phone, MapPin, ArrowUpRight } from "lucide-react"
 import TransitionLink from "@/components/transitions/TransitionLink"
@@ -96,7 +96,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           blur(16px) su tutta la texture ad ogni frame → jank. */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             className="absolute inset-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -118,13 +118,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               className="absolute inset-0"
               style={{ backgroundColor: "rgba(12, 8, 6, 0.84)" }}
             />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           className="absolute inset-0 flex flex-col"
           // y: puro transform → GPU layer → 60fps garantiti.
           // willChange: "transform" promuove il panel a layer composito prima dell'animazione.
@@ -154,7 +154,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center px-8 md:px-16 gap-8">
 
               {/* Colonna sinistra — info (solo desktop) */}
-              <motion.div
+              <m.div
                 className="hidden md:flex flex-col gap-5"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -193,12 +193,12 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     Milano Marittima (RA)
                   </span>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Colonna centrale — voci menu */}
               <nav className="flex flex-col items-center gap-1 text-center">
                 {voci.map((voce, i) => (
-                  <motion.div
+                  <m.div
                     key={voce.href}
                     className="group"
                     variants={voceVariants}
@@ -228,11 +228,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         style={{ height: 1.5, backgroundColor: "rgba(255, 248, 240, 0.6)" }}
                       />
                     </TransitionLink>
-                  </motion.div>
+                  </m.div>
                 ))}
 
                 {/* CTA Prenota — mobile only */}
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, type: "spring", stiffness: 100, damping: 15 }}
@@ -250,11 +250,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   >
                     Prenota ora
                   </a>
-                </motion.div>
+                </m.div>
               </nav>
 
               {/* Colonna destra — social + prenota (solo desktop) */}
-              <motion.div
+              <m.div
                 className="hidden md:flex flex-col items-end gap-6"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -298,11 +298,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 >
                   Prenota ora
                 </a>
-              </motion.div>
+              </m.div>
 
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
     </div>

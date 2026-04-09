@@ -6,7 +6,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { X } from "lucide-react"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { menu } from "@/data/menu"
 import { useEffect } from "react"
 
@@ -53,9 +53,10 @@ export default function MenuPage() {
           }}
         >
           <Image
-            src="/images/foglie-menu-sx.png"
+            src="/images/foglie-menu-sx.webp"
             alt=""
             fill
+            sizes="(max-width: 640px) 20vw, (max-width: 768px) 24vw, (max-width: 1024px) 28vw, 32vw"
             className="object-cover"
             style={{ objectPosition: "left top" }}
             priority
@@ -71,9 +72,10 @@ export default function MenuPage() {
           }}
         >
           <Image
-            src="/images/foglie-menu-dx.png"
+            src="/images/foglie-menu-dx.webp"
             alt=""
             fill
+            sizes="(max-width: 640px) 20vw, (max-width: 768px) 24vw, (max-width: 1024px) 28vw, 32vw"
             className="object-cover"
             style={{ objectPosition: "right top" }}
             priority
@@ -86,7 +88,7 @@ export default function MenuPage() {
       <div className="relative z-20 max-w-xl mx-auto px-[24vw] sm:px-8 md:px-6 pt-28 md:pt-36 pb-24">
 
         {/* Titolo */}
-        <motion.div
+        <m.div
           className="text-center mb-20 md:mb-28 flex flex-col items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -113,7 +115,7 @@ export default function MenuPage() {
           >
             Menù
           </h1>
-        </motion.div>
+        </m.div>
 
         {/* Categorie */}
         <div className="space-y-20 md:space-y-28">
@@ -123,7 +125,7 @@ export default function MenuPage() {
             return (
               <section key={category.id}>
                 {/* Nome categoria */}
-                <motion.div
+                <m.div
                   className="text-center mb-8 md:mb-10"
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -149,10 +151,10 @@ export default function MenuPage() {
                       {category.descrizione}
                     </p>
                   )}
-                </motion.div>
+                </m.div>
 
                 {/* Separatore */}
-                <motion.div
+                <m.div
                   className="flex items-center gap-4 mb-8 md:mb-10"
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
@@ -163,12 +165,12 @@ export default function MenuPage() {
                   <div className="flex-1 h-px bg-[#ddd]" />
                   <div className="w-1 h-1 rounded-full bg-[#ddd]" />
                   <div className="flex-1 h-px bg-[#ddd]" />
-                </motion.div>
+                </m.div>
 
                 {/* Piatti */}
                 <div className="space-y-7 md:space-y-8">
                   {category.items.map((item, itemIndex) => (
-                    <motion.article
+                    <m.article
                       key={item.id}
                       className="text-center"
                       initial={{ opacity: 0, y: 12 }}
@@ -211,7 +213,7 @@ export default function MenuPage() {
                           € {item.prezzo}
                         </p>
                       )}
-                    </motion.article>
+                    </m.article>
                   ))}
                 </div>
               </section>

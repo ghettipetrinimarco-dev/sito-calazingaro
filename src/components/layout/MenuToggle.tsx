@@ -1,7 +1,7 @@
 "use client"
 
 import { useId } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence } from "framer-motion"
 
 // TASTE_RULES: stiffness 260 / damping 20 per interazioni
 const springInteraction = { type: "spring" as const, stiffness: 260, damping: 20 }
@@ -28,8 +28,8 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
       style={{
         top: topPx,
         transform: "translateY(-50%)",
-        // Bianco sull'hero, var(--color-text) sulla navbar; quando aperto sempre bianco (menu scuro)
-        color: isOpen ? "rgba(255, 248, 240, 0.9)" : scrolled ? "var(--color-text)" : "#fff",
+        // Bianco sull'hero, var(--color-text) sulla navbar; quando aperto sempre warm-white
+        color: isOpen ? "rgba(255, 248, 240, 0.95)" : scrolled ? "var(--color-text)" : "#fff",
         transition: "color 0.5s cubic-bezier(0.22, 1, 0.36, 1), top 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
         background: "none",
         border: "none",
@@ -46,26 +46,31 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
       <AnimatePresence mode="wait" initial={false}>
         {!isOpen ? (
           // ── HAMBURGER ──
-          <motion.span
+          <m.span
             key="hamburger"
             initial={{ opacity: 0, scale: 0.75 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.75 }}
             transition={springInteraction}
-            style={{ display: "block", width: 20, height: 20 }}
+            style={{ display: "block", width: 24, height: 24 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
-              width="20"
-              height="20"
+              width="24"
+              height="24"
             >
               <defs>
+                {/*
+                  Solo displacement: sposta i pixel del tracciato lungo noise fractal →
+                  bordi irregolari come gesso, senza toccare colore o alpha.
+                  La porosità era la causa del mix bianco/nero: rimossa.
+                */}
                 <filter id={hId} x="-20%" y="-60%" width="140%" height="220%">
                   <feTurbulence
                     type="fractalNoise"
-                    baseFrequency="0.035 0.11"
+                    baseFrequency="0.04 0.12"
                     numOctaves={4}
                     seed={3}
                     result="wave"
@@ -73,25 +78,10 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
                   <feDisplacementMap
                     in="SourceGraphic"
                     in2="wave"
-                    scale={1.6}
+                    scale={1.8}
                     xChannelSelector="R"
                     yChannelSelector="G"
-                    result="displaced"
                   />
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.72"
-                    numOctaves={2}
-                    seed={9}
-                    result="pores"
-                  />
-                  <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.3"
-                    in="pores"
-                    result="poreMask"
-                  />
-                  <feComposite in="displaced" in2="poreMask" operator="in" />
                 </filter>
               </defs>
               <g
@@ -106,29 +96,29 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
                 <path d="M 2.3 18.5 C 6.7 18.2, 13.0 18.7, 21.7 18.3" />
               </g>
             </svg>
-          </motion.span>
+          </m.span>
         ) : (
           // ── CHIUDI X ──
-          <motion.span
+          <m.span
             key="close"
             initial={{ opacity: 0, scale: 0.75 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.75 }}
             transition={springInteraction}
-            style={{ display: "block", width: 20, height: 20 }}
+            style={{ display: "block", width: 24, height: 24 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
-              width="20"
-              height="20"
+              width="24"
+              height="24"
             >
               <defs>
                 <filter id={xId} x="-20%" y="-20%" width="140%" height="140%">
                   <feTurbulence
                     type="fractalNoise"
-                    baseFrequency="0.035 0.11"
+                    baseFrequency="0.04 0.12"
                     numOctaves={4}
                     seed={5}
                     result="wave"
@@ -136,31 +126,16 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
                   <feDisplacementMap
                     in="SourceGraphic"
                     in2="wave"
-                    scale={1.6}
+                    scale={1.8}
                     xChannelSelector="R"
                     yChannelSelector="G"
-                    result="displaced"
                   />
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.72"
-                    numOctaves={2}
-                    seed={14}
-                    result="pores"
-                  />
-                  <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.3"
-                    in="pores"
-                    result="poreMask"
-                  />
-                  <feComposite in="displaced" in2="poreMask" operator="in" />
                 </filter>
               </defs>
               <g
                 filter={`url(#${xId})`}
                 stroke="currentColor"
-                strokeWidth={2.2}
+                strokeWidth={1.7}
                 strokeLinecap="round"
                 fill="none"
               >
@@ -168,7 +143,7 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
                 <path d="M 19.9 4.0 C 15.8 8.3, 10.2 13.7, 4.1 20.1" />
               </g>
             </svg>
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
     </button>

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { X } from "lucide-react"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { bevande } from "@/data/bevande"
 import { useEffect } from "react"
 
@@ -45,7 +45,7 @@ export default function ViniPage() {
             WebkitMaskImage: "linear-gradient(to right, black 55%, transparent 100%)",
           }}
         >
-          <Image src="/images/foglie-menu-sx.png" alt="" fill className="object-cover" style={{ objectPosition: "left top" }} priority />
+          <Image src="/images/foglie-menu-sx.webp" alt="" fill sizes="(max-width: 640px) 20vw, (max-width: 768px) 24vw, (max-width: 1024px) 28vw, 32vw" className="object-cover" style={{ objectPosition: "left top" }} priority />
         </div>
         <div
           className="absolute top-0 bottom-0 right-0 w-[20vw] sm:w-[24vw] md:w-[28vw] lg:w-[30vw] xl:w-[32vw]"
@@ -54,7 +54,7 @@ export default function ViniPage() {
             WebkitMaskImage: "linear-gradient(to left, black 55%, transparent 100%)",
           }}
         >
-          <Image src="/images/foglie-menu-dx.png" alt="" fill className="object-cover" style={{ objectPosition: "right top" }} priority />
+          <Image src="/images/foglie-menu-dx.webp" alt="" fill sizes="(max-width: 640px) 20vw, (max-width: 768px) 24vw, (max-width: 1024px) 28vw, 32vw" className="object-cover" style={{ objectPosition: "right top" }} priority />
         </div>
       </div>
 
@@ -62,7 +62,7 @@ export default function ViniPage() {
       <div className="relative z-20 max-w-3xl mx-auto px-[24vw] sm:px-10 md:px-12 pt-28 md:pt-36 pb-24">
 
         {/* Titolo */}
-        <motion.div
+        <m.div
           className="text-center mb-16 md:mb-24 flex flex-col items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,12 +88,12 @@ export default function ViniPage() {
           >
             Bevande
           </h1>
-        </motion.div>
+        </m.div>
 
         {/* Griglia categorie — 1 colonna mobile, 2 colonne desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-x-16 md:gap-y-16">
           {bevande.map((categoria, catIndex) => (
-            <motion.section
+            <m.section
               key={categoria.id}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ export default function ViniPage() {
                   </div>
                 ))}
               </div>
-            </motion.section>
+            </m.section>
           ))}
         </div>
 
