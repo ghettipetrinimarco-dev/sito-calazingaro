@@ -18,6 +18,15 @@ export default function Header() {
     window.scrollTo(0, 0)
   }, [pathname])
 
+  // Apre il menu hamburger se la X di /menu o /vini ha segnalato il ritorno
+  useEffect(() => {
+    const flag = sessionStorage.getItem("openMobileMenu")
+    if (flag) {
+      sessionStorage.removeItem("openMobileMenu")
+      setMenuOpen(true)
+    }
+  }, [pathname])
+
   // Listener scroll nativo — passivo, senza dipendenza da Framer Motion.
   // Quando il menu è aperto, position:fixed sul body azzera window.scrollY →
   // congelare scrolled per evitare che logo e hamburger cambino posizione.
@@ -26,8 +35,9 @@ export default function Header() {
 
     const onScroll = () => {
       const y = window.scrollY
-      if (y > 120) setScrolled(true)
-      else if (y < 60) setScrolled(false)
+      const threshold = window.innerHeight * 0.5
+      if (y > threshold) setScrolled(true)
+      else if (y < threshold - 40) setScrolled(false)
     }
 
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -56,6 +66,11 @@ export default function Header() {
         <TransitionLink
           href="/"
           className="absolute"
+          onClick={() => {
+            if (pathname === "/") {
+              window.scrollTo({ top: 0, behavior: "smooth" })
+            }
+          }}
           style={{
             top: scrolled ? "50%" : "58%",
             left: scrolled ? 24 : "50%",

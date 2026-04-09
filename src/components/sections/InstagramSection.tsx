@@ -2,37 +2,30 @@ import SectionLabel from "@/components/ui/SectionLabel"
 import RevealText from "@/components/ui/RevealText"
 import InstagramGrid from "@/components/sections/InstagramGrid"
 import OrganicLink from "@/components/ui/OrganicLink"
+import { fetchRecentPosts } from "@/lib/instagram"
 
-const POSTS = [
-  "https://www.instagram.com/p/DW3g0PKDUUT/",
-  "https://www.instagram.com/p/DWTTiIIjfoJ/",
-  "https://www.instagram.com/p/DWRx6jvDekG/",
-  "https://www.instagram.com/p/DWYquh2jQn1/",
-  "https://www.instagram.com/p/DWRDD17iOE3/",
-  "https://www.instagram.com/p/DWGiTdglMwM/",
-  "https://www.instagram.com/p/DV0nwPtiYv8/",
+// Foto reali del sito usate come placeholder finché Instagram non è collegato
+const PLACEHOLDER_POSTS = [
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-1.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-1.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-2.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-2.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Cucina/Cala-Zingaro-Cucina-3.webp" },
+  { url: "https://www.instagram.com/calazingaro/", thumb: "/Ambiente/Cala-Zingaro-Ambiente-3.webp" },
 ]
 
-async function getThumb(postUrl: string): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `https://api.instagram.com/oembed?url=${encodeURIComponent(postUrl)}&maxwidth=640`,
-      { next: { revalidate: 86400 } }
-    )
-    if (!res.ok) return null
-    const data = await res.json()
-    return data.thumbnail_url ?? null
-  } catch {
-    return null
-  }
-}
-
 export default async function InstagramSection() {
-  const thumbs = await Promise.all(POSTS.map(getThumb))
+  const rawPosts = await fetchRecentPosts()
 
-  const posts = POSTS.map((url, i) => ({ url, thumb: thumbs[i] })).filter(
-    (p): p is { url: string; thumb: string } => p.thumb !== null
-  )
+  // I VIDEO usano thumbnail_url come anteprima, le IMAGE usano media_url
+  const apiPosts = rawPosts
+    .filter((p) => p.media_url || p.thumbnail_url)
+    .map((p) => ({
+      url: p.permalink,
+      thumb: p.media_type === "VIDEO" ? (p.thumbnail_url ?? p.media_url) : p.media_url,
+    }))
+
+  const posts = apiPosts.length > 0 ? apiPosts : PLACEHOLDER_POSTS
 
   return (
     <section
@@ -56,7 +49,12 @@ export default async function InstagramSection() {
                 Seguici<br />su Instagram.
               </h2>
             </div>
-            <OrganicLink href="https://www.instagram.com/calazingaro/" color="var(--color-text)" className="text-[0.7rem] tracking-[0.18em] uppercase transition-opacity hover:opacity-60" external>
+            <OrganicLink
+              href="https://www.instagram.com/calazingaro/"
+              color="var(--color-text)"
+              className="text-[0.7rem] tracking-[0.18em] uppercase transition-opacity hover:opacity-60"
+              external
+            >
               @calazingaro →
             </OrganicLink>
           </div>

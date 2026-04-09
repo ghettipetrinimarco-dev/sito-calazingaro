@@ -38,9 +38,16 @@ export default function LeafOverlay() {
     }
   }, [pathname, phase, setPhase])
 
+  // Pagine di consultazione: non impilano history, pressing back non ci passa
+  const REPLACE_ROUTES = new Set(["/menu", "/vini"])
+
   const handleCoveringComplete = () => {
     if (phase !== "covering") return
-    router.push(targetHref)
+    if (REPLACE_ROUTES.has(targetHref)) {
+      router.replace(targetHref)
+    } else {
+      router.push(targetHref)
+    }
     onCoveringComplete()
   }
 

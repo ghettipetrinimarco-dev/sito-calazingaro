@@ -6,6 +6,7 @@ import { m, AnimatePresence } from "framer-motion"
 import RevealText from "@/components/ui/RevealText"
 import OrganicLink from "@/components/ui/OrganicLink"
 import SeasonToggle from "@/components/ui/SeasonToggle"
+import OrganicCorner from "@/components/ui/OrganicCorner"
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -109,9 +110,10 @@ export default function IlLuogo() {
 
             {/* Bottom — link */}
             <OrganicLink
-              href="/contatti"
+              href="https://maps.app.goo.gl/TUrsbEvbCBJ3mGxt9"
               color="var(--color-text)"
               className="text-[0.7rem] tracking-[0.2em] uppercase transition-opacity hover:opacity-50"
+              external
             >
               Come raggiungerci →
             </OrganicLink>
@@ -120,7 +122,7 @@ export default function IlLuogo() {
         </div>
 
         {/* Foto stagionale — crossfade */}
-        <div className="relative min-h-[480px] md:min-h-0" style={{ minHeight: "520px" }}>
+        <div className="relative min-h-[480px] md:min-h-0 overflow-hidden" style={{ minHeight: "520px" }}>
           <AnimatePresence>
             <m.div
               key={season + "-foto"}
