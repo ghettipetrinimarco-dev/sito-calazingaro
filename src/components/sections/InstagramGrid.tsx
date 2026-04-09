@@ -12,7 +12,7 @@ export default function InstagramGrid({ posts }: { posts: Post[] }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
       {posts.map(({ url, thumb }) => (
-        <SpotlightCard key={url}>
+        <SpotlightCard key={thumb}>
           <a
             href={url}
             target="_blank"
