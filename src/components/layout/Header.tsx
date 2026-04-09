@@ -49,7 +49,7 @@ export default function Header() {
           href="/"
           className="absolute"
           style={{
-            top: "50%",
+            top: scrolled ? "50%" : "58%",
             left: scrolled ? 24 : "50%",
             transform: scrolled ? "translateY(-50%)" : "translate(-50%, -50%)",
             height: scrolled ? 44 : 96,
