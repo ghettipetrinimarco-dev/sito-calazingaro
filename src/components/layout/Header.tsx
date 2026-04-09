@@ -5,9 +5,8 @@ import Image from "next/image"
 import TransitionLink from "@/components/transitions/TransitionLink"
 import { usePathname } from "next/navigation"
 import { useScroll } from "framer-motion"
-import { Menu } from "lucide-react"
-
 import MobileMenu from "./MobileMenu"
+import MenuToggle from "./MenuToggle"
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -21,13 +20,16 @@ export default function Header() {
     window.scrollTo(0, 0)
   }, [pathname])
 
-  // Aggiorna lo stato in base allo scroll reale
+  // Aggiorna lo stato in base allo scroll reale.
+  // Quando il menu è aperto, position:fixed sul body azzera window.scrollY →
+  // congelare scrolled per evitare che logo e hamburger cambino posizione.
   useEffect(() => {
     return scrollY.on("change", (v) => {
+      if (menuOpen) return
       if (v > 120) setScrolled(true)
       else if (v < 60) setScrolled(false)
     })
-  }, [scrollY])
+  }, [scrollY, menuOpen])
 
   if (pathname === "/menu" || pathname === "/vini") return null
 
@@ -64,6 +66,7 @@ export default function Header() {
             alt="Cala Zingaro"
             width={200}
             height={96}
+            loading="eager"
             style={{
               height: "100%",
               width: "auto",
@@ -78,6 +81,7 @@ export default function Header() {
             alt=""
             width={200}
             height={96}
+            loading="eager"
             style={{
               height: "100%",
               width: "auto",
@@ -112,23 +116,15 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Hamburger — sempre visibile, bianco sull'hero e scuro sulla navbar */}
-        <button
-          onClick={() => setMenuOpen(true)}
-          aria-label="Apri menu"
-          className="absolute right-6 md:right-10"
-          style={{
-            top: "50%",
-            transform: "translateY(-50%)",
-            color: scrolled ? "var(--color-text)" : "#fff",
-            transition,
-          }}
-        >
-          <Menu size={20} strokeWidth={1.5} />
-        </button>
       </header>
 
-      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} scrolled={scrolled} />
+      <MenuToggle
+        isOpen={menuOpen}
+        onToggle={() => setMenuOpen((v) => !v)}
+        scrolled={scrolled}
+      />
+
+      <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   )
 }
