@@ -41,7 +41,7 @@ export default function RevealText({
           }
         })
       },
-      { rootMargin: "-60px 0px", threshold: 0 }
+      { rootMargin: "0px 0px -40px 0px", threshold: 0 }
     )
 
     observer.observe(el)

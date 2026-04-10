@@ -24,7 +24,7 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
     <button
       onClick={onToggle}
       aria-label={isOpen ? "Chiudi menu" : "Apri menu"}
-      className="fixed right-6 md:right-10 z-[60]"
+      className="fixed right-6 md:right-10 z-[9000]"
       style={{
         top: topPx,
         transform: "translateY(-50%)",
@@ -35,6 +35,7 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
         border: "none",
         padding: 0,
         cursor: "pointer",
+        touchAction: "manipulation",
         // Area tap 44×44 per accessibilità touch
         display: "flex",
         alignItems: "center",

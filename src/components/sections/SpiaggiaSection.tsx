@@ -10,10 +10,10 @@ export default function SpiaggiaSection() {
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-sand)" }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+      <div className="flex flex-col md:grid md:grid-cols-2 items-stretch">
 
-        {/* Foto — sinistra */}
-        <RevealText className="min-h-[480px] md:min-h-0">
+        {/* Foto — sinistra desktop, sotto su mobile */}
+        <RevealText className="min-h-[480px] md:min-h-0 order-2 md:order-1">
           <div className="relative w-full h-full overflow-hidden" style={{ minHeight: "520px" }}>
             <Image
               src="/Ambiente/Cala-Zingaro-Ambiente-10.webp"
@@ -25,8 +25,8 @@ export default function SpiaggiaSection() {
           </div>
         </RevealText>
 
-        {/* Testo — destra */}
-        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 md:py-24 pb-10 md:pb-16">
+        {/* Testo — destra desktop, sopra su mobile */}
+        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 md:py-24 pb-10 md:pb-16 order-1 md:order-2">
           <RevealText delay={0.1}>
             <p className="section-label mb-5" style={{ color: "var(--color-subtle)" }}>
               Beach Club

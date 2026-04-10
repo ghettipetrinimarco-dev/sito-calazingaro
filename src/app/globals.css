@@ -45,16 +45,18 @@ body {
   font-family: var(--font-quicksand), system-ui, sans-serif;
 }
 
-/* Reveal on scroll — sostituzione Framer Motion RevealText */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(28px);
-  will-change: opacity, transform;
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
+/* Reveal on scroll — solo desktop */
+@media (min-width: 768px) {
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    will-change: opacity, transform;
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
-.reveal-on-scroll.revealed {
-  opacity: 1;
-  transform: translateY(0);
+  .reveal-on-scroll.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
