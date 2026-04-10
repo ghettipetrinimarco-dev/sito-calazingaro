@@ -6,6 +6,7 @@ interface RevealTextProps {
   children: React.ReactNode
   delay?: number
   className?: string
+  style?: React.CSSProperties
 }
 
 /**
@@ -18,6 +19,7 @@ export default function RevealText({
   children,
   delay = 0,
   className = "",
+  style,
 }: RevealTextProps) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -50,6 +52,7 @@ export default function RevealText({
     <div
       ref={ref}
       className={`reveal-on-scroll ${className}`}
+      style={style}
     >
       {children}
     </div>

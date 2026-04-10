@@ -31,6 +31,12 @@ export default function TransitionLink({
     // Stessa pagina: non avviare la transizione
     if (href === pathname) return
 
+    // Pagine di consultazione: salva il path e lo scroll di ritorno per la X
+    if (href === "/menu" || href === "/vini") {
+      sessionStorage.setItem("menuReturnPath", pathname)
+      sessionStorage.setItem("menuReturnScroll", String(window.scrollY))
+    }
+
     startTransition(href)
   }
 

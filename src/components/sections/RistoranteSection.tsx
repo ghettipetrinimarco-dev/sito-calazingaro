@@ -6,6 +6,7 @@ import OrganicLine from "@/components/ui/OrganicLine"
 export default function RistoranteSection() {
   return (
     <section
+      id="ristorante"
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-sand)" }}
     >
@@ -86,13 +87,21 @@ export default function RistoranteSection() {
           </OrganicLink>
         </RevealText>
         <RevealText delay={0.15}>
-          <div className="mt-8">
+          <div className="mt-8 flex items-center justify-center gap-8">
             <OrganicLink
               href="/menu"
               color="var(--color-text)"
               className="text-[0.9rem] tracking-[0.22em] uppercase hover:opacity-50 transition-opacity"
             >
               Vedi il menu →
+            </OrganicLink>
+            <span style={{ color: "var(--color-subtle)", fontSize: "1rem" }}>·</span>
+            <OrganicLink
+              href="/vini"
+              color="var(--color-text)"
+              className="text-[0.9rem] tracking-[0.22em] uppercase hover:opacity-50 transition-opacity"
+            >
+              Vedi i vini →
             </OrganicLink>
           </div>
         </RevealText>

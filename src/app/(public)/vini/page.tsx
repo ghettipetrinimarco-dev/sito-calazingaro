@@ -1,13 +1,23 @@
 "use client"
 
-import Link from "next/link"
 import Image from "next/image"
 import { X } from "lucide-react"
 import { m } from "framer-motion"
 import { bevande } from "@/data/bevande"
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ViniPage() {
+  const router = useRouter()
+
+  const handleClose = useCallback(() => {
+    const returnPath = sessionStorage.getItem("menuReturnPath") || "/"
+    const returnScroll = parseInt(sessionStorage.getItem("menuReturnScroll") || "0")
+    sessionStorage.removeItem("menuReturnPath")
+    sessionStorage.removeItem("menuReturnScroll")
+    router.replace(returnPath)
+    setTimeout(() => window.scrollTo({ top: returnScroll, behavior: "instant" }), 100)
+  }, [router])
 
   useEffect(() => {
     document.documentElement.style.backgroundColor = "#ffffff"
@@ -23,9 +33,9 @@ export default function ViniPage() {
   return (
     <div className="relative min-h-screen bg-white text-[#111] overflow-x-hidden">
 
-      {/* X chiudi */}
-      <Link
-        href="/"
+      {/* X chiudi — torna alla pagina precedente con hamburger aperto */}
+      <button
+        onClick={handleClose}
         aria-label="Chiudi"
         className="fixed top-5 right-5 z-50 p-2"
         style={{
@@ -34,7 +44,7 @@ export default function ViniPage() {
         }}
       >
         <X strokeWidth={2} size={34} />
-      </Link>
+      </button>
 
       {/* Cornice Foglie */}
       <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
