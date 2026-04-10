@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Yanone_Kaffeesatz, Quicksand } from "next/font/google"
 import LenisProvider from "@/components/layout/LenisProvider"
 import MotionProvider from "@/components/layout/MotionProvider"
@@ -21,6 +21,11 @@ const quicksand = Quicksand({
   variable: "--font-quicksand",
   display: "swap",
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: {

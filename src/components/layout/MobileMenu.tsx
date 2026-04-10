@@ -108,7 +108,7 @@ function MenuVoce({ href, anchor, label, onClose }: { href: string; anchor?: str
         style={{
           fontFamily: "var(--font-yanone)",
           fontWeight: 300,
-          fontSize: "clamp(2rem, 8vw, 3rem)",
+          fontSize: "clamp(2.6rem, 11vw, 3rem)",
           color: "rgba(255, 248, 240, 0.92)",
           lineHeight: 1.15,
           letterSpacing: "0.02em",
@@ -168,8 +168,12 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     // senza usare clipPath (che non è GPU-accelerated e causa jank).
     // pointer-events:none quando chiuso per non bloccare interazioni sulla pagina.
     <div
-      className="fixed inset-0 z-50 overflow-hidden"
-      style={{ pointerEvents: isOpen ? "auto" : "none" }}
+      className="fixed inset-0 z-50"
+      style={{
+        pointerEvents: isOpen ? "auto" : "none",
+        visibility: isOpen ? "visible" : "hidden",
+        clipPath: "inset(0)",
+      }}
     >
       {/* Background separato dal pannello: fade puro (opacity → GPU only).
           Il blur rasterizza UNA volta e rimane fisso — nessun re-raster per frame.
@@ -338,15 +342,21 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
             {/* Footer mobile — prenotazioni + telefono */}
             <m.div
-              className="md:hidden flex flex-col items-center gap-5 pb-6 px-8"
+              className="md:hidden flex flex-col items-center gap-5 pb-10 px-8"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, type: "spring", stiffness: 100, damping: 15 }}
             >
-              {/* Separatore */}
-              <div className="w-12 h-px" style={{ backgroundColor: "rgba(255,248,240,0.15)" }} />
+              {/* Label + separatore */}
+              <div className="flex items-center gap-4 w-full px-6">
+                <div className="flex-1 h-px" style={{ backgroundColor: "rgba(255,248,240,0.12)" }} />
+                <p style={{ fontFamily: "var(--font-quicksand)", fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,248,240,0.35)" }}>
+                  Prenota
+                </p>
+                <div className="flex-1 h-px" style={{ backgroundColor: "rgba(255,248,240,0.12)" }} />
+              </div>
 
-              {/* Prenota */}
+              {/* Links */}
               <div className="flex items-center gap-8">
                 {[
                   { label: "→ Ristorante", href: "#prenota" },
