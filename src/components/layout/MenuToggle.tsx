@@ -48,10 +48,10 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
           // ── HAMBURGER ──
           <m.span
             key="hamburger"
-            initial={{ opacity: 0, scale: 0.75 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.75 }}
-            transition={springInteraction}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeInOut" }}
             style={{ display: "block", width: 24, height: 24 }}
           >
             <svg
@@ -101,10 +101,10 @@ export default function MenuToggle({ isOpen, onToggle, scrolled }: MenuTogglePro
           // ── CHIUDI X ──
           <m.span
             key="close"
-            initial={{ opacity: 0, scale: 0.75 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.75 }}
-            transition={springInteraction}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeInOut" }}
             style={{ display: "block", width: 24, height: 24 }}
           >
             <svg

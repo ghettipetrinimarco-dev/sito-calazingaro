@@ -4,6 +4,7 @@ import RevealText from "@/components/ui/RevealText"
 export default function StoriaSection() {
   return (
     <section
+      id="storia"
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-night)" }}
     >

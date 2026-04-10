@@ -6,6 +6,7 @@ import OrganicCorner from "@/components/ui/OrganicCorner"
 export default function SpiaggiaSection() {
   return (
     <section
+      id="spiaggia"
       className="overflow-hidden"
       style={{ backgroundColor: "var(--color-sand)" }}
     >

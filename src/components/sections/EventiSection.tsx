@@ -144,6 +144,7 @@ export default function EventiSection() {
   return (
     <LazyMotion features={domAnimation}>
       <section
+        id="eventi"
         className="relative overflow-hidden py-20 md:py-28"
         style={{ backgroundColor: "var(--color-night)" }}
       >

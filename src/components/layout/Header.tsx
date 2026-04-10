@@ -98,6 +98,36 @@ export default function Header() {
           />
         </TransitionLink>
 
+        {/* Menu link — compare solo dopo lo scroll */}
+        <div
+          className="absolute right-40 md:right-52"
+          style={{
+            top: "50%",
+            transform: "translateY(-50%)",
+            opacity: scrolled ? 1 : 0,
+            pointerEvents: scrolled ? "auto" : "none",
+            transition,
+          }}
+        >
+          <TransitionLink
+            href="/menu"
+            className="relative inline-flex items-center justify-center px-4 py-1.5 hover:opacity-50 transition-opacity"
+            style={{ color: "var(--color-text)" }}
+          >
+            <span style={{
+              fontFamily: "var(--font-quicksand)",
+              fontSize: "0.7rem",
+              fontWeight: 500,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              lineHeight: 1,
+              display: "block",
+            }}>
+              Menu
+            </span>
+          </TransitionLink>
+        </div>
+
         {/* Prenota — compare solo dopo lo scroll.
             Bordo a gesso: SVG ellisse con displacement filter (stessa tecnica del MenuToggle).
             Spostato a right-20/right-28 per respirare dal toggle. */}

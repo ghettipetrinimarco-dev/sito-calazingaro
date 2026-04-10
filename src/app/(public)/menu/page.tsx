@@ -17,9 +17,11 @@ export default function MenuPage() {
 
   const handleClose = useCallback(() => {
     const returnPath = sessionStorage.getItem("menuReturnPath") || "/"
+    const returnScroll = parseInt(sessionStorage.getItem("menuReturnScroll") || "0")
     sessionStorage.removeItem("menuReturnPath")
-    sessionStorage.setItem("openMobileMenu", "1")
+    sessionStorage.removeItem("menuReturnScroll")
     router.replace(returnPath)
+    setTimeout(() => window.scrollTo({ top: returnScroll, behavior: "instant" }), 100)
   }, [router])
 
   useEffect(() => {
