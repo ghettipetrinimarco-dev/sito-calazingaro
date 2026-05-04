@@ -78,7 +78,7 @@ export default function RistoranteSection() {
       <div className="px-6 md:px-16 pt-16 md:pt-20 pb-20 md:pb-28 text-center">
         <RevealText delay={0.05}>
           <OrganicLink
-            href="#prenota"
+            href="/prenota"
             color="var(--color-text)"
             className="title-display"
             style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)", lineHeight: 1 }}

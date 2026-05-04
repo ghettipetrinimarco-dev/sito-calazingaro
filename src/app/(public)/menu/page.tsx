@@ -54,7 +54,7 @@ export default function MenuPage() {
       </button>
 
       {/* Cornice Foglie con parallax */}
-      <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-10">
 
         {/* Ramo Sinistro */}
         <div
@@ -64,11 +64,15 @@ export default function MenuPage() {
             WebkitMaskImage: "linear-gradient(to right, black 60%, transparent 100%)",
           }}
         >
-          <m.div className="absolute left-0 w-full top-0" style={{ y: plantsY }}>
+          <m.div
+            className="absolute left-0 right-0"
+            style={{ top: "-40vh", height: "200vh", y: plantsY }}
+          >
             <Image
               src="/Logo & Illustrazioni/foglie-menu-sx-lunga.webp"
-              alt="" width={600} height={2400}
-              className="w-full h-auto"
+              alt="" fill
+              sizes="(max-width: 640px) 22vw, (max-width: 768px) 26vw, 32vw"
+              className="object-cover object-left-top"
               priority
             />
           </m.div>
@@ -82,11 +86,15 @@ export default function MenuPage() {
             WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)",
           }}
         >
-          <m.div className="absolute right-0 w-full top-0" style={{ y: plantsY }}>
+          <m.div
+            className="absolute left-0 right-0"
+            style={{ top: "-40vh", height: "200vh", y: plantsY }}
+          >
             <Image
               src="/Logo & Illustrazioni/foglie-menu-dx-lunga.webp"
-              alt="" width={600} height={2400}
-              className="w-full h-auto"
+              alt="" fill
+              sizes="(max-width: 640px) 22vw, (max-width: 768px) 26vw, 32vw"
+              className="object-cover object-right-top"
               priority
             />
           </m.div>

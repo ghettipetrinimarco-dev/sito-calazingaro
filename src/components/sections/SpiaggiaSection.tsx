@@ -29,7 +29,7 @@ export default function SpiaggiaSection() {
         <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-16 md:py-24 pb-10 md:pb-16 order-1 md:order-2">
           <RevealText delay={0.1}>
             <p className="section-label mb-5" style={{ color: "var(--color-subtle)" }}>
-              Beach Club
+              Spiaggia
             </p>
             <h2
               className="title-display mb-8"
@@ -48,7 +48,7 @@ export default function SpiaggiaSection() {
               <OrganicLink href="/spiaggia" color="var(--color-text)" className="text-[0.7rem] tracking-[0.2em] uppercase hover:opacity-50 transition-opacity">
                 Vedi prezzi e servizi →
               </OrganicLink>
-              <OrganicLink href="#prenota" color="var(--color-text)" className="text-[0.7rem] tracking-[0.2em] uppercase hover:opacity-50 transition-opacity">
+              <OrganicLink href="/prenota" color="var(--color-text)" className="text-[0.7rem] tracking-[0.2em] uppercase hover:opacity-50 transition-opacity">
                 Prenota l&apos;ombrellone →
               </OrganicLink>
             </div>
