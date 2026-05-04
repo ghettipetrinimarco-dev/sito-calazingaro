@@ -44,7 +44,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [menuOpen])
 
-  if (pathname === "/menu" || pathname === "/vini") return null
+  if (pathname === "/menu" || pathname === "/vini" || pathname === "/prenota") return null
 
   const transition = "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
 
@@ -98,9 +98,9 @@ export default function Header() {
           />
         </TransitionLink>
 
-        {/* Menu link — compare solo dopo lo scroll */}
+        {/* Menu link — solo desktop */}
         <div
-          className="absolute right-40 md:right-52"
+          className="hidden md:block absolute right-40 md:right-52"
           style={{
             top: "50%",
             transform: "translateY(-50%)",
@@ -128,11 +128,9 @@ export default function Header() {
           </TransitionLink>
         </div>
 
-        {/* Prenota — compare solo dopo lo scroll.
-            Bordo a gesso: SVG ellisse con displacement filter (stessa tecnica del MenuToggle).
-            Spostato a right-20/right-28 per respirare dal toggle. */}
+        {/* Prenota — solo desktop */}
         <div
-          className="absolute right-20 md:right-28"
+          className="hidden md:block absolute right-20 md:right-28"
           style={{
             top: "50%",
             transform: "translateY(-50%)",
@@ -141,96 +139,42 @@ export default function Header() {
             transition,
           }}
         >
-          <a
-            href="#prenota"
+          <TransitionLink
+            href="/prenota"
             className="relative inline-flex items-center justify-center px-4 py-1.5"
             style={{ color: "var(--color-text)" }}
           >
-            {/* Cerchio a gesso: ellisse con displacement — stessa logica del MenuToggle */}
             <svg
               aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: -2,
-                width: "calc(100% + 4px)",
-                height: "calc(100% + 4px)",
-                overflow: "visible",
-              }}
+              style={{ position: "absolute", inset: -2, width: "calc(100% + 4px)", height: "calc(100% + 4px)", overflow: "visible" }}
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
               fill="none"
             >
               <defs>
                 <filter id="chalk-btn" x="-20%" y="-20%" width="140%" height="140%">
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.035 0.1"
-                    numOctaves={4}
-                    seed={11}
-                    result="wave"
-                  />
-                  <feDisplacementMap
-                    in="SourceGraphic"
-                    in2="wave"
-                    scale={4}
-                    xChannelSelector="R"
-                    yChannelSelector="G"
-                  />
+                  <feTurbulence type="fractalNoise" baseFrequency="0.035 0.1" numOctaves={4} seed={11} result="wave" />
+                  <feDisplacementMap in="SourceGraphic" in2="wave" scale={4} xChannelSelector="R" yChannelSelector="G" />
                 </filter>
-                {/*
-                  Filtro testo gessato: NON sposta i pixel (niente displacement).
-                  Usa turbulence come maschera di opacità → toglie piccole aree
-                  casuali del testo, esattamente come il gesso su una lavagna.
-                  Le lettere restano leggibili e alla giusta posizione.
-                */}
                 <filter id="chalk-text" x="-5%" y="-10%" width="110%" height="120%">
-                  <feTurbulence
-                    type="fractalNoise"
-                    baseFrequency="0.55"
-                    numOctaves={3}
-                    seed={4}
-                    result="noise"
-                  />
-                  {/* alpha = 3*R_noise - 0.08 → toglie ~3% dei pixel, quasi tutto visibile */}
-                  <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -0.08"
-                    in="noise"
-                    result="chalkMask"
-                  />
+                  <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves={3} seed={4} result="noise" />
+                  <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -0.08" in="noise" result="chalkMask" />
                   <feComposite in="SourceGraphic" in2="chalkMask" operator="in" />
                 </filter>
               </defs>
-              {/*
-                Ellisse asimmetrica disegnata a mano:
-                - apice sinistro y≈58 (più in basso del centro)
-                - apice destro  y≈42 (più in alto del centro)
-                → forma leggermente ruotata in senso orario, come un cerchio tracciato a gesso
-              */}
               <path
                 d="M 50 6 C 74 2, 97 22, 97 42 C 97 62, 78 96, 51 97 C 24 98, 3 74, 3 58 C 3 38, 26 10, 50 6 Z"
-                stroke="currentColor"
-                strokeWidth={1.8}
-                strokeLinecap="round"
-                fill="none"
-                filter="url(#chalk-btn)"
-                vectorEffect="non-scaling-stroke"
+                stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" fill="none"
+                filter="url(#chalk-btn)" vectorEffect="non-scaling-stroke"
               />
             </svg>
             <span
               className="relative"
-              style={{
-                fontFamily: "var(--font-quicksand)",
-                fontSize: "0.7rem",
-                fontWeight: 500,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                filter: "url(#chalk-text)",
-              }}
+              style={{ fontFamily: "var(--font-quicksand)", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", filter: "url(#chalk-text)" }}
             >
               Prenota
             </span>
-          </a>
+          </TransitionLink>
         </div>
 
       </header>

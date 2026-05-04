@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 import { m, AnimatePresence, type Variants } from "framer-motion"
 import { Phone, MapPin } from "lucide-react"
-import TransitionLink from "@/components/transitions/TransitionLink"
 import { useId } from "react"
 import { usePathname } from "next/navigation"
 import { usePageTransition } from "@/contexts/TransitionContext"
@@ -37,10 +36,13 @@ function ChalkUnderline({ visible }: { visible: boolean }) {
   )
 }
 
-const voci = [
+type Voce = { label: string; href: string; anchor?: string }
+
+const voci: Voce[] = [
   { label: "Il Luogo", href: "/", anchor: "scopri" },
-  { label: "Spiaggia", href: "/spiaggia" },
-  { label: "Ristorante", href: "/ristorante" },
+  { label: "Spiaggia", href: "/", anchor: "spiaggia" },
+  { label: "Ristorante", href: "/", anchor: "ristorante" },
+  { label: "Menu", href: "/menu" },
   { label: "Eventi", href: "/eventi" },
   { label: "Contatti", href: "/contatti" },
 ]
@@ -188,7 +190,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
             style={{
-              backgroundColor: "rgba(6, 4, 3, 0.82)",
+              backgroundColor: "rgba(6, 4, 3, 0.89)",
               backdropFilter: "blur(14px) saturate(0.6)",
               WebkitBackdropFilter: "blur(14px) saturate(0.6)",
             }}
@@ -262,43 +264,15 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <nav className="flex flex-col items-center gap-1 text-center md:text-center">
                 {voci.map((voce, i) => (
                   <m.div
-                    key={voce.href}
+                    key={`${voce.href}-${i}`}
                     variants={voceVariants}
                     initial="hidden"
                     animate="visible"
                     custom={i}
                   >
                     <m.div whileHover="hover" whileTap="hover">
-                      <MenuVoce href={voce.href} anchor={"anchor" in voce ? voce.anchor : undefined} onClose={onClose} label={voce.label} />
+                      <MenuVoce href={voce.href} anchor={voce.anchor} onClose={onClose} label={voce.label} />
                     </m.div>
-
-                    {/* Sotto-link (es. Ristorante) — solo desktop */}
-                    {"sub" in voce && voce.sub && (
-                      <div className="hidden md:flex items-center justify-center gap-6 mt-1 mb-1">
-                        {voce.sub.map((s, si) => (
-                          <span key={s.href} className="flex items-center gap-6">
-                            {si > 0 && (
-                              <span style={{ color: "rgba(255,248,240,0.2)", fontSize: "0.55rem" }}>·</span>
-                            )}
-                            <TransitionLink
-                              href={s.href}
-                              onClick={onClose}
-                              className="hover:opacity-100 transition-opacity"
-                              style={{
-                                fontFamily: "var(--font-yanone)",
-                                fontWeight: 200,
-                                fontSize: "clamp(0.9rem, 2vw, 1.2rem)",
-                                letterSpacing: "0.12em",
-                                color: "rgba(255, 248, 240, 0.4)",
-                                fontStyle: "italic",
-                              }}
-                            >
-                              {s.label}
-                            </TransitionLink>
-                          </span>
-                        ))}
-                      </div>
-                    )}
 
                   </m.div>
                 ))}
@@ -315,11 +289,11 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   Prenota
                 </p>
                 {[
-                  { label: "Ristorante", href: "#prenota" },
-                  { label: "Lettini", href: "#prenota-spiaggia" },
+                  { label: "Ristorante", href: "/prenota" },
+                  { label: "Lettini", href: "/prenota" },
                 ].map((item) => (
                   <a
-                    key={item.href}
+                    key={item.label}
                     href={item.href}
                     onClick={onClose}
                     className="group flex items-center gap-2 hover:opacity-60 transition-opacity"
