@@ -34,6 +34,28 @@ const WEEKDAYS: Record<string, number> = {
 const DATE_WORDS = new Set(["oggi", "domani"])
 const DINNER_WORDS = new Set(["sera", "cena", "stasera"])
 const LUNCH_WORDS = new Set(["pranzo"])
+const IGNORED_NOTE_WORDS = new Set(["alle", "alla", "al", "per", "persona", "persone", "coperto", "coperti", "pax", "ore", "h"])
+const NOTE_HINT_WORDS = new Set([
+  "allergia",
+  "allergie",
+  "anniversario",
+  "bambini",
+  "bambino",
+  "bimbi",
+  "bimbo",
+  "compleanno",
+  "dentro",
+  "fuori",
+  "mare",
+  "passeggino",
+  "seggiolone",
+  "tav",
+  "table",
+  "tavolo",
+  "terrazza",
+  "veranda",
+  "vista",
+])
 
 function normalizeToken(value: string): string {
   return value
@@ -206,18 +228,54 @@ function parseCoperti(rawTokens: string[], tokens: string[], alreadyConsumed: Se
   return { coperti: null, consumed }
 }
 
-function parseTelefono(input: string): string | null {
-  const match = input.match(/(?:\+39\s*)?(?:\d\s*){8,12}/)
-  if (!match) return null
+function parseTelefono(rawTokens: string[]): { telefono: string | null; consumed: Set<number> } {
+  for (let startIndex = 0; startIndex < rawTokens.length; startIndex++) {
+    const consumed = new Set<number>()
+    const parts: string[] = []
 
-  return match[0].replace(/\s/g, "")
+    for (let index = startIndex; index < rawTokens.length; index++) {
+      const cleaned = rawTokens[index].replace(/[^\d+]/g, "")
+      if (!cleaned) break
+      if (cleaned.includes("+") && cleaned !== "+39") break
+
+      parts.push(cleaned)
+      consumed.add(index)
+
+      const digits = parts.join("").replace(/^\+39/, "").replace(/\D/g, "")
+      if (digits.length >= 8 && digits.length <= 12) {
+        return {
+          telefono: parts.join("").replace(/\s/g, ""),
+          consumed,
+        }
+      }
+
+      if (digits.length > 12) break
+    }
+  }
+
+  return { telefono: null, consumed: new Set<number>() }
 }
 
 function isPotentialNameToken(value: string): boolean {
   return /^[A-ZÀ-ÖØ-Þ]/.test(value)
 }
 
-function parseNome(rawTokens: string[], consumed: Set<number>): { nome: string | null; consumed: Set<number> } {
+function isNumberToken(value: string): boolean {
+  return /^\d{1,2}$/.test(value)
+}
+
+function isLowercaseNameCandidate(token: string): boolean {
+  if (!/^[a-zà-öø-ÿ]{2,}$/i.test(token)) return false
+  if (DATE_WORDS.has(token)) return false
+  if (DINNER_WORDS.has(token)) return false
+  if (LUNCH_WORDS.has(token)) return false
+  if (IGNORED_NOTE_WORDS.has(token)) return false
+  if (NOTE_HINT_WORDS.has(token)) return false
+  if (WEEKDAYS[token] !== undefined) return false
+  return true
+}
+
+function parseNome(rawTokens: string[], tokens: string[], consumed: Set<number>): { nome: string | null; consumed: Set<number> } {
   const capitalizedIndexes: number[] = []
 
   for (const [index, token] of rawTokens.entries()) {
@@ -239,6 +297,36 @@ function parseNome(rawTokens: string[], consumed: Set<number>): { nome: string |
     return {
       nome: capitalizedIndexes.map((index) => rawTokens[index]).join(" ").trim(),
       consumed: new Set(capitalizedIndexes),
+    }
+  }
+
+  const afterNumberIndex = tokens.findIndex((token, index) => {
+    if (consumed.has(index)) return false
+    if (!isLowercaseNameCandidate(token)) return false
+
+    const previousIndex = index - 1
+    return previousIndex >= 0 && consumed.has(previousIndex) && isNumberToken(rawTokens[previousIndex])
+  })
+
+  if (afterNumberIndex >= 0) {
+    return {
+      nome: rawTokens[afterNumberIndex],
+      consumed: new Set([afterNumberIndex]),
+    }
+  }
+
+  const beforeNumberIndex = tokens.findIndex((token, index) => {
+    if (consumed.has(index)) return false
+    if (!isLowercaseNameCandidate(token)) return false
+
+    const nextIndex = index + 1
+    return nextIndex < rawTokens.length && consumed.has(nextIndex) && isNumberToken(rawTokens[nextIndex])
+  })
+
+  if (beforeNumberIndex >= 0) {
+    return {
+      nome: rawTokens[beforeNumberIndex],
+      consumed: new Set([beforeNumberIndex]),
     }
   }
 
@@ -280,26 +368,33 @@ export function parseQuickReservation(input: string, referenceDate = new Date())
   const parsedTime = parseTime(rawTokens, tokens)
   const parsedDate = parseDate(tokens, referenceDate)
   const parsedFascia = parseFascia(tokens, parsedTime.orario)
+  const parsedTelefono = parseTelefono(rawTokens)
   const parsedCoperti = parseCoperti(
     rawTokens,
     tokens,
-    new Set<number>([...parsedTime.consumed, ...parsedDate.consumed, ...parsedFascia.consumed])
+    new Set<number>([
+      ...parsedTime.consumed,
+      ...parsedDate.consumed,
+      ...parsedFascia.consumed,
+      ...parsedTelefono.consumed,
+    ])
   )
 
   const consumed = new Set<number>([
     ...parsedTime.consumed,
     ...parsedDate.consumed,
     ...parsedFascia.consumed,
+    ...parsedTelefono.consumed,
     ...parsedCoperti.consumed,
   ])
 
-  const parsedNome = parseNome(rawTokens, consumed)
+  const parsedNome = parseNome(rawTokens, tokens, consumed)
   for (const index of parsedNome.consumed) consumed.add(index)
 
   const noteTokens = rawTokens.filter((_, index) => {
     if (consumed.has(index)) return false
     const token = tokens[index]
-    return !DATE_WORDS.has(token) && !DINNER_WORDS.has(token) && !LUNCH_WORDS.has(token)
+    return !DATE_WORDS.has(token) && !DINNER_WORDS.has(token) && !LUNCH_WORDS.has(token) && !IGNORED_NOTE_WORDS.has(token)
   })
 
   const baseDraft = {
@@ -309,7 +404,7 @@ export function parseQuickReservation(input: string, referenceDate = new Date())
     fascia: parsedFascia.fascia,
     orario: parsedTime.orario,
     coperti: parsedCoperti.coperti,
-    telefono: parseTelefono(trimmedInput),
+    telefono: parsedTelefono.telefono,
     note: noteTokens.length > 0 ? noteTokens.join(" ") : null,
   }
 

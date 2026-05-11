@@ -86,4 +86,63 @@ describe("parseQuickReservation", () => {
       missingFields: [],
     })
   })
+
+  it("capisce nomi minuscoli anche quando la frase parte dalla data", () => {
+    expect(parseQuickReservation("domani sera franco 4 fuori", referenceDate)).toMatchObject({
+      nome: "franco",
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 4,
+      note: "fuori",
+      missingFields: [],
+    })
+  })
+
+  it("capisce nomi minuscoli dopo i coperti quando la frase e' molto mescolata", () => {
+    expect(parseQuickReservation("20:30 anniversario 2 bianchi sabato", referenceDate)).toMatchObject({
+      nome: "bianchi",
+      data: "2026-05-16",
+      fascia: "cena",
+      orario: "20:30",
+      coperti: 2,
+      note: "anniversario",
+      missingFields: [],
+    })
+  })
+
+  it("ignora parole di appoggio come alle, per e persone", () => {
+    expect(parseQuickReservation("Rossi domani alle 21 per 4 persone", referenceDate)).toMatchObject({
+      nome: "Rossi",
+      data: "2026-05-12",
+      fascia: "cena",
+      orario: "21:00",
+      coperti: 4,
+      note: null,
+      missingFields: [],
+    })
+  })
+
+  it("estrae il telefono senza usarlo come coperti o orario", () => {
+    expect(parseQuickReservation("Rossi 4 domani sera 333 1234567 fuori", referenceDate)).toMatchObject({
+      nome: "Rossi",
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 4,
+      telefono: "3331234567",
+      note: "fuori",
+      missingFields: [],
+    })
+  })
+
+  it("non inventa il nome quando restano solo note operative", () => {
+    expect(parseQuickReservation("domani sera 4 fuori vista mare", referenceDate)).toMatchObject({
+      nome: null,
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 4,
+      note: "fuori vista mare",
+      missingFields: ["nome"],
+      confidence: "media",
+    })
+  })
 })
