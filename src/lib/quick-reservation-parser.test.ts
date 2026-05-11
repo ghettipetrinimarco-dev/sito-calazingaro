@@ -1,0 +1,54 @@
+import { describe, expect, it } from "vitest"
+import { parseQuickReservation } from "./quick-reservation-parser"
+
+const referenceDate = new Date("2026-05-11T10:00:00+02:00")
+
+describe("parseQuickReservation", () => {
+  it("converte domani sera in data italiana e fascia cena", () => {
+    expect(parseQuickReservation("Rossi 4 domani sera fuori", referenceDate)).toEqual({
+      input: "Rossi 4 domani sera fuori",
+      nome: "Rossi",
+      data: "2026-05-12",
+      fascia: "cena",
+      orario: null,
+      coperti: 4,
+      telefono: null,
+      note: "fuori",
+      missingFields: [],
+      confidence: "alta",
+    })
+  })
+
+  it("estrae un orario preciso senza confonderlo con i coperti", () => {
+    expect(parseQuickReservation("Bianchi 2 sabato 20:30 anniversario", referenceDate)).toMatchObject({
+      nome: "Bianchi",
+      data: "2026-05-16",
+      fascia: "cena",
+      orario: "20:30",
+      coperti: 2,
+      note: "anniversario",
+      missingFields: [],
+    })
+  })
+
+  it("segnala i campi mancanti senza inventarli", () => {
+    expect(parseQuickReservation("Verdi domani pranzo", referenceDate)).toMatchObject({
+      nome: "Verdi",
+      data: "2026-05-12",
+      fascia: "pranzo",
+      coperti: null,
+      missingFields: ["coperti"],
+      confidence: "media",
+    })
+  })
+
+  it("riconosce oggi dalla timezone italiana", () => {
+    expect(parseQuickReservation("Neri 3 oggi 13:00", referenceDate)).toMatchObject({
+      nome: "Neri",
+      data: "2026-05-11",
+      fascia: "pranzo",
+      orario: "13:00",
+      coperti: 3,
+    })
+  })
+})
