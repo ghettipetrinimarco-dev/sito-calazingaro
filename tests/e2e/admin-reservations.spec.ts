@@ -28,6 +28,21 @@ test("filters service and updates reservation status", async ({ page }) => {
   await expect(reservation.getByText("Arrivato")).toBeVisible()
 })
 
+test("surfaces reservations that need attention and confirms them", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: "Azioni richieste" })).toBeVisible()
+
+  const reservation = page.locator("article").filter({ hasText: "Bianchi" })
+
+  await expect(reservation.getByText("Da confermare").first()).toBeVisible()
+  await expect(reservation.getByText("Tavolo da assegnare").first()).toBeVisible()
+
+  await reservation.getByRole("button", { name: "Conferma" }).click()
+
+  await expect(reservation.getByText("Confermata")).toBeVisible()
+  await expect(reservation.getByText("Da confermare")).not.toBeVisible()
+  await expect(reservation.getByText("Tavolo da assegnare").first()).toBeVisible()
+})
+
 test("edits table and notes inline", async ({ page }) => {
   const reservation = page.locator("article").filter({ hasText: "Bianchi" })
 
