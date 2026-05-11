@@ -174,7 +174,35 @@ function parseTelefono(input: string): string | null {
   return match[0].replace(/\s/g, "")
 }
 
+function isPotentialNameToken(value: string): boolean {
+  return /^[A-ZÀ-ÖØ-Þ]/.test(value)
+}
+
 function parseNome(rawTokens: string[], consumed: Set<number>): { nome: string | null; consumed: Set<number> } {
+  const capitalizedIndexes: number[] = []
+
+  for (const [index, token] of rawTokens.entries()) {
+    if (consumed.has(index)) continue
+    if (!isPotentialNameToken(token)) continue
+
+    capitalizedIndexes.push(index)
+
+    for (let nextIndex = index + 1; nextIndex < rawTokens.length; nextIndex++) {
+      if (consumed.has(nextIndex)) break
+      if (!isPotentialNameToken(rawTokens[nextIndex])) break
+      capitalizedIndexes.push(nextIndex)
+    }
+
+    break
+  }
+
+  if (capitalizedIndexes.length > 0) {
+    return {
+      nome: capitalizedIndexes.map((index) => rawTokens[index]).join(" ").trim(),
+      consumed: new Set(capitalizedIndexes),
+    }
+  }
+
   const nameIndexes: number[] = []
 
   for (const [index, token] of rawTokens.entries()) {

@@ -51,4 +51,27 @@ describe("parseQuickReservation", () => {
       coperti: 3,
     })
   })
+
+  it("capisce i dati anche quando non sono in ordine naturale", () => {
+    expect(parseQuickReservation("domani sera Rossi 4 fuori", referenceDate)).toMatchObject({
+      nome: "Rossi",
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 4,
+      note: "fuori",
+      missingFields: [],
+    })
+  })
+
+  it("mantiene le note quando nome, coperti e orario sono mescolati", () => {
+    expect(parseQuickReservation("20:30 anniversario 2 Bianchi sabato", referenceDate)).toMatchObject({
+      nome: "Bianchi",
+      data: "2026-05-16",
+      fascia: "cena",
+      orario: "20:30",
+      coperti: 2,
+      note: "anniversario",
+      missingFields: [],
+    })
+  })
 })
