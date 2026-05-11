@@ -107,7 +107,25 @@ function parseDate(tokens: string[], referenceDate: Date): { data: string | null
   return { data: null, consumed }
 }
 
-function parseTime(rawTokens: string[]): { orario: string | null; consumed: Set<number> } {
+function isTableReference(tokens: string[], index: number): boolean {
+  const previousToken = tokens[index - 1]
+  return previousToken === "tavolo" || previousToken === "tav" || previousToken === "table"
+}
+
+function hasOtherSmallNumber(rawTokens: string[], currentIndex: number): boolean {
+  return rawTokens.some((token, index) => {
+    if (index === currentIndex) return false
+    if (token.includes(":") || token.includes(".")) return false
+
+    const match = token.match(/^\d{1,2}$/)
+    if (!match) return false
+
+    const value = Number(match[0])
+    return value >= 1 && value <= 30
+  })
+}
+
+function parseTime(rawTokens: string[], tokens: string[]): { orario: string | null; consumed: Set<number> } {
   const consumed = new Set<number>()
 
   for (const [index, token] of rawTokens.entries()) {
@@ -117,6 +135,25 @@ function parseTime(rawTokens: string[]): { orario: string | null; consumed: Set<
     consumed.add(index)
     return {
       orario: `${match[1].padStart(2, "0")}:${match[2]}`,
+      consumed,
+    }
+  }
+
+  for (const [index, token] of rawTokens.entries()) {
+    if (isTableReference(tokens, index)) continue
+
+    const match = token.match(/^\d{1,2}$/)
+    if (!match) continue
+
+    const value = Number(match[0])
+    const isDinnerHour = value >= 18 && value <= 23
+    const isLunchHourWithCopertiNearby = value >= 12 && value <= 15 && hasOtherSmallNumber(rawTokens, index)
+
+    if (!isDinnerHour && !isLunchHourWithCopertiNearby) continue
+
+    consumed.add(index)
+    return {
+      orario: `${String(value).padStart(2, "0")}:00`,
       consumed,
     }
   }
@@ -148,10 +185,12 @@ function parseFascia(tokens: string[], orario: string | null): { fascia: QuickRe
   return { fascia: null, consumed }
 }
 
-function parseCoperti(rawTokens: string[]): { coperti: number | null; consumed: Set<number> } {
+function parseCoperti(rawTokens: string[], tokens: string[], alreadyConsumed: Set<number>): { coperti: number | null; consumed: Set<number> } {
   const consumed = new Set<number>()
 
   for (const [index, token] of rawTokens.entries()) {
+    if (alreadyConsumed.has(index)) continue
+    if (isTableReference(tokens, index)) continue
     if (token.includes(":") || token.includes(".")) continue
 
     const match = token.match(/^\d{1,2}$/)
@@ -238,10 +277,14 @@ export function parseQuickReservation(input: string, referenceDate = new Date())
   const rawTokens = trimmedInput.split(/\s+/).filter(Boolean)
   const tokens = rawTokens.map(normalizeToken)
 
-  const parsedTime = parseTime(rawTokens)
+  const parsedTime = parseTime(rawTokens, tokens)
   const parsedDate = parseDate(tokens, referenceDate)
   const parsedFascia = parseFascia(tokens, parsedTime.orario)
-  const parsedCoperti = parseCoperti(rawTokens)
+  const parsedCoperti = parseCoperti(
+    rawTokens,
+    tokens,
+    new Set<number>([...parsedTime.consumed, ...parsedDate.consumed, ...parsedFascia.consumed])
+  )
 
   const consumed = new Set<number>([
     ...parsedTime.consumed,

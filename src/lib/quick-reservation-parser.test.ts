@@ -74,4 +74,16 @@ describe("parseQuickReservation", () => {
       missingFields: [],
     })
   })
+
+  it("non confonde il numero del tavolo con i coperti e interpreta l'ora secca", () => {
+    expect(parseQuickReservation("franco domani tavolo 7 3 21", referenceDate)).toMatchObject({
+      nome: "franco",
+      data: "2026-05-12",
+      fascia: "cena",
+      orario: "21:00",
+      coperti: 3,
+      note: "tavolo 7",
+      missingFields: [],
+    })
+  })
 })
