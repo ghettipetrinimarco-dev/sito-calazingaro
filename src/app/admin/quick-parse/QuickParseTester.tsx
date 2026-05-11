@@ -34,6 +34,15 @@ function formatMissingField(value: string) {
   return labels[value] ?? value
 }
 
+function formatItalianDate(value: string | null) {
+  if (!value) return "Da scegliere"
+
+  const [year, month, day] = value.split("-")
+  if (!year || !month || !day) return value
+
+  return `${day}/${month}/${year}`
+}
+
 export default function QuickParseTester() {
   const [text, setText] = useState(examples[0])
   const [draft, setDraft] = useState<QuickReservationDraft | null>(null)
@@ -171,7 +180,7 @@ export default function QuickParseTester() {
                     <p className="text-xs uppercase tracking-[0.15em]" style={{ color: "var(--color-muted)" }}>
                       Data
                     </p>
-                    <p className="mt-1 font-medium">{draft.data ?? "Da scegliere"}</p>
+                    <p className="mt-1 font-medium">{formatItalianDate(draft.data)}</p>
                   </div>
                   <div className="rounded bg-white p-3">
                     <p className="text-xs uppercase tracking-[0.15em]" style={{ color: "var(--color-muted)" }}>
@@ -210,10 +219,6 @@ export default function QuickParseTester() {
                   Bozza completa, pronta per il salvataggio.
                 </div>
               )}
-
-              <pre className="max-h-72 overflow-auto rounded bg-black p-4 text-xs text-white">
-                {JSON.stringify(draft, null, 2)}
-              </pre>
             </div>
           )}
         </section>
