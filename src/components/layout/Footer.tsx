@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 export default function Footer() {
   const pathname = usePathname()
 
-  if (pathname === "/menu" || pathname === "/vini" || pathname === "/prenota") return null
+  if (pathname === "/menu" || pathname === "/vini" || pathname === "/prenota" || pathname.startsWith("/admin")) return null
 
   return (
     <footer className="relative z-50" style={{ backgroundColor: "var(--color-ink)" }}>

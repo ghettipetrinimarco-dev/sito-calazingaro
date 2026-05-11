@@ -14,8 +14,9 @@ export default function Header() {
 
   // Reset immediato a "top" ad ogni navigazione, prima del paint
   useLayoutEffect(() => {
-    setScrolled(false)
     window.scrollTo(0, 0)
+    const frame = requestAnimationFrame(() => setScrolled(false))
+    return () => cancelAnimationFrame(frame)
   }, [pathname])
 
   // Apre il menu hamburger se la X di /menu o /vini ha segnalato il ritorno
@@ -23,7 +24,8 @@ export default function Header() {
     const flag = sessionStorage.getItem("openMobileMenu")
     if (flag) {
       sessionStorage.removeItem("openMobileMenu")
-      setMenuOpen(true)
+      const frame = requestAnimationFrame(() => setMenuOpen(true))
+      return () => cancelAnimationFrame(frame)
     }
   }, [pathname])
 
@@ -44,7 +46,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [menuOpen])
 
-  if (pathname === "/menu" || pathname === "/vini" || pathname === "/prenota") return null
+  if (pathname === "/menu" || pathname === "/vini" || pathname === "/prenota" || pathname.startsWith("/admin")) return null
 
   const transition = "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
 
