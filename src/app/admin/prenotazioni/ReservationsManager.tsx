@@ -2,23 +2,21 @@
 
 import { useEffect, useMemo, useState } from "react"
 import {
-  AlertTriangle,
-  Ban,
   CalendarDays,
   Check,
-  CheckCircle2,
   Clock,
   Edit3,
   Loader2,
   Plus,
   Search,
+  Trash2,
   UserRoundCheck,
   Users,
   X,
 } from "lucide-react"
 import { parseQuickReservation, type QuickReservationFascia } from "@/lib/quick-reservation-parser"
 
-type ReservationStatus = "confirmed" | "pending" | "arrived" | "completed" | "cancelled"
+type ReservationStatus = "confirmed" | "arrived" | "completed" | "cancelled"
 type ServiceFilter = "all" | QuickReservationFascia
 
 interface AdminReservation {
@@ -41,19 +39,17 @@ interface EditableReservation {
   notes: string
 }
 
-const storageKey = "calazingaro:admin-reservations:v1"
+const storageKey = "calazingaro:operator-agenda:v1"
 
 const statusLabels: Record<ReservationStatus, string> = {
-  confirmed: "Confermata",
-  pending: "Da confermare",
+  confirmed: "Prenotata",
   arrived: "Arrivato",
-  completed: "Completata",
-  cancelled: "Cancellata",
+  completed: "Chiuso",
+  cancelled: "Annullata",
 }
 
 const statusStyles: Record<ReservationStatus, string> = {
   confirmed: "border-stone-200 bg-white text-stone-700",
-  pending: "border-amber-200 bg-amber-50 text-amber-800",
   arrived: "border-emerald-200 bg-emerald-50 text-emerald-800",
   completed: "border-stone-200 bg-stone-100 text-stone-500",
   cancelled: "border-red-200 bg-red-50 text-red-800",
@@ -117,7 +113,7 @@ function getSeedReservations(today: string): AdminReservation[] {
       service: "cena",
       time: "20:30",
       guests: 2,
-      status: "pending",
+      status: "confirmed",
       table: null,
       notes: "anniversario",
       source: "whatsapp",
@@ -125,14 +121,14 @@ function getSeedReservations(today: string): AdminReservation[] {
     },
     {
       id: "seed-franco",
-      name: "franco",
+      name: "Franco",
       date: today,
       service: "cena",
       time: "21:00",
       guests: 3,
       status: "confirmed",
       table: "7",
-      notes: "tavolo 7",
+      notes: null,
       source: "telefono",
       createdAt: `${today}T11:05:00`,
     },
@@ -149,35 +145,21 @@ function sortReservations(items: AdminReservation[]) {
 }
 
 function getStats(items: AdminReservation[]) {
+  const activeItems = items.filter((item) => item.status !== "cancelled")
   return {
-    total: items.length,
-    guests: items.reduce((sum, item) => sum + item.guests, 0),
-    pending: items.filter((item) => item.status === "pending").length,
-    arrived: items.filter((item) => item.status === "arrived").length,
-    withoutTable: items.filter((item) => !item.table && item.status !== "cancelled").length,
-    withoutTime: items.filter((item) => !item.time && item.status !== "cancelled").length,
+    total: activeItems.length,
+    guests: activeItems.reduce((sum, item) => sum + item.guests, 0),
+    arrived: activeItems.filter((item) => item.status === "arrived").length,
   }
-}
-
-function needsAttention(reservation: AdminReservation) {
-  if (reservation.status === "completed" || reservation.status === "cancelled") return false
-  return reservation.status === "pending" || !reservation.table || !reservation.time
-}
-
-function getAttentionLabels(reservation: AdminReservation) {
-  const labels: string[] = []
-  if (reservation.status === "pending") labels.push("Da confermare")
-  if (!reservation.table) labels.push("Tavolo da assegnare")
-  if (!reservation.time) labels.push("Orario non preciso")
-  return labels
 }
 
 export default function ReservationsManager() {
   const today = useMemo(() => getRomeDate(), [])
+  const tomorrow = useMemo(() => addDays(today, 1), [today])
   const [selectedDate, setSelectedDate] = useState(today)
   const [serviceFilter, setServiceFilter] = useState<ServiceFilter>("all")
   const [search, setSearch] = useState("")
-  const [quickText, setQuickText] = useState("franco domani tavolo 7 3 21")
+  const [quickText, setQuickText] = useState("Franco domani tavolo 7 3 21")
   const [reservations, setReservations] = useState<AdminReservation[]>([])
   const [editing, setEditing] = useState<EditableReservation | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
@@ -223,15 +205,6 @@ export default function ReservationsManager() {
   }, [reservations, search, selectedDate, serviceFilter])
 
   const stats = useMemo(() => getStats(visibleReservations), [visibleReservations])
-  const attentionReservations = useMemo(
-    () => visibleReservations.filter((reservation) => needsAttention(reservation)),
-    [visibleReservations]
-  )
-  const agendaReservations = useMemo(
-    () => visibleReservations.filter((reservation) => !needsAttention(reservation)),
-    [visibleReservations]
-  )
-  const tomorrow = useMemo(() => addDays(today, 1), [today])
 
   function handleAddReservation() {
     const draft = parseQuickReservation(quickText)
@@ -301,17 +274,16 @@ export default function ReservationsManager() {
 
   function renderReservation(reservation: AdminReservation) {
     const isEditing = editing?.id === reservation.id
-    const attentionLabels = getAttentionLabels(reservation)
-    const hasAttention = attentionLabels.length > 0 && needsAttention(reservation)
+    const isCancelled = reservation.status === "cancelled"
 
     return (
       <article
         key={reservation.id}
-        className={`rounded-[8px] border bg-white p-4 transition hover:border-stone-300 ${
-          hasAttention ? "border-amber-200 shadow-[inset_4px_0_0_#d97706]" : "border-stone-200"
+        className={`rounded-[8px] border border-stone-200 bg-white p-4 transition hover:border-stone-300 ${
+          isCancelled ? "opacity-55" : ""
         }`}
       >
-        <div className="grid gap-4 xl:grid-cols-[92px_minmax(0,1fr)_190px] xl:items-start">
+        <div className="grid gap-4 xl:grid-cols-[96px_minmax(0,1fr)_170px] xl:items-start">
           <div className="rounded-[8px] bg-[#fbfaf7] px-3 py-2 text-center">
             <p className="flex items-center justify-center gap-1 text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
               <Clock className="size-3.5" />
@@ -334,20 +306,6 @@ export default function ReservationsManager() {
                 {sourceLabels[reservation.source]}
               </span>
             </div>
-
-            {hasAttention && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {attentionLabels.map((label) => (
-                  <span
-                    key={label}
-                    className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800"
-                  >
-                    <AlertTriangle className="size-3.5" />
-                    {label}
-                  </span>
-                ))}
-              </div>
-            )}
 
             {isEditing ? (
               <div className="mt-4 grid gap-3 sm:grid-cols-[160px_1fr]">
@@ -389,7 +347,7 @@ export default function ReservationsManager() {
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] bg-[#26231f] px-3 text-sm font-semibold text-white transition active:translate-y-px"
                 >
                   <Check className="size-4" />
-                  Salva modifiche
+                  Salva
                 </button>
                 <button
                   type="button"
@@ -397,33 +355,21 @@ export default function ReservationsManager() {
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 px-3 text-sm font-semibold text-stone-600 transition active:translate-y-px"
                 >
                   <X className="size-4" />
-                  Annulla
+                  Chiudi
                 </button>
               </>
             ) : (
               <>
-                {reservation.status === "pending" && (
+                {reservation.status === "confirmed" && (
                   <button
                     type="button"
-                    onClick={() => updateStatus(reservation.id, "confirmed")}
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 bg-white px-3 text-sm font-semibold text-stone-700 transition hover:border-stone-400 active:translate-y-px"
+                    onClick={() => updateStatus(reservation.id, "arrived")}
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-800 transition active:translate-y-px"
                   >
-                    <CheckCircle2 className="size-4" />
-                    Conferma
+                    <UserRoundCheck className="size-4" />
+                    Arrivato
                   </button>
                 )}
-                {reservation.status !== "arrived" &&
-                  reservation.status !== "completed" &&
-                  reservation.status !== "cancelled" && (
-                    <button
-                      type="button"
-                      onClick={() => updateStatus(reservation.id, "arrived")}
-                      className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-800 transition active:translate-y-px"
-                    >
-                      <UserRoundCheck className="size-4" />
-                      Segna arrivato
-                    </button>
-                  )}
                 {reservation.status === "arrived" && (
                   <button
                     type="button"
@@ -431,7 +377,7 @@ export default function ReservationsManager() {
                     className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 bg-stone-50 px-3 text-sm font-semibold text-stone-700 transition active:translate-y-px"
                   >
                     <Check className="size-4" />
-                    Completa
+                    Chiudi
                   </button>
                 )}
                 {reservation.status !== "completed" && reservation.status !== "cancelled" && (
@@ -441,7 +387,7 @@ export default function ReservationsManager() {
                     aria-label="Annulla prenotazione"
                     className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-red-100 bg-red-50 px-3 text-sm font-semibold text-red-800 transition active:translate-y-px"
                   >
-                    <Ban className="size-4" />
+                    <Trash2 className="size-4" />
                     Annulla
                   </button>
                 )}
@@ -463,14 +409,14 @@ export default function ReservationsManager() {
 
   return (
     <main className="min-h-[100dvh] bg-[#f6f4ef] px-4 py-4 text-stone-950 md:px-6 md:py-6">
-      <div className="mx-auto max-w-[1440px] overflow-hidden rounded-[8px] border border-stone-200 bg-[#fbfaf7] shadow-[0_24px_80px_-48px_rgba(28,25,23,0.45)]">
+      <div className="mx-auto max-w-[1320px] overflow-hidden rounded-[8px] border border-stone-200 bg-[#fbfaf7] shadow-[0_24px_80px_-48px_rgba(28,25,23,0.45)]">
         <header className="border-b border-stone-200 bg-[#26231f] px-5 py-5 text-white md:px-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/45">Cala Zingaro admin</p>
-              <h1 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">Gestione prenotazioni</h1>
+              <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/45">Agenda operatore</p>
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">Prenotazioni ristorante</h1>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-5">
+            <div className="grid grid-cols-3 gap-2 text-xs">
               <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
                 <p className="text-white/45">Prenotazioni</p>
                 <p className="mt-1 text-lg font-semibold tabular-nums">{stats.total}</p>
@@ -480,27 +426,19 @@ export default function ReservationsManager() {
                 <p className="mt-1 text-lg font-semibold tabular-nums">{stats.guests}</p>
               </div>
               <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
-                <p className="text-white/45">Da confermare</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.pending}</p>
-              </div>
-              <div className="rounded-[8px] border border-amber-300/20 bg-amber-300/10 px-3 py-2">
-                <p className="text-amber-100/65">Da gestire</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{attentionReservations.length}</p>
-              </div>
-              <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
-                <p className="text-white/45">Senza tavolo</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.withoutTable}</p>
+                <p className="text-white/45">Arrivati</p>
+                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.arrived}</p>
               </div>
             </div>
           </div>
         </header>
 
-        <div className="grid lg:grid-cols-[420px_1fr]">
+        <div className="grid lg:grid-cols-[400px_1fr]">
           <aside className="border-b border-stone-200 p-5 md:p-6 lg:border-b-0 lg:border-r">
             <div className="rounded-[8px] border border-stone-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">Nuova prenotazione</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">Scrivi come in chat</p>
               <label htmlFor="reservation-message" className="mt-4 block text-sm font-semibold text-stone-800">
-                Messaggio prenotazione
+                Nuova prenotazione
               </label>
               <textarea
                 id="reservation-message"
@@ -515,13 +453,13 @@ export default function ReservationsManager() {
                 className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-[8px] bg-[#26231f] px-4 text-sm font-semibold text-white transition hover:bg-[#37322d] active:translate-y-px"
               >
                 <Plus className="size-4" />
-                Aggiungi in agenda
+                Inserisci in agenda
               </button>
             </div>
 
             <div className="mt-5 rounded-[8px] border border-stone-200 bg-white p-4">
               <label htmlFor="reservation-date" className="block text-sm font-semibold text-stone-800">
-                Giorno agenda
+                Giorno
               </label>
               <input
                 id="reservation-date"
@@ -578,7 +516,7 @@ export default function ReservationsManager() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-[0.68rem] uppercase tracking-[0.24em] text-stone-400">
-                  {serviceFilter === "all" ? "Agenda completa" : `Prenotazioni ${getServiceLabel(serviceFilter).toLowerCase()}`}
+                  {serviceFilter === "all" ? "Agenda completa" : getServiceLabel(serviceFilter)}
                 </p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight">{formatItalianDate(selectedDate)}</h2>
               </div>
@@ -594,26 +532,7 @@ export default function ReservationsManager() {
               </label>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
-              <div className="rounded-[8px] border border-stone-200 bg-white px-3 py-2">
-                <p className="text-xs font-medium text-stone-400">Arrivati</p>
-                <p className="mt-1 font-semibold tabular-nums text-stone-800">{stats.arrived}</p>
-              </div>
-              <div className="rounded-[8px] border border-stone-200 bg-white px-3 py-2">
-                <p className="text-xs font-medium text-stone-400">Senza orario</p>
-                <p className="mt-1 font-semibold tabular-nums text-stone-800">{stats.withoutTime}</p>
-              </div>
-              <div className="rounded-[8px] border border-stone-200 bg-white px-3 py-2">
-                <p className="text-xs font-medium text-stone-400">Da confermare</p>
-                <p className="mt-1 font-semibold tabular-nums text-stone-800">{stats.pending}</p>
-              </div>
-              <div className="rounded-[8px] border border-stone-200 bg-white px-3 py-2">
-                <p className="text-xs font-medium text-stone-400">In agenda</p>
-                <p className="mt-1 font-semibold tabular-nums text-stone-800">{agendaReservations.length}</p>
-              </div>
-            </div>
-
-            <div className="mt-6 grid gap-6">
+            <div className="mt-6 grid gap-3">
               {!isLoaded && (
                 <div className="flex min-h-64 items-center justify-center rounded-[8px] border border-stone-200 bg-white text-stone-500">
                   <Loader2 className="mr-2 size-4 animate-spin" />
@@ -625,36 +544,13 @@ export default function ReservationsManager() {
                 <div className="flex min-h-64 items-center justify-center rounded-[8px] border border-dashed border-stone-200 bg-white p-8 text-center">
                   <div>
                     <CalendarDays className="mx-auto size-8 text-stone-300" />
-                    <p className="mt-3 text-sm font-semibold text-stone-700">Nessuna prenotazione visibile</p>
-                    <p className="mt-1 text-sm text-stone-500">Cambia filtro o aggiungi una prenotazione rapida.</p>
+                    <p className="mt-3 text-sm font-semibold text-stone-700">Agenda vuota</p>
+                    <p className="mt-1 text-sm text-stone-500">Inserisci una prenotazione o cambia giorno.</p>
                   </div>
                 </div>
               )}
 
-              {isLoaded && attentionReservations.length > 0 && (
-                <section aria-label="Azioni richieste">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[0.68rem] uppercase tracking-[0.24em] text-amber-700">Prima da sistemare</p>
-                      <h3 className="mt-1 text-lg font-semibold text-stone-900">Azioni richieste</h3>
-                    </div>
-                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
-                      {attentionReservations.length} aperte
-                    </span>
-                  </div>
-                  <div className="grid gap-3">{attentionReservations.map(renderReservation)}</div>
-                </section>
-              )}
-
-              {isLoaded && agendaReservations.length > 0 && (
-                <section aria-label="Agenda ordinata">
-                  <div className="mb-3">
-                    <p className="text-[0.68rem] uppercase tracking-[0.24em] text-stone-400">Servizio pronto</p>
-                    <h3 className="mt-1 text-lg font-semibold text-stone-900">Agenda ordinata</h3>
-                  </div>
-                  <div className="grid gap-3">{agendaReservations.map(renderReservation)}</div>
-                </section>
-              )}
+              {isLoaded && visibleReservations.map(renderReservation)}
             </div>
           </section>
         </div>
