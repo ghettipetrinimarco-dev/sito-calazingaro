@@ -430,12 +430,9 @@ export default function ReservationsManager() {
   return (
     <main className="admin-shell px-4 py-8 md:px-6 md:py-10">
       <div className="mx-auto max-w-[1232px]">
-        <header className="mb-7 flex flex-col gap-5 text-[var(--adm-sand)] md:flex-row md:items-end md:justify-between">
+        <header className="mb-7 flex flex-col gap-4 text-[var(--adm-sand)] md:flex-row md:items-end md:justify-between">
           <div>
             <h1 className="admin-display text-[2.6rem] md:text-[3.1rem]">Cala Zingaro · Admin</h1>
-            <p className="admin-serif mt-2 max-w-[560px] text-[1.08rem] leading-snug text-[rgba(244,242,237,0.64)] md:text-[1.2rem]">
-              Pannello operativo per la sala. Gestione prenotazioni separata dal sito pubblico, con estetica calibrata sul brand.
-            </p>
           </div>
           <p className="admin-mono text-[0.68rem] tracking-[0.16em] text-[rgba(200,168,122,0.86)]">
             {isAuthenticated ? `/admin/${activeView === "agenda" ? "agenda" : "servizio"}` : "/admin · Login"}
@@ -528,11 +525,6 @@ export default function ReservationsManager() {
                     <h2 className="admin-display text-[2.45rem] text-[var(--adm-text)]">
                       {activeView === "agenda" ? "Agenda digitale" : "Modalita servizio"}
                     </h2>
-                    <p className="admin-serif mt-1 text-[1.05rem] italic text-[var(--adm-muted)]">
-                      {activeView === "agenda"
-                        ? "Archivio operativo per inserire, cercare e correggere le prenotazioni."
-                        : "Vista rapida per seguire il turno e aggiornare lo stato dei tavoli."}
-                    </p>
                   </div>
                   <p className="admin-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--adm-accent-deep)]">
                     {activeView === "agenda" ? "Agenda" : "Live"}
