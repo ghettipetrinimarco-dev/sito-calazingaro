@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react"
 import {
   CalendarDays,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Edit3,
   Loader2,
@@ -162,7 +164,6 @@ function getStats(items: AdminReservation[]) {
 
 export default function ReservationsManager() {
   const today = useMemo(() => getRomeDate(), [])
-  const tomorrow = useMemo(() => addDays(today, 1), [today])
   const [selectedDate, setSelectedDate] = useState(today)
   const [serviceFilter, setServiceFilter] = useState<ServiceFilter>("all")
   const [search, setSearch] = useState("")
@@ -287,6 +288,47 @@ export default function ReservationsManager() {
       )
     )
     setEditing(null)
+  }
+
+  function renderDatePicker(label: string) {
+    return (
+      <div className="admin-panel p-4">
+        <p className="admin-label text-[var(--adm-accent-deep)]">{label}</p>
+        <div className="mt-4 rounded-[4px] border border-[var(--adm-line)] bg-white p-3">
+          <div className="flex items-center gap-2">
+            <CalendarDays className="size-4 text-[var(--adm-accent-deep)]" />
+            <p className="admin-display text-[1.65rem] text-[var(--adm-text)]">
+              {formatItalianDate(selectedDate)}
+            </p>
+          </div>
+          <div className="mt-3 grid grid-cols-[40px_minmax(0,1fr)_40px] gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedDate((current) => addDays(current, -1))}
+              aria-label="Giorno precedente"
+              className="admin-button admin-button-ghost grid h-10 place-items-center px-0"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(event) => setSelectedDate(event.target.value)}
+              aria-label={label}
+              className="admin-input h-10 w-full px-3 text-center text-sm"
+            />
+            <button
+              type="button"
+              onClick={() => setSelectedDate((current) => addDays(current, 1))}
+              aria-label="Giorno successivo"
+              className="admin-button admin-button-ghost grid h-10 place-items-center px-0"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   function renderReservation(reservation: AdminReservation) {
@@ -576,36 +618,10 @@ export default function ReservationsManager() {
                       </button>
                     </div>
 
+                    {renderDatePicker("Giorno")}
+
                     <div className="admin-panel p-4">
-                      <label htmlFor="reservation-date" className="admin-label block text-[var(--adm-text)]">
-                        Giorno
-                      </label>
-                      <input
-                        id="reservation-date"
-                        type="date"
-                        value={selectedDate}
-                        onChange={(event) => setSelectedDate(event.target.value)}
-                        className="admin-input mt-2 h-11 w-full px-3 text-sm"
-                      />
-
-                      <div className="mt-3 grid grid-cols-2 gap-2">
-                        {[
-                          { value: today, label: "Oggi" },
-                          { value: tomorrow, label: "Domani" },
-                        ].map((dateShortcut) => (
-                          <button
-                            key={dateShortcut.value}
-                            type="button"
-                            onClick={() => setSelectedDate(dateShortcut.value)}
-                            className={`admin-button h-10 px-3 ${
-                              selectedDate === dateShortcut.value ? "admin-button-dark" : "admin-button-ghost"
-                            }`}
-                          >
-                            {dateShortcut.label}
-                          </button>
-                        ))}
-                      </div>
-
+                      <p className="admin-label text-[var(--adm-accent-deep)]">Turno</p>
                       <div className="mt-4 grid grid-cols-3 gap-2">
                         {[
                           { value: "all", label: "Tutto" },
@@ -698,15 +714,7 @@ export default function ReservationsManager() {
                         </div>
                       </div>
 
-                      <div className="admin-panel p-4">
-                        <p className="admin-label text-[var(--adm-text)]">Giorno servizio</p>
-                        <input
-                          type="date"
-                          value={selectedDate}
-                          onChange={(event) => setSelectedDate(event.target.value)}
-                          className="admin-input mt-2 h-11 w-full px-3 text-sm"
-                        />
-                      </div>
+                      {renderDatePicker("Giorno servizio")}
                     </aside>
 
                     <section className="admin-panel p-4 md:p-5">
