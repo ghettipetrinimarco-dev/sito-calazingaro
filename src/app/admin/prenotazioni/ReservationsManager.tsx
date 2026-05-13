@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import {
   CalendarDays,
@@ -49,10 +50,10 @@ const statusLabels: Record<ReservationStatus, string> = {
 }
 
 const statusStyles: Record<ReservationStatus, string> = {
-  confirmed: "border-stone-200 bg-white text-stone-700",
-  arrived: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  completed: "border-stone-200 bg-stone-100 text-stone-500",
-  cancelled: "border-red-200 bg-red-50 text-red-800",
+  confirmed: "bg-[var(--adm-ok-bg)] text-[var(--adm-ok)]",
+  arrived: "bg-[var(--adm-info-bg)] text-[var(--adm-info)]",
+  completed: "bg-[var(--adm-neutral-bg)] text-[var(--adm-neutral)]",
+  cancelled: "bg-[var(--adm-busy-bg)] text-[var(--adm-busy)]",
 }
 
 const sourceLabels: Record<AdminReservation["source"], string> = {
@@ -164,6 +165,7 @@ export default function ReservationsManager() {
   const [editing, setEditing] = useState<EditableReservation | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -183,6 +185,14 @@ export default function ReservationsManager() {
     if (!isLoaded) return
     localStorage.setItem(storageKey, JSON.stringify(reservations))
   }, [isLoaded, reservations])
+
+  function handleLogin() {
+    setIsAuthenticated(true)
+  }
+
+  function handleLogout() {
+    setIsAuthenticated(false)
+  }
 
   const visibleReservations = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
@@ -279,30 +289,31 @@ export default function ReservationsManager() {
     return (
       <article
         key={reservation.id}
-        className={`rounded-[8px] border border-stone-200 bg-white p-4 transition hover:border-stone-300 ${
+        className={`admin-panel p-3 transition hover:bg-white md:p-4 ${
           isCancelled ? "opacity-55" : ""
         }`}
       >
-        <div className="grid gap-4 xl:grid-cols-[96px_minmax(0,1fr)_170px] xl:items-start">
-          <div className="rounded-[8px] bg-[#fbfaf7] px-3 py-2 text-center">
-            <p className="flex items-center justify-center gap-1 text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
+        <div className="grid gap-4 xl:grid-cols-[92px_minmax(0,1fr)_150px] xl:items-start">
+          <div className="rounded-[4px] border border-[var(--adm-line)] bg-white px-3 py-2 text-center">
+            <p className="admin-label flex items-center justify-center gap-1 text-[var(--adm-muted)]">
               <Clock className="size-3.5" />
               {getServiceLabel(reservation.service)}
             </p>
-            <p className="mt-1 text-xl font-semibold tabular-nums">{reservation.time ?? "--:--"}</p>
+            <p className="admin-mono mt-2 text-lg text-[var(--adm-text)] tabular-nums">{reservation.time ?? "--:--"}</p>
           </div>
 
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-xl font-semibold tracking-tight">{reservation.name}</h3>
-              <span className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-medium ${statusStyles[reservation.status]}`}>
+              <h3 className="admin-display text-[1.45rem] text-[var(--adm-text)]">{reservation.name}</h3>
+              <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[0.6rem] font-medium uppercase tracking-[0.16em] ${statusStyles[reservation.status]}`}>
+                <span className="size-1.5 rounded-full bg-current" />
                 {statusLabels[reservation.status]}
               </span>
-              <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-600">
+              <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-[rgba(20,17,13,0.06)] px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-[0.14em] text-[var(--adm-muted)]">
                 <Users className="size-3.5" />
                 {reservation.guests} coperti
               </span>
-              <span className="whitespace-nowrap rounded-full bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-500">
+              <span className="admin-mono whitespace-nowrap rounded-full bg-[rgba(20,17,13,0.04)] px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.16em] text-[var(--adm-accent-deep)]">
                 {sourceLabels[reservation.source]}
               </span>
             </div>
@@ -310,30 +321,32 @@ export default function ReservationsManager() {
             {isEditing ? (
               <div className="mt-4 grid gap-3 sm:grid-cols-[160px_1fr]">
                 <label className="block">
-                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">Tavolo</span>
+                  <span className="admin-label text-[var(--adm-text)]">Tavolo</span>
                   <input
                     aria-label="Tavolo"
                     value={editing.table}
                     onChange={(event) => setEditing({ ...editing, table: event.target.value })}
-                    className="mt-1 h-10 w-full rounded-[8px] border border-stone-200 px-3 text-sm outline-none focus:border-stone-500"
+                    className="admin-input mt-1 h-10 w-full px-3 text-sm"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">Note</span>
+                  <span className="admin-label text-[var(--adm-text)]">Note</span>
                   <input
                     aria-label="Note"
                     value={editing.notes}
                     onChange={(event) => setEditing({ ...editing, notes: event.target.value })}
-                    className="mt-1 h-10 w-full rounded-[8px] border border-stone-200 px-3 text-sm outline-none focus:border-stone-500"
+                    className="admin-input mt-1 h-10 w-full px-3 text-sm"
                   />
                 </label>
               </div>
             ) : (
-              <div className="mt-3 flex flex-wrap gap-2 text-sm text-stone-600">
-                <span className="rounded-[8px] bg-[#fbfaf7] px-3 py-2">
+              <div className="mt-3 flex flex-wrap gap-2 text-sm text-[var(--adm-muted)]">
+                <span className="rounded-[4px] bg-[rgba(20,17,13,0.04)] px-3 py-2">
                   {reservation.table ? `Tavolo ${reservation.table}` : "Tavolo da assegnare"}
                 </span>
-                <span className="rounded-[8px] bg-[#fbfaf7] px-3 py-2">{reservation.notes ?? "Nessuna nota"}</span>
+                <span className="admin-serif rounded-[4px] bg-[rgba(20,17,13,0.04)] px-3 py-2 text-[1rem] italic">
+                  {reservation.notes ?? "Nessuna nota"}
+                </span>
               </div>
             )}
           </div>
@@ -344,7 +357,7 @@ export default function ReservationsManager() {
                 <button
                   type="button"
                   onClick={saveEditing}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] bg-[#26231f] px-3 text-sm font-semibold text-white transition active:translate-y-px"
+                  className="admin-button admin-button-dark inline-flex h-10 items-center justify-center gap-2 px-3"
                 >
                   <Check className="size-4" />
                   Salva
@@ -352,7 +365,7 @@ export default function ReservationsManager() {
                 <button
                   type="button"
                   onClick={() => setEditing(null)}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 px-3 text-sm font-semibold text-stone-600 transition active:translate-y-px"
+                  className="admin-button admin-button-ghost inline-flex h-10 items-center justify-center gap-2 px-3"
                 >
                   <X className="size-4" />
                   Chiudi
@@ -364,7 +377,7 @@ export default function ReservationsManager() {
                   <button
                     type="button"
                     onClick={() => updateStatus(reservation.id, "arrived")}
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-800 transition active:translate-y-px"
+                    className="admin-button inline-flex h-10 items-center justify-center gap-2 rounded-[4px] bg-[var(--adm-ok-bg)] px-3 text-[var(--adm-ok)]"
                   >
                     <UserRoundCheck className="size-4" />
                     Arrivato
@@ -374,7 +387,7 @@ export default function ReservationsManager() {
                   <button
                     type="button"
                     onClick={() => updateStatus(reservation.id, "completed")}
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 bg-stone-50 px-3 text-sm font-semibold text-stone-700 transition active:translate-y-px"
+                    className="admin-button admin-button-ghost inline-flex h-10 items-center justify-center gap-2 px-3"
                   >
                     <Check className="size-4" />
                     Chiudi
@@ -385,7 +398,7 @@ export default function ReservationsManager() {
                     type="button"
                     onClick={() => updateStatus(reservation.id, "cancelled")}
                     aria-label="Annulla prenotazione"
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-red-100 bg-red-50 px-3 text-sm font-semibold text-red-800 transition active:translate-y-px"
+                    className="admin-button inline-flex h-10 items-center justify-center gap-2 rounded-[4px] bg-[var(--adm-busy-bg)] px-3 text-[var(--adm-busy)]"
                   >
                     <Trash2 className="size-4" />
                     Annulla
@@ -394,7 +407,7 @@ export default function ReservationsManager() {
                 <button
                   type="button"
                   onClick={() => startEditing(reservation)}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-[8px] border border-stone-200 px-3 text-sm font-semibold text-stone-600 transition hover:border-stone-400 active:translate-y-px"
+                  className="admin-button admin-button-ghost inline-flex h-10 items-center justify-center gap-2 px-3"
                 >
                   <Edit3 className="size-4" />
                   Modifica
@@ -408,151 +421,247 @@ export default function ReservationsManager() {
   }
 
   return (
-    <main className="min-h-[100dvh] bg-[#f6f4ef] px-4 py-4 text-stone-950 md:px-6 md:py-6">
-      <div className="mx-auto max-w-[1320px] overflow-hidden rounded-[8px] border border-stone-200 bg-[#fbfaf7] shadow-[0_24px_80px_-48px_rgba(28,25,23,0.45)]">
-        <header className="border-b border-stone-200 bg-[#26231f] px-5 py-5 text-white md:px-7">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/45">Agenda operatore</p>
-              <h1 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">Prenotazioni ristorante</h1>
-            </div>
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
-                <p className="text-white/45">Prenotazioni</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.total}</p>
-              </div>
-              <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
-                <p className="text-white/45">Coperti</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.guests}</p>
-              </div>
-              <div className="rounded-[8px] border border-white/10 bg-white/[0.06] px-3 py-2">
-                <p className="text-white/45">Arrivati</p>
-                <p className="mt-1 text-lg font-semibold tabular-nums">{stats.arrived}</p>
-              </div>
-            </div>
+    <main className="admin-shell px-4 py-8 md:px-6 md:py-10">
+      <div className="mx-auto max-w-[1232px]">
+        <header className="mb-7 flex flex-col gap-5 text-[var(--adm-sand)] md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 className="admin-display text-[2.6rem] md:text-[3.1rem]">Cala Zingaro · Admin</h1>
+            <p className="admin-serif mt-2 max-w-[560px] text-[1.08rem] leading-snug text-[rgba(244,242,237,0.64)] md:text-[1.2rem]">
+              Pannello operativo per la sala. Gestione prenotazioni separata dal sito pubblico, con estetica calibrata sul brand.
+            </p>
           </div>
+          <p className="admin-mono text-[0.68rem] tracking-[0.16em] text-[rgba(200,168,122,0.86)]">
+            {isAuthenticated ? "/admin/prenotazioni" : "/admin · Login"}
+          </p>
         </header>
 
-        <div className="grid lg:grid-cols-[400px_1fr]">
-          <aside className="border-b border-stone-200 p-5 md:p-6 lg:border-b-0 lg:border-r">
-            <div className="rounded-[8px] border border-stone-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400">Scrivi come in chat</p>
-              <label htmlFor="reservation-message" className="mt-4 block text-sm font-semibold text-stone-800">
-                Nuova prenotazione
-              </label>
-              <textarea
-                id="reservation-message"
-                value={quickText}
-                onChange={(event) => setQuickText(event.target.value)}
-                className="mt-2 min-h-28 w-full resize-none rounded-[8px] border border-stone-200 bg-[#fbfaf7] p-3 text-sm leading-6 outline-none transition focus:border-stone-500 focus:ring-4 focus:ring-stone-950/5"
-              />
-              {formError && <p className="mt-2 text-sm text-red-700">{formError}</p>}
-              <button
-                type="button"
-                onClick={handleAddReservation}
-                className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-[8px] bg-[#26231f] px-4 text-sm font-semibold text-white transition hover:bg-[#37322d] active:translate-y-px"
-              >
-                <Plus className="size-4" />
-                Inserisci in agenda
-              </button>
-            </div>
+        <div className="admin-browser">
+          <div className="admin-browser-bar">calazingaro.it/admin{isAuthenticated ? "/prenotazioni" : ""}</div>
 
-            <div className="mt-5 rounded-[8px] border border-stone-200 bg-white p-4">
-              <label htmlFor="reservation-date" className="block text-sm font-semibold text-stone-800">
-                Giorno
-              </label>
-              <input
-                id="reservation-date"
-                type="date"
-                value={selectedDate}
-                onChange={(event) => setSelectedDate(event.target.value)}
-                className="mt-2 h-11 w-full rounded-[8px] border border-stone-200 bg-[#fbfaf7] px-3 text-sm outline-none focus:border-stone-500 focus:ring-4 focus:ring-stone-950/5"
-              />
-
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {[
-                  { value: today, label: "Oggi" },
-                  { value: tomorrow, label: "Domani" },
-                ].map((dateShortcut) => (
-                  <button
-                    key={dateShortcut.value}
-                    type="button"
-                    onClick={() => setSelectedDate(dateShortcut.value)}
-                    className={`h-10 rounded-[8px] border px-3 text-sm font-medium transition active:translate-y-px ${
-                      selectedDate === dateShortcut.value
-                        ? "border-[#26231f] bg-[#26231f] text-white"
-                        : "border-stone-200 bg-white text-stone-600 hover:border-stone-400"
-                    }`}
-                  >
-                    {dateShortcut.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {[
-                  { value: "all", label: "Tutto" },
-                  { value: "pranzo", label: "Pranzo" },
-                  { value: "cena", label: "Cena" },
-                ].map((filter) => (
-                  <button
-                    key={filter.value}
-                    type="button"
-                    onClick={() => setServiceFilter(filter.value as ServiceFilter)}
-                    className={`h-10 rounded-[8px] border px-3 text-sm font-medium transition active:translate-y-px ${
-                      serviceFilter === filter.value
-                        ? "border-[#26231f] bg-[#26231f] text-white"
-                        : "border-stone-200 bg-white text-stone-600 hover:border-stone-400"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </aside>
-
-          <section className="p-5 md:p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-[0.68rem] uppercase tracking-[0.24em] text-stone-400">
-                  {serviceFilter === "all" ? "Agenda completa" : getServiceLabel(serviceFilter)}
-                </p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-tight">{formatItalianDate(selectedDate)}</h2>
-              </div>
-              <label className="relative block md:w-80">
-                <span className="sr-only">Cerca prenotazione</span>
-                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
-                <input
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Cerca nome, note, tavolo"
-                  className="h-11 w-full rounded-[8px] border border-stone-200 bg-white pl-10 pr-3 text-sm outline-none focus:border-stone-500 focus:ring-4 focus:ring-stone-950/5"
-                />
-              </label>
-            </div>
-
-            <div className="mt-6 grid gap-3">
-              {!isLoaded && (
-                <div className="flex min-h-64 items-center justify-center rounded-[8px] border border-stone-200 bg-white text-stone-500">
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Caricamento agenda
-                </div>
-              )}
-
-              {isLoaded && visibleReservations.length === 0 && (
-                <div className="flex min-h-64 items-center justify-center rounded-[8px] border border-dashed border-stone-200 bg-white p-8 text-center">
-                  <div>
-                    <CalendarDays className="mx-auto size-8 text-stone-300" />
-                    <p className="mt-3 text-sm font-semibold text-stone-700">Agenda vuota</p>
-                    <p className="mt-1 text-sm text-stone-500">Inserisci una prenotazione o cambia giorno.</p>
+          {!isAuthenticated ? (
+            <section className="grid min-h-[calc(100dvh-265px)] place-items-center bg-[var(--adm-sand)] px-5 py-10 md:py-12">
+              <div className="w-full max-w-[380px] text-center">
+                <div className="mx-auto mb-8 flex h-[82px] items-center justify-center">
+                  <div className="relative h-[79px] w-[230px]">
+                    <Image
+                      src="/images/logo.svg"
+                      alt="Cala Zingaro"
+                      fill
+                      priority
+                      sizes="230px"
+                      className="object-contain"
+                    />
                   </div>
                 </div>
-              )}
+                <h2 className="admin-display text-[2.8rem] md:text-[3.1rem]">Cala Zingaro</h2>
+                <p className="admin-mono mt-3 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--adm-accent-deep)]">
+                  Pannello gestione
+                </p>
 
-              {isLoaded && visibleReservations.map(renderReservation)}
-            </div>
-          </section>
+                <div className="mt-10 grid gap-3">
+                  <input
+                    type="password"
+                    aria-label="Password"
+                    autoComplete="current-password"
+                    placeholder="Password"
+                    className="admin-input h-[52px] px-4 text-[0.95rem]"
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") handleLogin()
+                    }}
+                  />
+                  <button type="button" onClick={handleLogin} className="admin-button admin-button-dark h-11">
+                    Accedi
+                  </button>
+                </div>
+
+                <p className="admin-serif mt-6 rounded-[4px] border border-[rgba(200,168,122,0.18)] bg-[rgba(200,168,122,0.08)] px-5 py-4 text-[1.02rem] italic leading-snug text-[var(--adm-muted)]">
+                  Accesso staff. Per ora mantiene il comportamento demo: entra con invio o con il pulsante.
+                </p>
+              </div>
+            </section>
+          ) : (
+            <section className="bg-[var(--adm-sand)]">
+              <header className="flex flex-col gap-4 border-b border-[var(--adm-line)] bg-[var(--adm-sand-2)] px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+                <div>
+                  <p className="admin-display text-[1.5rem] text-[var(--adm-text)]">Cala Zingaro</p>
+                  <p className="admin-label mt-1 text-[var(--adm-muted)]">Sala · Maître</p>
+                </div>
+
+                <nav className="flex flex-wrap gap-2">
+                  {["Prenotazioni"].map((item) => (
+                    <button key={item} type="button" className="admin-button admin-button-dark h-8 px-4">
+                      {item}
+                    </button>
+                  ))}
+                </nav>
+
+                <div className="flex items-center gap-3">
+                  <p className="admin-label text-[var(--adm-muted)]">Sala ·</p>
+                  <span className="grid size-8 place-items-center rounded-full bg-[var(--adm-text)] text-[0.72rem] font-semibold text-[var(--adm-sand)]">
+                    F
+                  </span>
+                  <span className="text-sm text-[var(--adm-text)]">Federica</span>
+                  <button type="button" onClick={handleLogout} className="admin-button admin-button-ghost h-8 px-3">
+                    Esci
+                  </button>
+                </div>
+              </header>
+
+              <div className="px-5 py-6 md:px-7 md:py-7">
+                <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <h2 className="admin-display text-[2.45rem] text-[var(--adm-text)]">Prenotazioni</h2>
+                    <p className="admin-serif mt-1 text-[1.05rem] italic text-[var(--adm-muted)]">
+                      Gestione del servizio in tempo reale · pranzo e cena.
+                    </p>
+                  </div>
+                  <p className="admin-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--adm-accent-deep)]">
+                    Live
+                  </p>
+                </div>
+
+                <div className="mb-5 grid gap-3 md:grid-cols-3">
+                  {[
+                    { label: "Prenotazioni", value: stats.total },
+                    { label: "Coperti", value: stats.guests },
+                    { label: "Arrivati", value: stats.arrived },
+                  ].map((stat) => (
+                    <div key={stat.label} className="admin-panel px-4 py-3">
+                      <p className="admin-label flex items-center gap-2 text-[var(--adm-muted)]">
+                        <Users className="size-3.5" />
+                        {stat.label}
+                      </p>
+                      <p className="admin-display mt-2 text-[2.1rem] text-[var(--adm-text)]">
+                        {stat.value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid gap-5 lg:grid-cols-[360px_minmax(0,1fr)]">
+                  <aside className="space-y-4">
+                    <div className="admin-panel p-4">
+                      <p className="admin-label text-[var(--adm-accent-deep)]">Scrivi come in chat</p>
+                      <label htmlFor="reservation-message" className="admin-label mt-4 block text-[var(--adm-text)]">
+                        Nuova prenotazione
+                      </label>
+                      <textarea
+                        id="reservation-message"
+                        value={quickText}
+                        onChange={(event) => setQuickText(event.target.value)}
+                        className="admin-input mt-2 min-h-28 w-full resize-none p-3 text-sm leading-6"
+                      />
+                      {formError && <p className="mt-2 text-sm text-[var(--adm-busy)]">{formError}</p>}
+                      <button
+                        type="button"
+                        onClick={handleAddReservation}
+                        className="admin-button admin-button-dark mt-4 inline-flex h-11 w-full items-center justify-center gap-2 px-4"
+                      >
+                        <Plus className="size-4" />
+                        Inserisci
+                      </button>
+                    </div>
+
+                    <div className="admin-panel p-4">
+                      <label htmlFor="reservation-date" className="admin-label block text-[var(--adm-text)]">
+                        Giorno
+                      </label>
+                      <input
+                        id="reservation-date"
+                        type="date"
+                        value={selectedDate}
+                        onChange={(event) => setSelectedDate(event.target.value)}
+                        className="admin-input mt-2 h-11 w-full px-3 text-sm"
+                      />
+
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        {[
+                          { value: today, label: "Oggi" },
+                          { value: tomorrow, label: "Domani" },
+                        ].map((dateShortcut) => (
+                          <button
+                            key={dateShortcut.value}
+                            type="button"
+                            onClick={() => setSelectedDate(dateShortcut.value)}
+                            className={`admin-button h-10 px-3 ${
+                              selectedDate === dateShortcut.value ? "admin-button-dark" : "admin-button-ghost"
+                            }`}
+                          >
+                            {dateShortcut.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-3 gap-2">
+                        {[
+                          { value: "all", label: "Tutto" },
+                          { value: "pranzo", label: "Pranzo" },
+                          { value: "cena", label: "Cena" },
+                        ].map((filter) => (
+                          <button
+                            key={filter.value}
+                            type="button"
+                            onClick={() => setServiceFilter(filter.value as ServiceFilter)}
+                            className={`admin-button h-10 px-3 ${
+                              serviceFilter === filter.value ? "admin-button-dark" : "admin-button-ghost"
+                            }`}
+                          >
+                            {filter.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </aside>
+
+                  <section className="admin-panel p-4 md:p-5">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="admin-label text-[var(--adm-accent-deep)]">
+                          {serviceFilter === "all" ? "Agenda completa" : getServiceLabel(serviceFilter)}
+                        </p>
+                        <h3 className="admin-display mt-2 text-[2rem] text-[var(--adm-text)]">
+                          {formatItalianDate(selectedDate)}
+                        </h3>
+                      </div>
+                      <label className="relative block md:w-80">
+                        <span className="sr-only">Cerca prenotazione</span>
+                        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--adm-muted)]" />
+                        <input
+                          value={search}
+                          onChange={(event) => setSearch(event.target.value)}
+                          placeholder="Cerca nome, note, tavolo"
+                          className="admin-input h-11 w-full pl-10 pr-3 text-sm"
+                        />
+                      </label>
+                    </div>
+
+                    <div className="mt-5 grid gap-3">
+                      {!isLoaded && (
+                        <div className="admin-panel flex min-h-64 items-center justify-center text-[var(--adm-muted)]">
+                          <Loader2 className="mr-2 size-4 animate-spin" />
+                          Caricamento agenda
+                        </div>
+                      )}
+
+                      {isLoaded && visibleReservations.length === 0 && (
+                        <div className="flex min-h-64 items-center justify-center rounded-[6px] border border-dashed border-[var(--adm-line-strong)] bg-[var(--adm-sand-2)] p-8 text-center">
+                          <div>
+                            <CalendarDays className="mx-auto size-8 text-[var(--adm-accent)]" />
+                            <p className="admin-display mt-3 text-[1.5rem] text-[var(--adm-text)]">Agenda vuota</p>
+                            <p className="admin-serif mt-1 text-[1rem] italic text-[var(--adm-muted)]">
+                              Inserisci una prenotazione o cambia giorno.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {isLoaded && visibleReservations.map(renderReservation)}
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </main>

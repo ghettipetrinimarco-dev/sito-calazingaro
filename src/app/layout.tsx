@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Yanone_Kaffeesatz, Quicksand } from "next/font/google"
+import { Cormorant_Garamond, JetBrains_Mono, Quicksand, Yanone_Kaffeesatz } from "next/font/google"
 import LenisProvider from "@/components/layout/LenisProvider"
 import MotionProvider from "@/components/layout/MotionProvider"
 import Header from "@/components/layout/Header"
@@ -19,6 +19,21 @@ const quicksand = Quicksand({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-quicksand",
+  display: "swap",
+})
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 })
 
@@ -46,7 +61,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="it" className={`${yanone.variable} ${quicksand.variable}`}>
+    <html lang="it" className={`${yanone.variable} ${quicksand.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-full flex flex-col">
         <TransitionProvider>
           <MotionProvider>
@@ -62,4 +77,3 @@ export default function RootLayout({
     </html>
   )
 }
-

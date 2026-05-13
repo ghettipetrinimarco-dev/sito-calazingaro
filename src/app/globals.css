@@ -60,3 +60,132 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Admin Cala Zingaro: replica estetica del prototipo standalone. */
+:root {
+  --adm-ink: #14110d;
+  --adm-text: #26231f;
+  --adm-sand: #f4f2ed;
+  --adm-sand-2: #fbfaf7;
+  --adm-muted: #82786b;
+  --adm-line: rgba(38, 35, 31, 0.12);
+  --adm-line-strong: rgba(38, 35, 31, 0.22);
+  --adm-accent: #c8a87a;
+  --adm-accent-deep: #8d6b3f;
+  --adm-ok: #5b7a4a;
+  --adm-ok-bg: #e7eddc;
+  --adm-busy: #8a4a3a;
+  --adm-busy-bg: #edd8cf;
+  --adm-info: #486f7a;
+  --adm-info-bg: #d9e7ea;
+  --adm-neutral: #82786b;
+  --adm-neutral-bg: rgba(38, 35, 31, 0.07);
+  --adm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.admin-shell {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(200, 168, 122, 0.16), transparent 34%),
+    var(--adm-ink);
+  color: var(--adm-text);
+  font-family: var(--font-quicksand), system-ui, sans-serif;
+}
+
+.admin-display {
+  font-family: var(--font-yanone), sans-serif;
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.admin-serif {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+.admin-mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+.admin-browser {
+  border: 1px solid rgba(200, 168, 122, 0.22);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--adm-sand);
+  box-shadow: 0 36px 100px rgba(0, 0, 0, 0.38);
+}
+
+.admin-browser-bar {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--adm-line);
+  background: #eee8dc;
+  color: var(--adm-muted);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.admin-panel {
+  border: 1px solid var(--adm-line);
+  border-radius: 6px;
+  background: var(--adm-sand-2);
+}
+
+.admin-input {
+  border: 1px solid var(--adm-line);
+  border-radius: 4px;
+  background: white;
+  color: var(--adm-text);
+  outline: none;
+  transition: border 0.2s var(--adm-ease), box-shadow 0.2s var(--adm-ease);
+}
+
+.admin-input:focus {
+  border-color: var(--adm-accent);
+  box-shadow: 0 0 0 4px rgba(200, 168, 122, 0.16);
+}
+
+.admin-button {
+  border-radius: 4px;
+  font-family: var(--font-quicksand), system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: transform 0.16s var(--adm-ease), background 0.16s var(--adm-ease), border-color 0.16s var(--adm-ease);
+}
+
+.admin-button:active {
+  transform: translateY(1px);
+}
+
+.admin-button-dark {
+  background: var(--adm-text);
+  color: var(--adm-sand);
+}
+
+.admin-button-dark:hover {
+  background: #2f2a23;
+}
+
+.admin-button-ghost {
+  border: 1px solid var(--adm-line);
+  background: white;
+  color: var(--adm-text);
+}
+
+.admin-button-ghost:hover {
+  border-color: var(--adm-line-strong);
+  background: var(--adm-sand);
+}
+
+.admin-label {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
