@@ -19,6 +19,7 @@ import { parseQuickReservation, type QuickReservationFascia } from "@/lib/quick-
 
 type ReservationStatus = "confirmed" | "arrived" | "completed" | "cancelled"
 type ServiceFilter = "all" | QuickReservationFascia
+type AdminView = "agenda" | "service"
 
 interface AdminReservation {
   id: string
@@ -61,6 +62,11 @@ const sourceLabels: Record<AdminReservation["source"], string> = {
   whatsapp: "WhatsApp",
   manuale: "Manuale",
 }
+
+const adminViews: { value: AdminView; label: string }[] = [
+  { value: "agenda", label: "Agenda digitale" },
+  { value: "service", label: "Modalita servizio" },
+]
 
 function getRomeDate() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -166,6 +172,7 @@ export default function ReservationsManager() {
   const [formError, setFormError] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [activeView, setActiveView] = useState<AdminView>("agenda")
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -431,17 +438,19 @@ export default function ReservationsManager() {
             </p>
           </div>
           <p className="admin-mono text-[0.68rem] tracking-[0.16em] text-[rgba(200,168,122,0.86)]">
-            {isAuthenticated ? "/admin/prenotazioni" : "/admin · Login"}
+            {isAuthenticated ? `/admin/${activeView === "agenda" ? "agenda" : "servizio"}` : "/admin · Login"}
           </p>
         </header>
 
         <div className="admin-browser">
-          <div className="admin-browser-bar">calazingaro.it/admin{isAuthenticated ? "/prenotazioni" : ""}</div>
+          <div className="admin-browser-bar">
+            calazingaro.it/admin{isAuthenticated ? `/${activeView === "agenda" ? "agenda" : "servizio"}` : ""}
+          </div>
 
           {!isAuthenticated ? (
-            <section className="grid min-h-[calc(100dvh-265px)] place-items-center bg-[var(--adm-sand)] px-5 py-10 md:py-12">
+            <section className="grid min-h-[calc(100dvh-265px)] place-items-center bg-[var(--adm-ink)] px-5 py-10 md:py-12">
               <div className="w-full max-w-[380px] text-center">
-                <div className="mx-auto mb-8 flex h-[82px] items-center justify-center">
+                <div className="mx-auto mb-8 flex h-[96px] items-center justify-center">
                   <div className="relative h-[79px] w-[230px]">
                     <Image
                       src="/images/logo.svg"
@@ -449,12 +458,11 @@ export default function ReservationsManager() {
                       fill
                       priority
                       sizes="230px"
-                      className="object-contain"
+                      className="object-contain brightness-0 invert"
                     />
                   </div>
                 </div>
-                <h2 className="admin-display text-[2.8rem] md:text-[3.1rem]">Cala Zingaro</h2>
-                <p className="admin-mono mt-3 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--adm-accent-deep)]">
+                <p className="admin-mono text-[0.64rem] uppercase tracking-[0.28em] text-[var(--adm-accent)]">
                   Pannello gestione
                 </p>
 
@@ -464,19 +472,19 @@ export default function ReservationsManager() {
                     aria-label="Password"
                     autoComplete="current-password"
                     placeholder="Password"
-                    className="admin-input h-[52px] px-4 text-[0.95rem]"
+                    className="h-[52px] rounded-[4px] border border-white/10 bg-white/[0.08] px-4 text-[0.95rem] text-[var(--adm-sand)] outline-none transition placeholder:text-white/35 focus:border-[var(--adm-accent)] focus:ring-4 focus:ring-[rgba(200,168,122,0.16)]"
                     onKeyDown={(event) => {
                       if (event.key === "Enter") handleLogin()
                     }}
                   />
-                  <button type="button" onClick={handleLogin} className="admin-button admin-button-dark h-11">
+                  <button
+                    type="button"
+                    onClick={handleLogin}
+                    className="admin-button h-11 bg-[var(--adm-accent)] text-[var(--adm-ink)] hover:bg-[#d6bb91]"
+                  >
                     Accedi
                   </button>
                 </div>
-
-                <p className="admin-serif mt-6 rounded-[4px] border border-[rgba(200,168,122,0.18)] bg-[rgba(200,168,122,0.08)] px-5 py-4 text-[1.02rem] italic leading-snug text-[var(--adm-muted)]">
-                  Accesso staff. Per ora mantiene il comportamento demo: entra con invio o con il pulsante.
-                </p>
               </div>
             </section>
           ) : (
@@ -488,9 +496,16 @@ export default function ReservationsManager() {
                 </div>
 
                 <nav className="flex flex-wrap gap-2">
-                  {["Prenotazioni"].map((item) => (
-                    <button key={item} type="button" className="admin-button admin-button-dark h-8 px-4">
-                      {item}
+                  {adminViews.map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => setActiveView(item.value)}
+                      className={`admin-button h-8 px-4 ${
+                        activeView === item.value ? "admin-button-dark" : "admin-button-ghost"
+                      }`}
+                    >
+                      {item.label}
                     </button>
                   ))}
                 </nav>
@@ -510,34 +525,41 @@ export default function ReservationsManager() {
               <div className="px-5 py-6 md:px-7 md:py-7">
                 <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
-                    <h2 className="admin-display text-[2.45rem] text-[var(--adm-text)]">Prenotazioni</h2>
+                    <h2 className="admin-display text-[2.45rem] text-[var(--adm-text)]">
+                      {activeView === "agenda" ? "Agenda digitale" : "Modalita servizio"}
+                    </h2>
                     <p className="admin-serif mt-1 text-[1.05rem] italic text-[var(--adm-muted)]">
-                      Gestione del servizio in tempo reale · pranzo e cena.
+                      {activeView === "agenda"
+                        ? "Archivio operativo per inserire, cercare e correggere le prenotazioni."
+                        : "Vista rapida per seguire il turno e aggiornare lo stato dei tavoli."}
                     </p>
                   </div>
                   <p className="admin-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--adm-accent-deep)]">
-                    Live
+                    {activeView === "agenda" ? "Agenda" : "Live"}
                   </p>
                 </div>
 
-                <div className="mb-5 grid gap-3 md:grid-cols-3">
-                  {[
-                    { label: "Prenotazioni", value: stats.total },
-                    { label: "Coperti", value: stats.guests },
-                    { label: "Arrivati", value: stats.arrived },
-                  ].map((stat) => (
-                    <div key={stat.label} className="admin-panel px-4 py-3">
-                      <p className="admin-label flex items-center gap-2 text-[var(--adm-muted)]">
-                        <Users className="size-3.5" />
-                        {stat.label}
-                      </p>
-                      <p className="admin-display mt-2 text-[2.1rem] text-[var(--adm-text)]">
-                        {stat.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                {activeView === "service" && (
+                  <div className="mb-5 grid gap-3 md:grid-cols-3">
+                    {[
+                      { label: "Prenotazioni", value: stats.total },
+                      { label: "Coperti", value: stats.guests },
+                      { label: "Arrivati", value: stats.arrived },
+                    ].map((stat) => (
+                      <div key={stat.label} className="admin-panel px-4 py-3">
+                        <p className="admin-label flex items-center gap-2 text-[var(--adm-muted)]">
+                          <Users className="size-3.5" />
+                          {stat.label}
+                        </p>
+                        <p className="admin-display mt-2 text-[2.1rem] text-[var(--adm-text)]">
+                          {stat.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
+                {activeView === "agenda" ? (
                 <div className="grid gap-5 lg:grid-cols-[360px_minmax(0,1fr)]">
                   <aside className="space-y-4">
                     <div className="admin-panel p-4">
@@ -659,6 +681,89 @@ export default function ReservationsManager() {
                     </div>
                   </section>
                 </div>
+                ) : (
+                  <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+                    <aside className="space-y-4">
+                      <div className="admin-panel p-4">
+                        <p className="admin-label text-[var(--adm-accent-deep)]">Turno</p>
+                        <div className="mt-4 grid grid-cols-3 gap-2 lg:grid-cols-1">
+                          {[
+                            { value: "all", label: "Tutto" },
+                            { value: "pranzo", label: "Pranzo" },
+                            { value: "cena", label: "Cena" },
+                          ].map((filter) => (
+                            <button
+                              key={filter.value}
+                              type="button"
+                              onClick={() => setServiceFilter(filter.value as ServiceFilter)}
+                              className={`admin-button h-10 px-3 ${
+                                serviceFilter === filter.value ? "admin-button-dark" : "admin-button-ghost"
+                              }`}
+                            >
+                              {filter.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="admin-panel p-4">
+                        <p className="admin-label text-[var(--adm-text)]">Giorno servizio</p>
+                        <input
+                          type="date"
+                          value={selectedDate}
+                          onChange={(event) => setSelectedDate(event.target.value)}
+                          className="admin-input mt-2 h-11 w-full px-3 text-sm"
+                        />
+                      </div>
+                    </aside>
+
+                    <section className="admin-panel p-4 md:p-5">
+                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <p className="admin-label text-[var(--adm-accent-deep)]">
+                            {serviceFilter === "all" ? "Turno completo" : getServiceLabel(serviceFilter)}
+                          </p>
+                          <h3 className="admin-display mt-2 text-[2rem] text-[var(--adm-text)]">
+                            {formatItalianDate(selectedDate)}
+                          </h3>
+                        </div>
+                        <label className="relative block md:w-80">
+                          <span className="sr-only">Cerca prenotazione</span>
+                          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--adm-muted)]" />
+                          <input
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
+                            placeholder="Cerca nome, note, tavolo"
+                            className="admin-input h-11 w-full pl-10 pr-3 text-sm"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mt-5 grid gap-3">
+                        {!isLoaded && (
+                          <div className="admin-panel flex min-h-64 items-center justify-center text-[var(--adm-muted)]">
+                            <Loader2 className="mr-2 size-4 animate-spin" />
+                            Caricamento servizio
+                          </div>
+                        )}
+
+                        {isLoaded && visibleReservations.length === 0 && (
+                          <div className="flex min-h-64 items-center justify-center rounded-[6px] border border-dashed border-[var(--adm-line-strong)] bg-[var(--adm-sand-2)] p-8 text-center">
+                            <div>
+                              <CalendarDays className="mx-auto size-8 text-[var(--adm-accent)]" />
+                              <p className="admin-display mt-3 text-[1.5rem] text-[var(--adm-text)]">Nessun tavolo in servizio</p>
+                              <p className="admin-serif mt-1 text-[1rem] italic text-[var(--adm-muted)]">
+                                Cambia giorno o turno per vedere le prenotazioni.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {isLoaded && visibleReservations.map(renderReservation)}
+                      </div>
+                    </section>
+                  </div>
+                )}
               </div>
             </section>
           )}
