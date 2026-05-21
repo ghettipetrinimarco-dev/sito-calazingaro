@@ -1,10 +1,5 @@
-import type { Metadata } from "next"
-import ReservationsManager from "./ReservationsManager"
+import { redirect } from "next/navigation"
 
-export const metadata: Metadata = {
-  title: "Gestione prenotazioni",
-}
-
-export default function AdminReservationsPage() {
-  return <ReservationsManager />
+export default function AdminReservationsRedirect() {
+  redirect("/admin")
 }

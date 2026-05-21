@@ -12,10 +12,14 @@ describe("parseQuickReservation", () => {
       fascia: "cena",
       orario: null,
       coperti: 4,
+      copertiRange: null,
       telefono: null,
       note: "fuori",
+      tags: ["esterno"],
       missingFields: [],
       confidence: "alta",
+      orarioAmbiguo: false,
+      copertiAmbiguo: false,
     })
   })
 
@@ -143,6 +147,96 @@ describe("parseQuickReservation", () => {
       note: "fuori vista mare",
       missingFields: ["nome"],
       confidence: "media",
+    })
+  })
+
+  it("usa 'alle' come marker forte: 18 coperti, ore 21", () => {
+    expect(parseQuickReservation("Greco sabato 18 alle 21 cena", referenceDate)).toMatchObject({
+      nome: "Greco",
+      data: "2026-05-16",
+      fascia: "cena",
+      orario: "21:00",
+      coperti: 18,
+      orarioAmbiguo: false,
+    })
+  })
+
+  it("usa 'persone' come marker forte coperti: 20 coperti, niente orario", () => {
+    expect(parseQuickReservation("Famiglia Verdi domani sera 20 persone", referenceDate)).toMatchObject({
+      nome: "Famiglia Verdi",
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 20,
+      orario: null,
+    })
+  })
+
+  it("riconosce 'siamo X' come marker coperti", () => {
+    expect(parseQuickReservation("Rossi domani siamo 5 alle 21", referenceDate)).toMatchObject({
+      nome: "Rossi",
+      data: "2026-05-12",
+      fascia: "cena",
+      coperti: 5,
+      orario: "21:00",
+    })
+  })
+
+  it("riconosce range coperti '10-12'", () => {
+    expect(parseQuickReservation("Carbone sabato sera 10-12", referenceDate)).toMatchObject({
+      nome: "Carbone",
+      data: "2026-05-16",
+      fascia: "cena",
+      coperti: 12,
+      copertiRange: { min: 10, max: 12 },
+    })
+  })
+
+  it("riconosce range 'tra X e Y'", () => {
+    expect(parseQuickReservation("Marini venerdi cena tra 18 e 20", referenceDate)).toMatchObject({
+      nome: "Marini",
+      data: "2026-05-15",
+      fascia: "cena",
+      coperti: 20,
+      copertiRange: { min: 18, max: 20 },
+    })
+  })
+
+  it("estrae tag celebrazione e bambini", () => {
+    expect(parseQuickReservation("Bianchi sabato 20:30 4 anniversario passeggino", referenceDate)).toMatchObject({
+      nome: "Bianchi",
+      coperti: 4,
+      orario: "20:30",
+      tags: expect.arrayContaining(["anniversario", "passeggino"]),
+    })
+  })
+
+  it("estrae tag allergia / celiaco / vegano", () => {
+    expect(parseQuickReservation("Rossi 3 domani 21 due celiaci un vegano", referenceDate)).toMatchObject({
+      tags: expect.arrayContaining(["celiaco", "vegano"]),
+    })
+  })
+
+  it("estrae tag vista mare ed esterno", () => {
+    expect(parseQuickReservation("Verdi 2 domani sera fuori vista mare", referenceDate)).toMatchObject({
+      tags: expect.arrayContaining(["esterno", "vista-mare"]),
+    })
+  })
+
+  it("marca orario ambiguo se basato su numero secco 18-23 senza marker", () => {
+    const result = parseQuickReservation("Rossi 4 sabato 21", referenceDate)
+    expect(result).toMatchObject({
+      coperti: 4,
+      orario: "21:00",
+      orarioAmbiguo: true,
+    })
+  })
+
+  it("non marca ambiguo quando l'orario ha marker", () => {
+    const result = parseQuickReservation("Rossi 4 sabato alle 21", referenceDate)
+    expect(result).toMatchObject({
+      coperti: 4,
+      orario: "21:00",
+      orarioAmbiguo: false,
     })
   })
 })
