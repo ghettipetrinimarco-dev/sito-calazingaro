@@ -7,8 +7,8 @@ import {
   type QuickReservationDraft,
 } from "@/lib/quick-reservation-parser"
 import { formatItalianDate, formatItalianDay } from "../_state/dateUtils"
-import type { AdminReservation, AdminTable, ReservationSource } from "../_state/types"
-import { addMinutesToTime } from "../_state/dateUtils"
+import type { AdminReservation, AdminTable, GuestProfile, ReservationSource } from "../_state/types"
+import { addMinutesToTime, timeToMinutes } from "../_state/dateUtils"
 import VoiceInput from "./VoiceInput"
 import TagPill from "./TagPill"
 
@@ -19,6 +19,10 @@ interface Props {
   durationFor: (partySize: number) => number
   getTableByName: (name: string | null) => AdminTable | null
   ensureGuest: (data: { name: string; phone?: string | null; tags?: AdminReservation["tags"] }) => string
+  // Fase 1.5: validazioni e CRM (opzionali per backward compat)
+  isShiftActive?: (date: string, service: "pranzo" | "cena") => boolean
+  lastSeatingFor?: (date: string, service: "pranzo" | "cena") => string | null
+  lookupGuest?: (criteria: { name?: string | null; phone?: string | null; email?: string | null }) => GuestProfile | null
 }
 
 const PLACEHOLDER =
@@ -94,6 +98,9 @@ export default function QuickAddForm({
   durationFor,
   getTableByName,
   ensureGuest,
+  isShiftActive,
+  lastSeatingFor,
+  lookupGuest,
 }: Props) {
   const [text, setText] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -140,6 +147,37 @@ export default function QuickAddForm({
     rawPreview.coperti !== null &&
     (rawPreview.orarioAmbiguo || rawPreview.copertiAmbiguo)
 
+  // Validazioni shift + lookup guest abituale
+  const validation = useMemo(() => {
+    if (!preview || !preview.data || !preview.fascia) return null
+    const shiftClosed = isShiftActive && !isShiftActive(preview.data, preview.fascia)
+    if (shiftClosed) {
+      return {
+        level: "block" as const,
+        message: `Il ristorante è chiuso questo giorno per ${preview.fascia}. Modifica giorno o turno.`,
+      }
+    }
+    if (preview.orario && lastSeatingFor) {
+      const last = lastSeatingFor(preview.data, preview.fascia)
+      const startMin = timeToMinutes(preview.orario)
+      const lastMin = last ? timeToMinutes(last) : null
+      if (last && startMin != null && lastMin != null && startMin > lastMin) {
+        return {
+          level: "warn" as const,
+          message: `Oltre l'ultima prenotabile (${last}). Conferma se è un'eccezione.`,
+        }
+      }
+    }
+    return null
+  }, [preview, isShiftActive, lastSeatingFor])
+
+  const knownGuest = useMemo<GuestProfile | null>(() => {
+    if (!preview?.nome || !lookupGuest) return null
+    return lookupGuest({ name: preview.nome, phone: preview.telefono })
+  }, [preview, lookupGuest])
+
+  const submitDisabled = !isReady || validation?.level === "block"
+
   function handleSubmit() {
     if (!preview) {
       setError("Scrivi una prenotazione per iniziare")
@@ -147,6 +185,10 @@ export default function QuickAddForm({
     }
     if (preview.missingFields.length > 0) {
       setError(`Manca ${describeMissing(preview.missingFields)}`)
+      return
+    }
+    if (validation?.level === "block") {
+      setError(validation.message)
       return
     }
 
@@ -204,7 +246,7 @@ export default function QuickAddForm({
   })()
 
   return (
-    <div className="admin-panel p-4 md:p-5">
+    <div className="admin-panel p-3 md:p-4">
       <div className="flex items-baseline justify-between gap-4">
         <div>
           <p
@@ -214,10 +256,10 @@ export default function QuickAddForm({
             Inserimento rapido
           </p>
           <h2
-            className="mt-1.5 leading-none"
+            className="mt-1 leading-none"
             style={{
               fontFamily: "var(--font-yanone)",
-              fontSize: "1.65rem",
+              fontSize: "1.35rem",
               fontWeight: 300,
               color: "var(--adm-text)",
             }}
@@ -238,7 +280,7 @@ export default function QuickAddForm({
         </span>
       </div>
 
-      <div className="relative mt-4">
+      <div className="relative mt-3">
         <textarea
           ref={textareaRef}
           id="quick-add-input"
@@ -249,8 +291,8 @@ export default function QuickAddForm({
           }}
           placeholder={PLACEHOLDER}
           aria-label="Inserisci prenotazione"
-          className="admin-input w-full resize-y p-3.5 pr-14 text-[0.95rem] leading-7"
-          style={{ minHeight: 112, fontFamily: "var(--font-quicksand)" }}
+          className="admin-input w-full resize-y p-3 pr-14 text-[0.92rem] leading-6"
+          style={{ minHeight: 84, fontFamily: "var(--font-quicksand)" }}
         />
         <div className="absolute right-3 top-3">
           <VoiceInput onTranscript={handleVoice} />
@@ -370,22 +412,87 @@ export default function QuickAddForm({
             </p>
           )}
 
+          {/* Cliente abituale: si vede solo se il nome matcha un GuestProfile esistente */}
+          {knownGuest && (
+            <div
+              className="mt-3 flex flex-wrap items-center gap-2 rounded-[6px] border px-3 py-2 text-[0.8rem]"
+              style={{
+                borderColor: "rgba(200,168,122,0.5)",
+                background: "rgba(200,168,122,0.1)",
+                color: "var(--adm-text)",
+                fontFamily: "var(--font-quicksand)",
+              }}
+            >
+              <Sparkles className="size-3.5" style={{ color: "var(--adm-accent-deep)" }} />
+              <span style={{ fontWeight: 600 }}>{knownGuest.name}</span>
+              <span style={{ color: "var(--adm-muted)" }}>
+                {knownGuest.visitCount === 0
+                  ? "già in anagrafica"
+                  : knownGuest.visitCount === 1
+                  ? "1 visita precedente"
+                  : `${knownGuest.visitCount} visite precedenti`}
+                {knownGuest.lastVisit && knownGuest.visitCount > 0 && ` · ultima ${knownGuest.lastVisit}`}
+              </span>
+              {knownGuest.vipLevel === "vip" && (
+                <span
+                  className="rounded-full px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.14em]"
+                  style={{ background: "var(--adm-accent)", color: "var(--adm-ink)", fontWeight: 700 }}
+                >
+                  VIP
+                </span>
+              )}
+              {knownGuest.vipLevel === "regular" && (
+                <span
+                  className="rounded-full px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.14em]"
+                  style={{ background: "rgba(200,168,122,0.3)", color: "var(--adm-accent-deep)", fontWeight: 600 }}
+                >
+                  Habitué
+                </span>
+              )}
+              {knownGuest.persistentTags.length > 0 && (
+                <span style={{ color: "var(--adm-busy)", fontWeight: 600 }}>
+                  ⚠ {knownGuest.persistentTags.join(", ")}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Validazione turno: blocco (rosso) o warning (oro) */}
+          {validation && (
+            <div
+              className="mt-3 rounded-[6px] border px-3 py-2 text-[0.82rem]"
+              style={{
+                borderColor:
+                  validation.level === "block" ? "rgba(138,74,58,0.55)" : "rgba(200,168,122,0.5)",
+                background:
+                  validation.level === "block" ? "rgba(138,74,58,0.08)" : "rgba(200,168,122,0.1)",
+                color: validation.level === "block" ? "var(--adm-busy)" : "var(--adm-accent-deep)",
+                fontFamily: "var(--font-quicksand)",
+                fontWeight: 500,
+              }}
+              role={validation.level === "block" ? "alert" : "status"}
+            >
+              {validation.level === "block" ? "⛔ " : "⚠ "}
+              {validation.message}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!isReady}
+            disabled={submitDisabled}
             className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-[6px] text-[0.86rem] tracking-[0.06em] transition disabled:cursor-not-allowed disabled:opacity-45 md:h-14 md:text-[0.92rem]"
             style={{
-              background: isReady ? "var(--adm-accent)" : "var(--adm-text)",
-              color: isReady ? "var(--adm-ink)" : "var(--adm-sand)",
+              background: submitDisabled ? "var(--adm-text)" : "var(--adm-accent)",
+              color: submitDisabled ? "var(--adm-sand)" : "var(--adm-ink)",
               fontFamily: "var(--font-quicksand)",
               fontWeight: 600,
             }}
             onMouseEnter={(event) => {
-              if (isReady) event.currentTarget.style.background = "#d6bb91"
+              if (!submitDisabled) event.currentTarget.style.background = "#d6bb91"
             }}
             onMouseLeave={(event) => {
-              if (isReady) event.currentTarget.style.background = "var(--adm-accent)"
+              if (!submitDisabled) event.currentTarget.style.background = "var(--adm-accent)"
             }}
           >
             <Plus className="size-4" />

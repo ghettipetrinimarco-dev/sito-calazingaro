@@ -98,7 +98,7 @@ export default function Footer() {
       >
         <span>© 2026 Cala Zingaro — Patti Srl — P.IVA IT00720310390</span>
         <Link
-          href="/admin/dashboard"
+          href="/admin"
           className="hover:text-white/40 transition-colors"
         >
           Admin

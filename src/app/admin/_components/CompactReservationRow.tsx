@@ -5,12 +5,15 @@ import {
   Check,
   ChevronDown,
   Edit3,
+  Loader2,
+  Mail,
+  Phone,
   RotateCcw,
   Trash2,
   UserRoundCheck,
   Users,
 } from "lucide-react"
-import type { AdminReservation, ReservationStatus } from "../_state/types"
+import type { AdminReservation, GuestProfile, ReservationStatus } from "../_state/types"
 import StatusBadge from "./StatusBadge"
 import TagPill from "./TagPill"
 
@@ -20,6 +23,7 @@ interface Props {
   showTime?: boolean
   onUpdateStatus: (id: string, status: ReservationStatus) => void
   onPatch: (id: string, partial: Partial<Pick<AdminReservation, "table" | "notes">>) => void
+  guest?: GuestProfile | null
 }
 
 export default function CompactReservationRow({
@@ -28,12 +32,24 @@ export default function CompactReservationRow({
   showTime = true,
   onUpdateStatus,
   onPatch,
+  guest = null,
 }: Props) {
   const [expanded, setExpanded] = useState(false)
   const [editing, setEditing] = useState(false)
   const [confirmCancel, setConfirmCancel] = useState(false)
+  const [busy, setBusy] = useState(false)
   const [editTable, setEditTable] = useState(reservation.table ?? "")
   const [editNotes, setEditNotes] = useState(reservation.notes ?? "")
+
+  // Wrapper per dare loading feedback inline su update sync (oggi localStorage) e async (futuro)
+  function runStatus(status: ReservationStatus) {
+    setBusy(true)
+    try {
+      onUpdateStatus(reservation.id, status)
+    } finally {
+      setBusy(false)
+    }
+  }
 
   const isCancelled = reservation.status === "cancelled"
   const isCompleted = reservation.status === "completed"
@@ -140,6 +156,35 @@ export default function CompactReservationRow({
           className="border-t px-3 py-3 md:px-4 md:py-4"
           style={{ borderColor: "var(--adm-line)" }}
         >
+          {/* Contatti ospite (da GuestProfile collegato) */}
+          {guest && (guest.phone || guest.email) && (
+            <div
+              className="mb-3 flex flex-wrap items-center gap-3 text-[0.82rem]"
+              style={{ color: "var(--adm-muted)", fontFamily: "var(--font-quicksand)" }}
+            >
+              {guest.phone && (
+                <a
+                  href={`tel:${guest.phone.replace(/\s+/g, "")}`}
+                  className="inline-flex items-center gap-1.5 transition hover:underline"
+                  style={{ color: "var(--adm-text)" }}
+                >
+                  <Phone className="size-3.5" />
+                  {guest.phone}
+                </a>
+              )}
+              {guest.email && (
+                <a
+                  href={`mailto:${guest.email}`}
+                  className="inline-flex items-center gap-1.5 transition hover:underline"
+                  style={{ color: "var(--adm-text)" }}
+                >
+                  <Mail className="size-3.5" />
+                  {guest.email}
+                </a>
+              )}
+            </div>
+          )}
+
           {/* Edit form o dettagli */}
           {editing ? (
             <div className="grid gap-3 sm:grid-cols-[120px_1fr]">
@@ -243,11 +288,12 @@ export default function CompactReservationRow({
               <>
                 <button
                   type="button"
+                  disabled={busy}
                   onClick={() => {
-                    onUpdateStatus(reservation.id, "cancelled")
+                    runStatus("cancelled")
                     setConfirmCancel(false)
                   }}
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em]"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em] disabled:opacity-60"
                   style={{
                     background: "var(--adm-busy)",
                     color: "white",
@@ -255,7 +301,7 @@ export default function CompactReservationRow({
                     fontWeight: 500,
                   }}
                 >
-                  <Trash2 className="size-3.5" />
+                  {busy ? <Loader2 className="size-3.5 animate-spin" /> : <Trash2 className="size-3.5" />}
                   Conferma annulla
                 </button>
                 <button
@@ -275,8 +321,9 @@ export default function CompactReservationRow({
             ) : isCancelled ? (
               <button
                 type="button"
-                onClick={() => onUpdateStatus(reservation.id, "confirmed")}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] border bg-white px-3 text-[0.72rem] tracking-[0.06em]"
+                disabled={busy}
+                onClick={() => runStatus("confirmed")}
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] border bg-white px-3 text-[0.72rem] tracking-[0.06em] disabled:opacity-60"
                 style={{
                   borderColor: "var(--adm-line)",
                   color: "var(--adm-text)",
@@ -284,7 +331,7 @@ export default function CompactReservationRow({
                   fontWeight: 500,
                 }}
               >
-                <RotateCcw className="size-3.5" />
+                {busy ? <Loader2 className="size-3.5 animate-spin" /> : <RotateCcw className="size-3.5" />}
                 Ripristina
               </button>
             ) : (
@@ -292,8 +339,9 @@ export default function CompactReservationRow({
                 {reservation.status === "confirmed" && (
                   <button
                     type="button"
-                    onClick={() => onUpdateStatus(reservation.id, "arrived")}
-                    className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em]"
+                    disabled={busy}
+                    onClick={() => runStatus("arrived")}
+                    className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em] disabled:opacity-60"
                     style={{
                       background: "var(--adm-ok)",
                       color: "white",
@@ -301,15 +349,16 @@ export default function CompactReservationRow({
                       fontWeight: 500,
                     }}
                   >
-                    <UserRoundCheck className="size-3.5" />
+                    {busy ? <Loader2 className="size-3.5 animate-spin" /> : <UserRoundCheck className="size-3.5" />}
                     Arrivato
                   </button>
                 )}
                 {reservation.status === "arrived" && (
                   <button
                     type="button"
-                    onClick={() => onUpdateStatus(reservation.id, "completed")}
-                    className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em]"
+                    disabled={busy}
+                    onClick={() => runStatus("completed")}
+                    className="inline-flex h-9 items-center justify-center gap-2 rounded-[4px] px-3 text-[0.72rem] tracking-[0.06em] disabled:opacity-60"
                     style={{
                       background: "var(--adm-text)",
                       color: "var(--adm-sand)",
@@ -317,7 +366,7 @@ export default function CompactReservationRow({
                       fontWeight: 500,
                     }}
                   >
-                    <Check className="size-3.5" />
+                    {busy ? <Loader2 className="size-3.5 animate-spin" /> : <Check className="size-3.5" />}
                     Chiudi tavolo
                   </button>
                 )}

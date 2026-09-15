@@ -5,9 +5,21 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import type {
   AdminReservation,
   AdminTable,
+  GuestProfile,
   ReservationStatus,
   ServiceFilter as ServiceFilterValue,
 } from "../_state/types"
+
+type StatusFilterValue = "all" | ReservationStatus
+
+const STATUS_LABEL: Record<ReservationStatus, string> = {
+  confirmed: "Confermate",
+  arrived: "In sala",
+  completed: "Chiuse",
+  cancelled: "Annullate",
+}
+
+const STATUS_ORDER: ReservationStatus[] = ["confirmed", "arrived", "completed", "cancelled"]
 import { addDays, formatItalianDate, formatItalianDay } from "../_state/dateUtils"
 import ServiceFilter from "./ServiceFilter"
 import SearchInput from "./SearchInput"
@@ -25,6 +37,10 @@ interface Props {
   durationFor: (partySize: number) => number
   getTableByName: (name: string | null) => AdminTable | null
   ensureGuest: (data: { name: string; phone?: string | null; tags?: AdminReservation["tags"] }) => string
+  // Validazione turno + CRM
+  isShiftActive: (date: string, service: "pranzo" | "cena") => boolean
+  lastSeatingFor: (date: string, service: "pranzo" | "cena") => string | null
+  lookupGuest: (criteria: { name?: string | null; phone?: string | null; email?: string | null }) => GuestProfile | null
 }
 
 function sortByTime(items: AdminReservation[]): AdminReservation[] {
@@ -46,22 +62,46 @@ export default function AgendaView({
   durationFor,
   getTableByName,
   ensureGuest,
+  isShiftActive,
+  lastSeatingFor,
+  lookupGuest,
 }: Props) {
   const [selectedDate, setSelectedDate] = useState(today)
   const [serviceFilter, setServiceFilter] = useState<ServiceFilterValue>("all")
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>("all")
   const [search, setSearch] = useState("")
 
+  // Set base: filtra solo per giorno+turno (alimenta i count dei chip)
+  const dayServiceItems = useMemo(() => {
+    return reservations.filter((item) => {
+      if (item.date !== selectedDate) return false
+      if (serviceFilter !== "all" && item.service !== serviceFilter) return false
+      return true
+    })
+  }, [reservations, selectedDate, serviceFilter])
+
+  const countByStatus = useMemo<Record<string, number>>(() => {
+    const acc: Record<string, number> = {}
+    for (const item of dayServiceItems) {
+      acc[item.status] = (acc[item.status] ?? 0) + 1
+    }
+    return acc
+  }, [dayServiceItems])
+
+  // Set finale: applica search (nome + telefono + email via guest) + filtro stato
   const visible = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase()
     return sortByTime(
-      reservations.filter((item) => {
-        if (item.date !== selectedDate) return false
-        if (serviceFilter !== "all" && item.service !== serviceFilter) return false
+      dayServiceItems.filter((item) => {
+        if (statusFilter !== "all" && item.status !== statusFilter) return false
         if (!normalizedSearch) return true
+        const guest = lookupGuest({ name: item.name })
         const haystack = [
           item.name,
           item.notes,
           item.table ? `tavolo ${item.table}` : null,
+          guest?.phone ?? null,
+          guest?.email ?? null,
         ]
           .filter(Boolean)
           .join(" ")
@@ -69,7 +109,7 @@ export default function AgendaView({
         return haystack.includes(normalizedSearch)
       })
     )
-  }, [reservations, search, selectedDate, serviceFilter])
+  }, [dayServiceItems, lookupGuest, search, statusFilter])
 
   const isToday = selectedDate === today
 
@@ -77,16 +117,20 @@ export default function AgendaView({
     onAdd(reservation)
     setSelectedDate(reservation.date)
     setServiceFilter(reservation.service)
+    setStatusFilter("all")
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* HERO — Quick Add a piena larghezza */}
       <QuickAddForm
         onSubmit={handleAdd}
         durationFor={durationFor}
         getTableByName={getTableByName}
         ensureGuest={ensureGuest}
+        isShiftActive={isShiftActive}
+        lastSeatingFor={lastSeatingFor}
+        lookupGuest={lookupGuest}
       />
 
       {/* TOOLBAR — barra orizzontale unificata: giorno + turno + search */}
@@ -208,26 +252,41 @@ export default function AgendaView({
         </div>
       </div>
 
-      {/* LISTA — full width, label discreta sopra */}
+      {/* LISTA — full width */}
       <section>
-        <div className="mb-3 flex items-baseline gap-2 px-1">
-          <p
-            className="text-[0.62rem] uppercase tracking-[0.22em]"
-            style={{ color: "var(--adm-accent-deep)", fontFamily: "var(--font-quicksand)" }}
-          >
-            {serviceFilter === "all"
-              ? "Tutte le prenotazioni"
-              : serviceFilter === "pranzo"
-              ? "Pranzo"
-              : "Cena"}
-          </p>
-          <span
-            className="text-[0.78rem]"
-            style={{ color: "var(--adm-muted)", fontFamily: "var(--font-quicksand)" }}
-          >
-            {visible.length} {visible.length === 1 ? "prenotazione" : "prenotazioni"}
-          </span>
-        </div>
+        {/* Chip filtri stato — visibili solo se ci sono prenotazioni nel giorno+turno */}
+        {dayServiceItems.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-1.5">
+            {([
+              { value: "all" as const, label: "Tutte", count: dayServiceItems.length },
+              ...STATUS_ORDER.filter((status) => (countByStatus[status] ?? 0) > 0).map((status) => ({
+                value: status,
+                label: STATUS_LABEL[status],
+                count: countByStatus[status],
+              })),
+            ]).map((chip) => {
+              const active = statusFilter === chip.value
+              return (
+                <button
+                  key={chip.value}
+                  type="button"
+                  onClick={() => setStatusFilter(chip.value)}
+                  className="inline-flex h-7 items-center gap-1.5 rounded-full border px-3 text-[0.7rem] transition"
+                  style={{
+                    borderColor: active ? "var(--adm-text)" : "var(--adm-line)",
+                    background: active ? "var(--adm-text)" : "transparent",
+                    color: active ? "var(--adm-sand)" : "var(--adm-muted)",
+                    fontFamily: "var(--font-quicksand)",
+                    fontWeight: active ? 600 : 500,
+                  }}
+                >
+                  {chip.label}
+                  <span className="tabular-nums opacity-70">{chip.count}</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
 
         <GroupedReservationList
           reservations={visible}
@@ -237,10 +296,13 @@ export default function AgendaView({
           emptyDescription={
             search
               ? "Nessun risultato per la ricerca."
+              : statusFilter !== "all"
+              ? "Nessuna prenotazione con questo stato. Cambia filtro o stato."
               : "Inserisci la prima nel form qui sopra, o cambia giorno."
           }
           onUpdateStatus={onUpdateStatus}
           onPatch={onPatch}
+          lookupGuest={lookupGuest}
         />
       </section>
     </div>

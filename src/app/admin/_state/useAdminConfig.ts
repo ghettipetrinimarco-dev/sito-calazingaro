@@ -124,6 +124,10 @@ interface UseAdminConfigResult {
   getTableByName: (name: string | null) => AdminTable | null
   durationFor: (partySize: number) => number
   shiftFor: (date: string, service: "pranzo" | "cena") => AdminShift | null
+  // Helpers derivati
+  isShiftActive: (date: string, service: "pranzo" | "cena") => boolean
+  maxCoversFor: (date: string, service: "pranzo" | "cena") => number | null
+  lastSeatingFor: (date: string, service: "pranzo" | "cena") => string | null
   zoneLabel: (zone: ZoneKey) => string
 }
 
@@ -268,6 +272,31 @@ export function useAdminConfig(): UseAdminConfigResult {
     [config.shifts]
   )
 
+  const isShiftActive = useCallback(
+    (date: string, service: "pranzo" | "cena"): boolean => {
+      const shift = shiftFor(date, service)
+      return shift?.active ?? false
+    },
+    [shiftFor]
+  )
+
+  const maxCoversFor = useCallback(
+    (date: string, service: "pranzo" | "cena"): number | null => {
+      const shift = shiftFor(date, service)
+      if (!shift || !shift.active) return null
+      return shift.maxCovers > 0 ? shift.maxCovers : null
+    },
+    [shiftFor]
+  )
+
+  const lastSeatingFor = useCallback(
+    (date: string, service: "pranzo" | "cena"): string | null => {
+      const shift = shiftFor(date, service)
+      return shift?.active ? shift.lastSeating : null
+    },
+    [shiftFor]
+  )
+
   const zoneLabel = useCallback((zone: ZoneKey) => ZONE_LABELS[zone], [])
 
   return {
@@ -283,6 +312,9 @@ export function useAdminConfig(): UseAdminConfigResult {
     getTableByName,
     durationFor,
     shiftFor,
+    isShiftActive,
+    maxCoversFor,
+    lastSeatingFor,
     zoneLabel,
   }
 }

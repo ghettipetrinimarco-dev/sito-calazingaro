@@ -8,7 +8,7 @@ interface Stat {
   value: number | string
   hint?: string
   icon: LucideIcon
-  tone?: "default" | "ok" | "info"
+  tone?: "default" | "ok" | "info" | "warn"
 }
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
   inSala: number
   daArrivare: number
   arrivatiTurno: number // arrived + completed
+  maxCovers?: number // capienza totale del turno (da Shift)
 }
 
 export default function ServiceStatsBar({
@@ -27,14 +28,23 @@ export default function ServiceStatsBar({
   inSala,
   daArrivare,
   arrivatiTurno,
+  maxCovers,
 }: Props) {
+  // Tono "warn" se siamo oltre 85% della capienza
+  const capacityRatio = maxCovers && maxCovers > 0 ? copertiTotali / maxCovers : 0
+  const capacityWarn = capacityRatio >= 0.85
+
+  const prenotazioniHint = maxCovers && maxCovers > 0
+    ? `${copertiTotali}/${maxCovers} coperti · ${Math.round(capacityRatio * 100)}%`
+    : `${copertiTotali} coperti totali`
+
   const stats: Stat[] = [
     {
       label: "Prenotazioni",
       value: prenotazioniAttive,
-      hint: `${copertiTotali} coperti totali`,
+      hint: prenotazioniHint,
       icon: UtensilsCrossed,
-      tone: "default",
+      tone: capacityWarn ? "warn" : "default",
     },
     {
       label: "In sala",
@@ -74,14 +84,28 @@ export default function ServiceStatsBar({
               className="size-3.5"
               style={{
                 color:
-                  tone === "ok" ? "var(--adm-ok)" : tone === "info" ? "var(--adm-info)" : "var(--adm-accent-deep)",
+                  tone === "ok"
+                    ? "var(--adm-ok)"
+                    : tone === "info"
+                    ? "var(--adm-info)"
+                    : tone === "warn"
+                    ? "var(--adm-busy)"
+                    : "var(--adm-accent-deep)",
               }}
             />
             <p
               className="text-[0.6rem] uppercase tracking-[0.22em]"
-              style={{ color: "var(--adm-muted)", fontFamily: "var(--font-quicksand)" }}
+              style={{
+                color: tone === "warn" ? "var(--adm-busy)" : "var(--adm-muted)",
+                fontFamily: "var(--font-quicksand)",
+              }}
             >
               {label}
+              {tone === "warn" && (
+                <span aria-hidden="true" className="ml-1">
+                  ⚠
+                </span>
+              )}
             </p>
           </div>
           <p

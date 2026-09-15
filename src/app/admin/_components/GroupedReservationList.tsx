@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import type { AdminReservation, ReservationStatus } from "../_state/types"
+import type { AdminReservation, GuestProfile, ReservationStatus } from "../_state/types"
 import CompactReservationRow from "./CompactReservationRow"
 import EmptyState from "./EmptyState"
 
@@ -14,6 +14,8 @@ interface Props {
   groupBy?: "time-slot" | "hour"
   onUpdateStatus: (id: string, status: ReservationStatus) => void
   onPatch: (id: string, partial: Partial<Pick<AdminReservation, "table" | "notes">>) => void
+  // Opzionale: lookup del guest collegato per mostrare phone/email nella card
+  lookupGuest?: (criteria: { name?: string | null; phone?: string | null; email?: string | null }) => GuestProfile | null
 }
 
 interface Group {
@@ -71,6 +73,7 @@ export default function GroupedReservationList({
   groupBy = "time-slot",
   onUpdateStatus,
   onPatch,
+  lookupGuest,
 }: Props) {
   const groups = useMemo(() => groupByTime(reservations, groupBy), [reservations, groupBy])
 
@@ -102,14 +105,8 @@ export default function GroupedReservationList({
               className="h-px flex-1"
               style={{ background: "var(--adm-line)" }}
             />
-            <span
-              className="text-[0.62rem] uppercase tracking-[0.16em] tabular-nums"
-              style={{ color: "var(--adm-muted)", fontFamily: "var(--font-quicksand)" }}
-            >
-              {group.items.length} {group.items.length === 1 ? "tavolo" : "tavoli"}
-            </span>
           </div>
-          <div className="grid gap-2">
+          <div className={`grid gap-2 ${group.items.length > 1 ? "lg:grid-cols-2" : ""}`}>
             {group.items.map((reservation) => (
               <CompactReservationRow
                 key={reservation.id}
@@ -117,6 +114,7 @@ export default function GroupedReservationList({
                 variant={variant}
                 onUpdateStatus={onUpdateStatus}
                 onPatch={onPatch}
+                guest={lookupGuest ? lookupGuest({ name: reservation.name }) : null}
               />
             ))}
           </div>

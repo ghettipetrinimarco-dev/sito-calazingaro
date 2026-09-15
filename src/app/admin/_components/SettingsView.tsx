@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Cog, Clock, Layers, RotateCcw, Star, Trash2, Users } from "lucide-react"
+import { Cog, Clock, Layers, RotateCcw, Trash2, Users } from "lucide-react"
 import type {
   AdminShift,
   AdminTable,
@@ -250,11 +250,6 @@ export default function SettingsView({
           />
         )}
       </div>
-
-      {/* Spazio extra per evitare overlap con icone */}
-      <span hidden>
-        <Star aria-hidden="true" />
-      </span>
     </div>
   )
 }

@@ -368,6 +368,37 @@ Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:` `docs:`
 
 ---
 
+<!-- DUAL-AI-ROUTING-START -->
+## DUAL-AI ROUTING (PREFERENZE SOFT)
+
+> Suggerimenti, non vincoli. Entrambi gli AI possono fare qualsiasi task.
+> Stessa baseline operativa: vedi `AGENTS.md` (entry-point Codex) -- regole condivise.
+
+### Preferenza Claude Code
+- Planning architetturale, refactoring multi-file
+- Logica business (prenotazioni, bot Telegram, DB)
+- Task con memoria persistente (GSD, plan, MEMORY.md)
+
+### Preferenza Codex
+- Componente UI isolato o sezione visiva nuova
+- Image-to-code (mockup + implementazione)
+- Second opinion / review pre-merge
+- Sblocco rapido dopo stallo dell'altro AI
+
+### Quando ricevi un task fuori preferenza
+1. NON rifiutare. Esegui normalmente.
+2. UNA riga di suggerimento opzionale: "se vuoi, [altro AI] qui sarebbe piu' [veloce/preciso] perche' [ragione]"
+3. Procedi al task.
+
+### Workflow tipico
+- Task piccolo: l'AI aperto per primo lo fa
+- Task grande: chi pianifica suggerisce divisione lavoro
+- Bug stuck dopo 2 tentativi: passare all'altro AI
+- Pre-merge su main: review dell'altro AI consigliata, non obbligatoria
+<!-- DUAL-AI-ROUTING-END -->
+
+---
+
 ## NOTE FINALI
 
 - Copyright footer: `© 2026 Cala Zingaro`
@@ -375,3 +406,28 @@ Prefissi: `feat:` `fix:` `refactor:` `style:` `chore:` `docs:`
 - Instagram in evidenza in header e footer
 - Admin token: `verificaAdminToken` accetta oggi e ieri (tolleranza mezzanotte UTC)
 - `tavolo_id` nel DB, non `table_id` — verificare sempre i tipi in `types/database.ts`
+
+---
+
+## DOCUMENTI STRATEGICI (LEGGERE PRIMA DI INIZIARE LO SVILUPPO GESTIONALE)
+
+- `docs/proposta-commerciale.md` — modello commerciale, prezzi, scope, frasi di vendita per il colloquio
+- `docs/architettura-sistema-prenotazioni.md` — architettura tecnica, riuso da Piccolo Hotel, chat AI, modello dati esteso
+
+**Progetto base di riferimento:** `~/Desktop/dev/Websites/sito-piccolo-hotel` — sistema gestionale gia' funzionante in produzione, da cui riusare componenti, schema DB, API routes e logica admin.
+
+**Stato attuale Cala Zingaro:** sito vetrina iniziato. Sistema gestionale (prenotazioni ristorante + ombrelloni + chat AI) ancora da sviluppare. Vedi i due documenti sopra prima di toccare qualcosa.
+
+<!-- COMPANY_BRAIN_POINTER_START -->
+## Company Brain
+
+Questo progetto fa parte del Company Brain Obsidian in `/Users/marco/Desktop/all/dev`.
+
+Prima di lavorare qui:
+1. Leggi `/Users/marco/Desktop/all/dev/llms.txt`.
+2. Leggi `/Users/marco/Desktop/all/dev/08_Data/project-context-map.json`.
+3. Leggi `/Users/marco/Desktop/all/dev/03_Projects/calazingaro-website.md`.
+4. Usa `/Users/marco/Desktop/all/dev/06_Docs/AI Context Retrieval.md` e `/Users/marco/Desktop/all/dev/06_Docs/AI Skill Routing.md` per scegliere contesto e skill senza scandire tutto il workspace.
+
+Non leggere cartelle intere se la mappa compatta indica gia' i file chiave.
+<!-- COMPANY_BRAIN_POINTER_END -->

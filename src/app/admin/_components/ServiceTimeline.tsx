@@ -48,6 +48,27 @@ interface EnrichedReservation {
   startMin: number
   endMin: number
   durationMin: number
+  hasConflict?: boolean
+}
+
+// Marca due prenotazioni sullo stesso tavolo che si sovrappongono nel tempo.
+// Non blocca, segnala visualmente (il maître decide se è doppio seating voluto o errore).
+function flagConflicts(items: EnrichedReservation[]): EnrichedReservation[] {
+  const sorted = [...items].sort((a, b) => a.startMin - b.startMin)
+  const result: EnrichedReservation[] = sorted.map((item) => ({ ...item, hasConflict: false }))
+  for (let i = 0; i < result.length; i++) {
+    for (let j = i + 1; j < result.length; j++) {
+      const a = result[i]
+      const b = result[j]
+      if (b.startMin >= a.endMin) break // sorted: niente più overlap possibili
+      // Overlap stretto: la fine di a > inizio di b
+      if (a.endMin > b.startMin) {
+        result[i].hasConflict = true
+        result[j].hasConflict = true
+      }
+    }
+  }
+  return result
 }
 
 // Calcola la fine reale di una prenotazione: usa endsAt se c'è, altrimenti calcola da turn time
@@ -116,7 +137,7 @@ function buildRows(
     key: table.id,
     label: table.name,
     table,
-    items: byTableId.get(table.id) ?? [],
+    items: flagConflicts(byTableId.get(table.id) ?? []),
   }))
 
   if (unassigned.length > 0) {
@@ -315,14 +336,31 @@ export default function ServiceTimeline({
                         width: `${widthPct}%`,
                         minWidth: 56,
                         background: colors.bg,
-                        borderColor: colors.border,
+                        borderColor: e.hasConflict ? "var(--adm-busy)" : colors.border,
+                        borderWidth: e.hasConflict ? 2 : 1,
+                        boxShadow: e.hasConflict
+                          ? "0 0 0 2px rgba(138,74,58,0.16)"
+                          : "none",
                         color: colors.fg,
                         fontFamily: "var(--font-quicksand)",
                         fontWeight: 600,
                         fontSize: "0.74rem",
                       }}
-                      title={`${r.name} · ${minToHHMM(e.startMin)}-${minToHHMM(e.endMin)} · ${r.guests} coperti`}
+                      title={
+                        e.hasConflict
+                          ? `⚠ Sovrapposizione con altra prenotazione su ${row.label} · ${r.name} ${minToHHMM(e.startMin)}-${minToHHMM(e.endMin)} · ${r.guests} coperti`
+                          : `${r.name} · ${minToHHMM(e.startMin)}-${minToHHMM(e.endMin)} · ${r.guests} coperti`
+                      }
                     >
+                      {e.hasConflict && (
+                        <span
+                          aria-label="Sovrapposizione"
+                          className="grid size-4 shrink-0 place-items-center rounded-full text-[0.55rem] font-bold"
+                          style={{ background: "var(--adm-busy)", color: "white" }}
+                        >
+                          !
+                        </span>
+                      )}
                       <span className="truncate">{r.name}</span>
                       <span className="ml-auto tabular-nums opacity-75">
                         {r.guestsRange
