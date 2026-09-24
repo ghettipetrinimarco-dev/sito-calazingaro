@@ -51,3 +51,6 @@ next-env.d.ts
 # file locali
 tasks.md
 **/.DS_Store
+
+# Playwright
+playwright-report/

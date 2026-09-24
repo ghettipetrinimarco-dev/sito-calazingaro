@@ -1,7 +1,7 @@
 # CLAUDE.md — sito-calazingaro
 
 > Regole operative per questo progetto. Leggi prima di toccare qualsiasi file.
-> Prima di iniziare: leggi anche `~/.claude/PATTERNS_GLOBALI.md`.
+> I pattern condivisi (stack, Next.js bug, font, git) sono in `/Dev/Websites/CLAUDE.md` — caricato automaticamente.
 
 ---
 
